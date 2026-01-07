@@ -227,7 +227,7 @@ const logoutBtn = document.getElementById("logout-btn");
 if (logoutBtn) {
     logoutBtn.addEventListener("click", () => {
         localStorage.removeItem("currentUser");
-        window.location.href = "login.html";
+        window.location.href = "index.html";
     });
 }
 // New/Edit ticket modal
@@ -893,4 +893,5 @@ function showToast(message) {
     toast.textContent = message;
     toast.classList.add("show");
     setTimeout(() => toast.classList.remove("show"), 2200);
+
 }

@@ -2,7 +2,7 @@
 // MOCK ACCOUNTS WITH ROLES
 // -------------------------------
 const defaultAccounts = [
-    { username: "admin", password: "admin", name: "Ercell Green", role: "admin", active: true },
+    { username: "ercell", password: "password123", name: "Ercell Green", role: "admin", active: true },
     { username: "puhl", password: "admin123", name: "Peter Uhl", role: "tech", active: true },
     { username: "kclemmer", password: "support1", name: "Kim Clemmer", role: "tech", active: true },
     { username: "adayala", password: "network!", name: "Andrew Ayala", role: "tech", active: true }
@@ -66,9 +66,7 @@ if (loginBtn) {
             return;
         }
 
-        // -------------------------------
-        // SAVE USER BEFORE REDIRECTING (Fix #2)
-        // -------------------------------
+        // Save logged-in user + role
         localStorage.setItem("currentUser", account.name);
         localStorage.setItem("currentUserRole", account.role);
         localStorage.setItem("currentUsername", account.username);
@@ -82,12 +80,8 @@ if (loginBtn) {
         });
         localStorage.setItem("systemLogs", JSON.stringify(logs));
 
-        // -------------------------------
-        // SAFE REDIRECT (Fix #2)
-        // -------------------------------
-        setTimeout(() => {
-            window.location.href = "index.html";
-        }, 50); // small delay ensures GitHub Pages writes localStorage
+        // Redirect to main app
+        window.location.href = "index.html";
     });
 }
 
@@ -101,8 +95,4 @@ usernameInput.addEventListener("keyup", e => {
     if (e.key === "Enter") {
         passwordInput.focus();
     }
-});
-        passwordInput.focus();
-    }
-
 });

@@ -2,7 +2,7 @@
 // MOCK ACCOUNTS WITH ROLES
 // -------------------------------
 const defaultAccounts = [
-    { username: "admin", password: "admin", name: "Ercell Green", role: "admin", active: true },
+    { username: "admin", password: "admin", name: "Administrator", role: "admin", active: true },
     { username: "puhl", password: "admin123", name: "Peter Uhl", role: "tech", active: true },
     { username: "kclemmer", password: "support1", name: "Kim Clemmer", role: "tech", active: true },
     { username: "adayala", password: "network!", name: "Andrew Ayala", role: "tech", active: true }
@@ -97,5 +97,6 @@ usernameInput.addEventListener("keyup", e => {
     }
 
 });
+
 
 

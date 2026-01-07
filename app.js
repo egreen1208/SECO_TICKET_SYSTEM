@@ -204,7 +204,12 @@ let selectedFilter = "open";
 let selectedPriorityFilter = "all";
 let viewMode = "cards";
 let editingTicketId = null;
-let currentUser = "Ercell Green";
+let currentUser = localStorage.getItem("currentUser") || "System";
+
+const currentUserDisplay = document.getElementById("current-user-display");
+if (currentUserDisplay) {
+    currentUserDisplay.textContent = currentUser;
+}
 
 // DOM references
 const ticketList = document.getElementById("ticket-list");
@@ -218,6 +223,13 @@ const darkModeToggle = document.getElementById("dark-mode-toggle");
 const viewToggle = document.getElementById("view-toggle");
 const currentUserSelect = document.getElementById("current-user-select");
 
+const logoutBtn = document.getElementById("logout-btn");
+if (logoutBtn) {
+    logoutBtn.addEventListener("click", () => {
+        localStorage.removeItem("currentUser");
+        window.location.href = "login.html";
+    });
+}
 // New/Edit ticket modal
 const newTicketBtn = document.getElementById("new-ticket-btn");
 const newTicketModal = document.getElementById("new-ticket-modal");

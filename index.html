@@ -8,7 +8,16 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-
+    <script>
+    window.addEventListener("DOMContentLoaded", () => {
+        const onLoginPage = window.location.pathname.includes("login.html");
+    
+        // If NOT logged in AND NOT already on login page → redirect to login
+        if (!localStorage.getItem("currentUser") && !onLoginPage) {
+            window.location.href = "login.html";
+        }
+    });
+    </script>
     <!-- Top Bar -->
     <header class="topbar">
         <div class="topbar-left">
@@ -335,3 +344,4 @@
 </body>
 
 </html>
+

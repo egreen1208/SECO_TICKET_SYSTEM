@@ -81,7 +81,7 @@ if (loginBtn) {
         localStorage.setItem("systemLogs", JSON.stringify(logs));
 
         // Redirect to main app
-        window.location.href = "index.html";
+        window.location.href = "home.html";
     });
 }
 
@@ -95,4 +95,5 @@ usernameInput.addEventListener("keyup", e => {
     if (e.key === "Enter") {
         passwordInput.focus();
     }
+
 });

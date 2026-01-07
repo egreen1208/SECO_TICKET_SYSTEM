@@ -97,3 +97,4 @@ usernameInput.addEventListener("keyup", e => {
     }
 
 });
+

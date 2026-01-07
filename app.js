@@ -185,8 +185,331 @@ const tickets = [
         activity: [
             { timestamp: "2026-01-06T09:00:00", user: "System", action: "Ticket created" }
         ]
-    }
-];
+    },
+      {
+        id: 8,
+        title: "Printer jam on 2nd floor",
+        description: "MFP-224 constantly jamming with multiple sheets.",
+        queue: "it-support",
+        status: "open",
+        assigned: false,
+        assignedTo: "",
+        priority: "Medium",
+        tags: ["printer", "hardware"],
+        requesterName: "Finance Team",
+        requesterEmail: "finance@example.com",
+        location: "HQ - 2nd Floor",
+        createdDate: "2026-01-06",
+        updatedDate: "2026-01-06",
+        dueDate: "",
+        category: "Hardware",
+        subcategory: "Printer",
+        internalNotes: "Check feed rollers and paper quality.",
+        attachments: "",
+        comments: [],
+        activity: [
+          { timestamp: "2026-01-06T11:20:00", user: "System", action: "Ticket created" }
+        ]
+      },
+      {
+        id: 9,
+        title: "Email deliverability issue",
+        description: "External clients not receiving marketing emails. Investigate SPF/DKIM/DMARC.",
+        queue: "it-systems",
+        status: "assigned",
+        assigned: true,
+        assignedTo: "Peter Uhl",
+        priority: "High",
+        tags: ["email", "dns", "deliverability"],
+        requesterName: "Marketing Team",
+        requesterEmail: "marketing@example.com",
+        location: "HQ",
+        createdDate: "2026-01-06",
+        updatedDate: "2026-01-07",
+        dueDate: "",
+        category: "Infrastructure",
+        subcategory: "Email",
+        internalNotes: "Review recent DNS changes; check SendGrid logs.",
+        attachments: "",
+        comments: [
+          {
+            author: "Marketing Team",
+            timestamp: "2026-01-06T14:05:00",
+            text: "Bounce rate increased since Jan 5."
+          }
+        ],
+        activity: [
+          { timestamp: "2026-01-06T13:50:00", user: "System", action: "Ticket created" },
+          { timestamp: "2026-01-07T08:10:00", user: "System", action: "Status changed to assigned" }
+        ]
+      },
+      {
+        id: 10,
+        title: "Wi-Fi coverage weak in training room",
+        description: "Intermittent signal drops and low throughput during sessions.",
+        queue: "it-networking",
+        status: "open",
+        assigned: false,
+        assignedTo: "",
+        priority: "Medium",
+        tags: ["wifi", "network", "coverage"],
+        requesterName: "L&D Team",
+        requesterEmail: "learning@example.com",
+        location: "HQ - Training Room A",
+        createdDate: "2026-01-07",
+        updatedDate: "2026-01-07",
+        dueDate: "",
+        category: "Networking",
+        subcategory: "Wireless",
+        internalNotes: "Survey AP placement; check channel overlap.",
+        attachments: "floorplan-training-room.pdf",
+        comments: [],
+        activity: [
+          { timestamp: "2026-01-07T08:45:00", user: "System", action: "Ticket created" }
+        ]
+      },
+      {
+        id: 11,
+        title: "Badge reader malfunction",
+        description: "Main entrance badge reader intermittently denies valid badges.",
+        queue: "building-grounds",
+        status: "assigned",
+        assigned: true,
+        assignedTo: "Kim Clemmer",
+        priority: "High",
+        tags: ["security", "access-control"],
+        requesterName: "Facilities",
+        requesterEmail: "facilities@example.com",
+        location: "HQ Main Entrance",
+        createdDate: "2026-01-07",
+        updatedDate: "2026-01-07",
+        dueDate: "",
+        category: "Security",
+        subcategory: "Access Control",
+        internalNotes: "Check power, cabling, controller logs.",
+        attachments: "",
+        comments: [],
+        activity: [
+          { timestamp: "2026-01-07T09:10:00", user: "System", action: "Ticket created" },
+          { timestamp: "2026-01-07T09:30:00", user: "System", action: "Status changed to assigned" }
+        ]
+      },
+      {
+        id: 12,
+        title: "Shared drive permissions",
+        description: "Team cannot access new 'Projects2026' folder. Needs read/write for Marketing.",
+        queue: "it-support",
+        status: "open",
+        assigned: false,
+        assignedTo: "",
+        priority: "Low",
+        tags: ["permissions", "fileshare"],
+        requesterName: "Marketing Team",
+        requesterEmail: "marketing@example.com",
+        location: "HQ",
+        createdDate: "2026-01-07",
+        updatedDate: "2026-01-07",
+        dueDate: "",
+        category: "User Management",
+        subcategory: "Permissions",
+        internalNotes: "Confirm group membership and NTFS share ACL.",
+        attachments: "",
+        comments: [],
+        activity: [
+          { timestamp: "2026-01-07T09:40:00", user: "System", action: "Ticket created" }
+        ]
+      },
+      {
+        id: 13,
+        title: "Accounting app license renewal",
+        description: "Renew 15 licenses before expiration on Jan 15.",
+        queue: "it-applications",
+        status: "open",
+        assigned: false,
+        assignedTo: "",
+        priority: "Medium",
+        tags: ["license", "software"],
+        requesterName: "Accounting",
+        requesterEmail: "accounting@example.com",
+        location: "HQ - 3rd Floor",
+        createdDate: "2026-01-07",
+        updatedDate: "2026-01-07",
+        dueDate: "2026-01-15",
+        category: "Applications",
+        subcategory: "License",
+        internalNotes: "Check vendor portal; PO is pending approval.",
+        attachments: "",
+        comments: [],
+        activity: [
+          { timestamp: "2026-01-07T10:00:00", user: "System", action: "Ticket created" }
+        ]
+      },
+      {
+        id: 14,
+        title: "Laptop battery replacement",
+        description: "User reports battery drains from 100% to 20% within 30 minutes.",
+        queue: "it-support",
+        status: "assigned",
+        assigned: true,
+        assignedTo: "Andrew Ayala",
+        priority: "Medium",
+        tags: ["hardware", "battery"],
+        requesterName: "John Smith",
+        requesterEmail: "john.smith@example.com",
+        location: "Remote",
+        createdDate: "2026-01-07",
+        updatedDate: "2026-01-07",
+        dueDate: "",
+        category: "Hardware",
+        subcategory: "Laptop",
+        internalNotes: "Check battery health via OEM tool; order replacement.",
+        attachments: "",
+        comments: [
+          {
+            author: "John Smith",
+            timestamp: "2026-01-07T10:15:00",
+            text: "Happens even with minimal usage."
+          }
+        ],
+        activity: [
+          { timestamp: "2026-01-07T10:10:00", user: "System", action: "Ticket created" },
+          { timestamp: "2026-01-07T10:30:00", user: "System", action: "Status changed to assigned" }
+        ]
+      },
+      {
+        id: 15,
+        title: "Patch management compliance",
+        description: "Monthly patch cycle verification—20 endpoints pending.",
+        queue: "it-systems",
+        status: "open",
+        assigned: false,
+        assignedTo: "",
+        priority: "High",
+        tags: ["patching", "compliance"],
+        requesterName: "IT Operations",
+        requesterEmail: "ops@example.com",
+        location: "HQ & Remote",
+        createdDate: "2026-01-07",
+        updatedDate: "2026-01-07",
+        dueDate: "2026-01-10",
+        category: "Infrastructure",
+        subcategory: "Patch Management",
+        internalNotes: "Review WSUS/SCCM reports; follow up with non-compliant users.",
+        attachments: "patch-report-Jan.csv",
+        comments: [],
+        activity: [
+          { timestamp: "2026-01-07T10:45:00", user: "System", action: "Ticket created" }
+        ]
+      },
+      {
+        id: 16,
+        title: "New conference room setup",
+        description: "Add display, conference phone, and room scheduler panel.",
+        queue: "electrical-services",
+        status: "open",
+        assigned: false,
+        assignedTo: "",
+        priority: "Medium",
+        tags: ["av", "room-setup"],
+        requesterName: "Facilities Projects",
+        requesterEmail: "projects@example.com",
+        location: "HQ - Conference Room C",
+        createdDate: "2026-01-07",
+        updatedDate: "2026-01-07",
+        dueDate: "",
+        category: "Facilities",
+        subcategory: "AV",
+        internalNotes: "Coordinate with vendors; verify power and network drops.",
+        attachments: "roomC-specs.pdf",
+        comments: [],
+        activity: [
+          { timestamp: "2026-01-07T11:00:00", user: "System", action: "Ticket created" }
+        ]
+      },
+      {
+        id: 17,
+        title: "2FA enrollment issue",
+        description: "User unable to enroll in MFA—QR code scan fails.",
+        queue: "it-security",
+        status: "assigned",
+        assigned: true,
+        assignedTo: "Kim Clemmer",
+        priority: "Medium",
+        tags: ["mfa", "security"],
+        requesterName: "Jane Doe",
+        requesterEmail: "jane.doe@example.com",
+        location: "HQ",
+        createdDate: "2026-01-07",
+        updatedDate: "2026-01-07",
+        dueDate: "",
+        category: "Security",
+        subcategory: "Identity",
+        internalNotes: "Check time sync on device; confirm enrollment policy.",
+        attachments: "",
+        comments: [],
+        activity: [
+          { timestamp: "2026-01-07T11:20:00", user: "System", action: "Ticket created" },
+          { timestamp: "2026-01-07T11:35:00", user: "System", action: "Status changed to assigned" }
+        ]
+      },
+      {
+        id: 18,
+        title: "SharePoint site request",
+        description: "Create new site for 'Q1 Initiatives' with Marketing and Sales access.",
+        queue: "it-applications",
+        status: "open",
+        assigned: false,
+        assignedTo: "",
+        priority: "Low",
+        tags: ["sharepoint", "collaboration"],
+        requesterName: "PMO",
+        requesterEmail: "pmo@example.com",
+        location: "HQ",
+        createdDate: "2026-01-07",
+        updatedDate: "2026-01-07",
+        dueDate: "",
+        category: "Applications",
+        subcategory: "SharePoint",
+        internalNotes: "Apply standard template; set owners and members groups.",
+        attachments: "",
+        comments: [],
+        activity: [
+          { timestamp: "2026-01-07T11:40:00", user: "System", action: "Ticket created" }
+        ]
+      },
+      {
+        id: 19,
+        title: "Power outage report",
+        description: "Brief outage affected building; verify UPS logs and server uptime.",
+        queue: "building-grounds",
+        status: "closed",
+        assigned: true,
+        assignedTo: "Peter Uhl",
+        priority: "High",
+        tags: ["power", "incident"],
+        requesterName: "Facilities",
+        requesterEmail: "facilities@example.com",
+        location: "HQ - Electrical Room",
+        createdDate: "2026-01-06",
+        updatedDate: "2026-01-07",
+        dueDate: "",
+        category: "Facilities",
+        subcategory: "Electrical",
+        internalNotes: "Event lasted ~3 minutes; UPS performed nominally.",
+        attachments: "ups-log-0106.txt",
+        comments: [
+          {
+            author: "Facilities",
+            timestamp: "2026-01-07T07:55:00",
+            text: "No safety incidents reported."
+          }
+        ],
+        activity: [
+          { timestamp: "2026-01-06T17:15:00", user: "System", action: "Ticket created" },
+          { timestamp: "2026-01-07T08:20:00", user: "System", action: "Status changed to closed" }
+        ]
+      }
+    ];
 
 // Priority ranking for sorting
 const priorityRank = {
@@ -895,3 +1218,4 @@ function showToast(message) {
     setTimeout(() => toast.classList.remove("show"), 2200);
 
 }
+

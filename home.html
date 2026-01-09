@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SECO Ticketing System</title>
+    <title>SECO Energy Service Portal</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -13,7 +13,7 @@
         <div class="topbar-left">
             <button id="sidebar-toggle" class="icon-btn" title="Toggle sidebar">&#9776;</button>
             <img src="seco-logo.png" alt="SECO Energy Logo" class="logo">
-            <h1>SECO Ticketing System</h1>
+            <h1>SECO Energy Service Portal</h1>
         </div>
 
         <div class="topbar-right">
@@ -40,10 +40,9 @@
         <!-- Sidebar Navigation -->
         <nav class="sidebar" id="sidebar">
             <ul>
-                <li class="active"><span>Tickets</span></li>
-
-                <li><span>Reports</span></li>
-                <li><span>Admin</span></li>
+                <li class="active"><a href="home.html">Tickets</a></li>
+                <li><a href="reports.html">Reports</a></li>
+                <li><a href="admin.html">Admin</a></li>
             </ul>
         </nav>
 
@@ -121,45 +120,6 @@
 
                 <div id="ticket-list" class="ticket-list">
                     <!-- Tickets will be injected here by JavaScript -->
-                </div>
-            </section>
-
-            <!-- Reports Panel (hidden by default) -->
-            <section id="reports-panel" class="panel hidden">
-                <h2>Reports</h2>
-                <div id="reports-summary" class="reports-summary">
-                    <div class="report-item">
-                        <h4>By Status</h4>
-                        <div id="report-by-status"></div>
-                    </div>
-                    <div class="report-item">
-                        <h4>By Queue</h4>
-                        <div id="report-by-queue"></div>
-                    </div>
-                    <div class="report-item">
-                        <h4>By Priority</h4>
-                        <div id="report-by-priority"></div>
-                    </div>
-                </div>
-                <div style="margin-top:12px;">
-                    <button id="export-reports-csv" class="btn-secondary">Export Tickets CSV</button>
-                </div>
-            </section>
-
-            <!-- Admin Panel (hidden by default) -->
-            <section id="admin-panel" class="panel hidden">
-                <h2>Admin</h2>
-                <div class="admin-section">
-                    <h3>Users</h3>
-                    <div id="admin-users-list"></div>
-                    <h4 style="margin-top:12px;">Add User</h4>
-                    <div class="form-grid">
-                        <label>Username <input type="text" id="admin-new-username"></label>
-                        <label>Password <input type="password" id="admin-new-password"></label>
-                        <label>Name <input type="text" id="admin-new-name"></label>
-                        <label>Role <input type="text" id="admin-new-role" placeholder="admin/tech"></label>
-                    </div>
-                    <div style="margin-top:8px;"><button id="admin-add-user" class="btn-primary">Add User</button></div>
                 </div>
             </section>
 

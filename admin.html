@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - SECO Energy Service Portal</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="admin-page">
+
+    <!-- Top Bar -->
+    <header class="topbar">
+        <div class="topbar-left">
+            <button id="sidebar-toggle" class="icon-btn" title="Toggle sidebar">&#9776;</button>
+            <img src="seco-logo.png" alt="SECO Energy Logo" class="logo">
+            <h1>SECO Energy Service Portal</h1>
+        </div>
+
+        <div class="topbar-right">
+            <button id="new-ticket-btn" class="pill-btn pill-primary">+ New Ticket</button>
+
+            <button id="view-toggle" class="pill-btn">View: Cards</button>
+            
+            <div id="current-user-display" class="pill-btn"></div>
+            <button id="logout-btn" class="pill-btn">Logout</button>
+
+            <div class="dark-mode-toggle">
+                <label class="switch">
+                    <input type="checkbox" id="dark-mode-toggle">
+                    <span class="slider"></span>
+                </label>
+                <span class="dark-mode-label">Dark mode</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Layout Wrapper -->
+    <div class="layout">
+
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar" id="sidebar">
+            <ul>
+                <li><a href="home.html">Tickets</a></li>
+                <li><a href="reports.html">Reports</a></li>
+                <li class="active"><a href="admin.html">Admin</a></li>
+            </ul>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="container">
+
+            <!-- Admin Panel -->
+            <section class="panel">
+                <h2>Admin</h2>
+                <div class="admin-section">
+                    <h3>Users</h3>
+                    <div id="admin-users-list"></div>
+                    <h4 style="margin-top:12px;">Add User</h4>
+                    <div class="form-grid">
+                        <label>Username <input type="text" id="admin-new-username"></label>
+                        <label>Password <input type="password" id="admin-new-password"></label>
+                        <label>Name <input type="text" id="admin-new-name"></label>
+                        <label>Role <input type="text" id="admin-new-role" placeholder="admin/tech"></label>
+                    </div>
+                    <div style="margin-top:8px;"><button id="admin-add-user" class="btn-primary">Add User</button></div>
+                </div>
+            </section>
+
+        </main>
+
+    </div>
+
+    <!-- Ticket Detail Modal -->
+    <div id="ticket-modal" class="modal">
+        <div class="modal-content modal-detail">
+            <span id="modal-close" class="modal-close">&times;</span>
+            <h2 id="modal-title"></h2>
+
+            <div class="modal-meta">
+                <p id="modal-id"></p>
+                <p id="modal-status"></p>
+                <p id="modal-assigned"></p>
+                <p id="modal-priority"></p>
+                <p id="modal-queue"></p>
+                <p id="modal-requester"></p>
+                <p id="modal-location"></p>
+                <p id="modal-dates"></p>
+                <p id="modal-tags"></p>
+                <p id="modal-category"></p>
+            </div>
+
+            <!-- Ticket Description -->
+            <h3 class="modal-section-header">Description</h3>
+            <div id="modal-description" class="modal-description"></div>
+
+            <!-- Ticket Images -->
+            <div id="modal-ticket-images" class="image-gallery" style="margin-top:12px;"></div>
+
+            <!-- Comments Section -->
+            <div class="modal-section">
+                <h3>Comments</h3>
+                <div id="modal-comments-list" class="comments-list"></div>
+                <div class="comment-form">
+                    <textarea id="modal-comment-text" rows="3" placeholder="Add a comment... (paste screenshots here)"></textarea>
+                    <div id="modal-comment-images" class="image-gallery"></div>
+                    <button id="modal-comment-add" class="btn-secondary">Add Comment</button>
+                </div>
+            </div>
+
+            <!-- Activity Log Section -->
+            <div class="modal-section">
+                <h3>Activity Log</h3>
+                <div id="modal-activity-list" class="activity-list"></div>
+            </div>
+
+            <div class="modal-actions">
+                <button id="modal-edit-btn" class="btn-primary">Edit Ticket</button>
+
+                <div class="inline-control">
+                    <label for="modal-status-select">Status:</label>
+                    <select id="modal-status-select">
+                        <option value="open">Open</option>
+                        <option value="assigned">Assigned</option>
+                        <option value="closed">Closed</option>
+                    </select>
+                    <button id="modal-status-save" class="btn-secondary">Update</button>
+                </div>
+
+                <div class="inline-control">
+                    <label for="modal-assign-select">Assigned To:</label>
+                    <select id="modal-assign-select">
+                        <option value="">Unassigned</option>
+                        <option value="Peter Uhl">Peter Uhl</option>
+                        <option value="Kim Clemmer">Kim Clemmer</option>
+                        <option value="Les Duffy">Les Duffy</option>
+                        <option value="Andrew Ayala">Andrew Ayala</option>
+                        <option value="Ercell Green">Ercell Green</option>
+                        <option value="Alex Richards">Alex Richards</option>
+                    </select>
+                    <button id="modal-assign-save" class="btn-secondary">Reassign</button>
+                </div>
+
+                
+            </div>
+        </div>
+    </div>
+
+    <!-- New / Edit Ticket Modal -->
+    <div id="new-ticket-modal" class="modal">
+        <div class="modal-content modal-form">
+            <span id="new-ticket-close" class="modal-close">&times;</span>
+            <h2 id="new-ticket-title">Create New Ticket</h2>
+
+            <form id="new-ticket-form">
+                <div class="form-grid">
+
+                    <!-- Ticket Information -->
+                    <div class="form-section">
+                        <h3>Ticket Information</h3>
+
+                        <label>
+                            Title<span class="required">*</span>
+                            <input type="text" id="new-title" required>
+                        </label>
+
+                        <label for="new-description" class="field-label">Description <span class="required">*</span></label>
+                        <textarea id="new-description" rows="10" required placeholder="Paste screenshots here - they will display below"></textarea>
+                        <div id="new-description-images" class="image-gallery"></div>
+
+                        <label>
+                            Queue<span class="required">*</span>
+                            <select id="new-queue" required>
+                                <option value="">Select queue...</option>
+                                <option value="building-grounds">Building &amp; Grounds</option>
+                                <option value="electrical-services">Electrical Services</option>
+                                <option value="it-applications">IT Applications</option>
+                                <option value="it-support">IT Support</option>
+                                <option value="it-networking">IT Networking</option>
+                                <option value="it-systems">IT Systems</option>
+                                <option value="it-security">IT Security</option>
+                            </select>
+                        </label>
+
+                        <label>
+                            Priority<span class="required">*</span>
+                            <select id="new-priority" required>
+                                <option value="Low">Low</option>
+                                <option value="Medium" selected>Medium</option>
+                                <option value="High">High</option>
+                                <option value="Critical">Critical</option>
+                            </select>
+                        </label>
+
+                        <label>
+                            Status<span class="required">*</span>
+                            <select id="new-status" required>
+                                <option value="open" selected>Open</option>
+                                <option value="assigned">Assigned</option>
+                                <option value="closed">Closed</option>
+                            </select>
+                        </label>
+
+                        <label>
+                            Assigned To
+                            <select id="new-assigned-to">
+                                <option value="">Unassigned</option>
+                                <option value="Peter Uhl">Peter Uhl</option>
+                                <option value="Kim Clemmer">Kim Clemmer</option>
+                                <option value="Les Duffy">Les Duffy</option>
+                                <option value="Andrew Ayala">Andrew Ayala</option>
+                                <option value="Ercell Green">Ercell Green</option>
+                                <option value="Alex Richards">Alex Richards</option>
+                            </select>
+                        </label>
+                    </div>
+
+                    <!-- Requester & Meta -->
+                    <div class="form-section">
+                        <h3>Requester & Details</h3>
+
+                        <label>
+                            Requester Name
+                            <input type="text" id="new-requester-name">
+                        </label>
+
+                        <label>
+                            Requester Email
+                            <input type="email" id="new-requester-email" placeholder="name@example.com">
+                        </label>
+
+                        <label>
+                            Location
+                            <input type="text" id="new-location" placeholder="Building, floor, room">
+                        </label>
+
+                        <label>
+                            Due Date
+                            <input type="date" id="new-due-date">
+                        </label>
+
+                        <label>
+                            Category
+                            <input type="text" id="new-category" placeholder="Hardware, Software, Network...">
+                        </label>
+
+                        <label>
+                            Subcategory
+                            <input type="text" id="new-subcategory" placeholder="Laptop, Firewall, VPN...">
+                        </label>
+
+                        <label>
+                            Attachments
+                            <input type="text" id="new-attachments" placeholder="e.g., screenshot.png (simulated)">
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <span id="new-ticket-error" class="form-error"></span>
+                    <button type="button" id="new-ticket-cancel" class="btn-secondary">Cancel</button>
+                    <button type="submit" id="new-ticket-submit" class="btn-primary">Create Ticket</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div id="toast" class="toast"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>

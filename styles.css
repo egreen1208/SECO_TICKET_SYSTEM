@@ -847,6 +847,30 @@ body.dark-mode .image-gallery-item {
 
 .ticket-panel {
     width: 100%;
+    position: relative;
+    min-height: 600px;
+}
+
+.ticket-panel::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 60%;
+    height: 60%;
+    background-image: url('seco-logo.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    opacity: 0.12;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.ticket-panel > * {
+    position: relative;
+    z-index: 1;
 }
 
 /* ---------------------------------------------------

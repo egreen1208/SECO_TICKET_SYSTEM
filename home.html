@@ -41,8 +41,7 @@
         <nav class="sidebar" id="sidebar">
             <ul>
                 <li class="active"><span>Tickets</span></li>
-                <li><span>Projects</span></li>
-                <li><span>Sprints</span></li>
+
                 <li><span>Reports</span></li>
                 <li><span>Admin</span></li>
             </ul>
@@ -125,6 +124,45 @@
                 </div>
             </section>
 
+            <!-- Reports Panel (hidden by default) -->
+            <section id="reports-panel" class="panel hidden">
+                <h2>Reports</h2>
+                <div id="reports-summary" class="reports-summary">
+                    <div class="report-item">
+                        <h4>By Status</h4>
+                        <div id="report-by-status"></div>
+                    </div>
+                    <div class="report-item">
+                        <h4>By Queue</h4>
+                        <div id="report-by-queue"></div>
+                    </div>
+                    <div class="report-item">
+                        <h4>By Priority</h4>
+                        <div id="report-by-priority"></div>
+                    </div>
+                </div>
+                <div style="margin-top:12px;">
+                    <button id="export-reports-csv" class="btn-secondary">Export Tickets CSV</button>
+                </div>
+            </section>
+
+            <!-- Admin Panel (hidden by default) -->
+            <section id="admin-panel" class="panel hidden">
+                <h2>Admin</h2>
+                <div class="admin-section">
+                    <h3>Users</h3>
+                    <div id="admin-users-list"></div>
+                    <h4 style="margin-top:12px;">Add User</h4>
+                    <div class="form-grid">
+                        <label>Username <input type="text" id="admin-new-username"></label>
+                        <label>Password <input type="password" id="admin-new-password"></label>
+                        <label>Name <input type="text" id="admin-new-name"></label>
+                        <label>Role <input type="text" id="admin-new-role" placeholder="admin/tech"></label>
+                    </div>
+                    <div style="margin-top:8px;"><button id="admin-add-user" class="btn-primary">Add User</button></div>
+                </div>
+            </section>
+
         </main>
 
     </div>
@@ -146,15 +184,22 @@
                 <p id="modal-dates"></p>
                 <p id="modal-tags"></p>
                 <p id="modal-category"></p>
-                <p id="modal-notes"></p>
             </div>
+
+            <!-- Ticket Description -->
+            <h3 class="modal-section-header">Description</h3>
+            <div id="modal-description" class="modal-description"></div>
+
+            <!-- Ticket Images -->
+            <div id="modal-ticket-images" class="image-gallery" style="margin-top:12px;"></div>
 
             <!-- Comments Section -->
             <div class="modal-section">
                 <h3>Comments</h3>
                 <div id="modal-comments-list" class="comments-list"></div>
                 <div class="comment-form">
-                    <textarea id="modal-comment-text" rows="3" placeholder="Add a comment..."></textarea>
+                    <textarea id="modal-comment-text" rows="3" placeholder="Add a comment... (paste screenshots here)"></textarea>
+                    <div id="modal-comment-images" class="image-gallery"></div>
                     <button id="modal-comment-add" class="btn-secondary">Add Comment</button>
                 </div>
             </div>
@@ -215,10 +260,9 @@
                             <input type="text" id="new-title" required>
                         </label>
 
-                        <label>
-                            Description<span class="required">*</span>
-                            <textarea id="new-description" rows="4" required></textarea>
-                        </label>
+                        <label for="new-description" class="field-label">Description <span class="required">*</span></label>
+                        <textarea id="new-description" rows="10" required placeholder="Paste screenshots here - they will display below"></textarea>
+                        <div id="new-description-images" class="image-gallery"></div>
 
                         <label>
                             Queue<span class="required">*</span>
@@ -265,11 +309,6 @@
                                 <option value="Alex Richards">Alex Richards</option>
                             </select>
                         </label>
-
-                        <label>
-                            Tags (comma separated)
-                            <input type="text" id="new-tags" placeholder="network, outage, urgent">
-                        </label>
                     </div>
 
                     <!-- Requester & Meta -->
@@ -304,11 +343,6 @@
                         <label>
                             Subcategory
                             <input type="text" id="new-subcategory" placeholder="Laptop, Firewall, VPN...">
-                        </label>
-
-                        <label>
-                            Internal Notes
-                            <textarea id="new-notes" rows="4" placeholder="Notes visible to IT staff only"></textarea>
                         </label>
 
                         <label>

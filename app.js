@@ -5,8 +5,8 @@
 const tickets = [
   {
     id: 1,
-    title: "Fix broken light",
-    description: "Light is out in hallway near break room.",
+    title: "Fix broken light in hallway",
+    description: "Light is out in hallway near break room. LED fixture appears to be faulty. Need to order replacement and schedule installation.",
     queue: "building-grounds",
     status: "open",
     assigned: false,
@@ -23,6 +23,7 @@ const tickets = [
     subcategory: "Lighting",
     internalNotes: "",
     attachments: "",
+    images: [],
     comments: [],
     activity: [
       { timestamp: "2026-01-01T09:00:00", user: "System", action: "Ticket created" }
@@ -31,9 +32,9 @@ const tickets = [
   {
     id: 2,
     title: "Server reboot needed",
-    description: "Production server showing high memory usage. Reboot during maintenance window.",
+    description: "Production server showing high memory usage. Reboot during maintenance window recommended.",
     queue: "it-systems",
-    status: "assigned",
+    status: "in-progress",
     assigned: true,
     assignedTo: "Peter Uhl",
     priority: "High",
@@ -42,28 +43,30 @@ const tickets = [
     requesterEmail: "ops@example.com",
     location: "Data Center A",
     createdDate: "2026-01-03",
-    updatedDate: "2026-01-03",
-    dueDate: "",
+    updatedDate: "2026-01-07",
+    dueDate: "2026-01-09",
     category: "Infrastructure",
     subcategory: "Server",
     internalNotes: "Coordinate with NOC before reboot.",
     attachments: "",
+    images: [],
     comments: [
       {
         author: "Operations Team",
         timestamp: "2026-01-03T10:00:00",
-        text: "Please schedule during Sunday maintenance window."
+        text: "Please schedule during Sunday maintenance window.",
+        images: []
       }
     ],
     activity: [
       { timestamp: "2026-01-03T09:00:00", user: "System", action: "Ticket created" },
-      { timestamp: "2026-01-03T10:30:00", user: "System", action: "Status changed to assigned" }
+      { timestamp: "2026-01-07T10:30:00", user: "System", action: "Status changed to in-progress" }
     ]
   },
   {
     id: 3,
     title: "New user onboarding",
-    description: "Create accounts and grant access for new hire.",
+    description: "Create accounts and grant access for new hire. Includes email setup, VPN, and application access.",
     queue: "it-support",
     status: "open",
     assigned: false,
@@ -75,11 +78,12 @@ const tickets = [
     location: "HQ",
     createdDate: "2026-01-04",
     updatedDate: "2026-01-04",
-    dueDate: "",
+    dueDate: "2026-01-08",
     category: "User Management",
     subcategory: "Onboarding",
     internalNotes: "",
     attachments: "",
+    images: [],
     comments: [],
     activity: [
       { timestamp: "2026-01-04T09:00:00", user: "System", action: "Ticket created" }
@@ -88,9 +92,9 @@ const tickets = [
   {
     id: 4,
     title: "Firewall rule update",
-    description: "Allow outbound traffic to new vendor IP range.",
+    description: "Allow outbound traffic to new vendor IP range for data sync.",
     queue: "it-security",
-    status: "closed",
+    status: "resolved",
     assigned: true,
     assignedTo: "Kim Clemmer",
     priority: "Critical",
@@ -99,49 +103,52 @@ const tickets = [
     requesterEmail: "security@example.com",
     location: "Data Center B",
     createdDate: "2026-01-02",
-    updatedDate: "2026-01-05",
+    updatedDate: "2026-01-06",
     dueDate: "",
     category: "Security",
     subcategory: "Firewall",
     internalNotes: "Change approved by CISO.",
     attachments: "change-request-4921.pdf",
+    images: [],
     comments: [],
     activity: [
       { timestamp: "2026-01-02T09:00:00", user: "System", action: "Ticket created" },
-      { timestamp: "2026-01-05T11:00:00", user: "System", action: "Status changed to closed" }
+      { timestamp: "2026-01-06T11:00:00", user: "System", action: "Status changed to resolved" }
     ]
   },
   {
     id: 5,
-    title: "Air conditioner leak",
-    description: "Water leaking from AC unit in lobby.",
-    queue: "electrical-services",
-    status: "open",
-    assigned: false,
-    assignedTo: "",
+    title: "Air conditioner leak in lobby",
+    description: "Water leaking from AC unit in main lobby. Maintenance team has been notified.",
+    queue: "building-grounds",
+    status: "in-progress",
+    assigned: true,
+    assignedTo: "Robert Chen",
     priority: "High",
     tags: ["hvac", "leak"],
     requesterName: "Front Desk",
     requesterEmail: "frontdesk@example.com",
     location: "HQ Lobby",
     createdDate: "2026-01-05",
-    updatedDate: "2026-01-05",
-    dueDate: "",
+    updatedDate: "2026-01-07",
+    dueDate: "2026-01-08",
     category: "Facilities",
     subcategory: "HVAC",
-    internalNotes: "",
+    internalNotes: "Technician scheduled for today.",
     attachments: "",
+    images: [],
     comments: [],
     activity: [
-      { timestamp: "2026-01-05T09:00:00", user: "System", action: "Ticket created" }
+      { timestamp: "2026-01-05T09:00:00", user: "System", action: "Ticket created" },
+      { timestamp: "2026-01-07T08:00:00", user: "System", action: "Status changed to in-progress" }
     ]
   },
   {
     id: 6,
-    title: "VPN access request",
-    description: "Enable VPN access for remote employee.",
+    title: "VPN access request for remote employee",
+    description: "Enable VPN access for remote employee working from home office.",
     queue: "it-networking",
-    status: "assigned",
+    status: "resolved",
     assigned: true,
     assignedTo: "Andrew Ayala",
     priority: "Medium",
@@ -150,22 +157,23 @@ const tickets = [
     requesterEmail: "john.smith@example.com",
     location: "Remote",
     createdDate: "2026-01-06",
-    updatedDate: "2026-01-06",
+    updatedDate: "2026-01-07",
     dueDate: "",
     category: "Networking",
     subcategory: "VPN",
-    internalNotes: "",
+    internalNotes: "Confirm MFA enrollment before granting access.",
     attachments: "",
+    images: [],
     comments: [],
     activity: [
       { timestamp: "2026-01-06T09:00:00", user: "System", action: "Ticket created" },
-      { timestamp: "2026-01-06T10:00:00", user: "System", action: "Status changed to assigned" }
+      { timestamp: "2026-01-07T10:00:00", user: "System", action: "Status changed to resolved" }
     ]
   },
   {
     id: 7,
-    title: "Install new software",
-    description: "Install licensed design software for marketing team.",
+    title: "Install design software for marketing",
+    description: "Install licensed design software for marketing team. Need Adobe Creative Cloud licenses.",
     queue: "it-applications",
     status: "open",
     assigned: false,
@@ -177,22 +185,21 @@ const tickets = [
     location: "HQ - 2nd Floor",
     createdDate: "2026-01-06",
     updatedDate: "2026-01-06",
-    dueDate: "",
+    dueDate: "2026-01-20",
     category: "Applications",
     subcategory: "Desktop Software",
-    internalNotes: "",
+    internalNotes: "Awaiting license keys from vendor.",
     attachments: "",
+    images: [],
     comments: [],
     activity: [
       { timestamp: "2026-01-06T09:00:00", user: "System", action: "Ticket created" }
     ]
   },
-
-  // ---- New tickets (8–19) integrated below ----
   {
     id: 8,
     title: "Printer jam on 2nd floor",
-    description: "MFP-224 constantly jamming with multiple sheets.",
+    description: "MFP-224 constantly jamming with multiple sheets. Feed mechanism needs inspection.",
     queue: "it-support",
     status: "open",
     assigned: false,
@@ -204,11 +211,12 @@ const tickets = [
     location: "HQ - 2nd Floor",
     createdDate: "2026-01-06",
     updatedDate: "2026-01-06",
-    dueDate: "",
+    dueDate: "2026-01-09",
     category: "Hardware",
     subcategory: "Printer",
     internalNotes: "Check feed rollers and paper quality.",
     attachments: "",
+    images: [],
     comments: [],
     activity: [
       { timestamp: "2026-01-06T11:20:00", user: "System", action: "Ticket created" }
@@ -217,9 +225,9 @@ const tickets = [
   {
     id: 9,
     title: "Email deliverability issue",
-    description: "External clients not receiving marketing emails. Investigate SPF/DKIM/DMARC.",
+    description: "External clients not receiving marketing emails. Investigation needed for SPF/DKIM/DMARC records.",
     queue: "it-systems",
-    status: "assigned",
+    status: "in-progress",
     assigned: true,
     assignedTo: "Peter Uhl",
     priority: "High",
@@ -229,27 +237,29 @@ const tickets = [
     location: "HQ",
     createdDate: "2026-01-06",
     updatedDate: "2026-01-07",
-    dueDate: "",
+    dueDate: "2026-01-08",
     category: "Infrastructure",
     subcategory: "Email",
     internalNotes: "Review recent DNS changes; check SendGrid logs.",
     attachments: "",
+    images: [],
     comments: [
       {
         author: "Marketing Team",
         timestamp: "2026-01-06T14:05:00",
-        text: "Bounce rate increased since Jan 5."
+        text: "Bounce rate increased since Jan 5.",
+        images: []
       }
     ],
     activity: [
       { timestamp: "2026-01-06T13:50:00", user: "System", action: "Ticket created" },
-      { timestamp: "2026-01-07T08:10:00", user: "System", action: "Status changed to assigned" }
+      { timestamp: "2026-01-07T08:10:00", user: "System", action: "Status changed to in-progress" }
     ]
   },
   {
     id: 10,
     title: "Wi-Fi coverage weak in training room",
-    description: "Intermittent signal drops and low throughput during sessions.",
+    description: "Intermittent signal drops and low throughput during sessions affecting online meetings.",
     queue: "it-networking",
     status: "open",
     assigned: false,
@@ -261,11 +271,12 @@ const tickets = [
     location: "HQ - Training Room A",
     createdDate: "2026-01-07",
     updatedDate: "2026-01-07",
-    dueDate: "",
+    dueDate: "2026-01-14",
     category: "Networking",
     subcategory: "Wireless",
     internalNotes: "Survey AP placement; check channel overlap.",
     attachments: "floorplan-training-room.pdf",
+    images: [],
     comments: [],
     activity: [
       { timestamp: "2026-01-07T08:45:00", user: "System", action: "Ticket created" }
@@ -274,9 +285,9 @@ const tickets = [
   {
     id: 11,
     title: "Badge reader malfunction",
-    description: "Main entrance badge reader intermittently denies valid badges.",
+    description: "Main entrance badge reader intermittently denies valid badges causing access issues.",
     queue: "building-grounds",
-    status: "assigned",
+    status: "in-progress",
     assigned: true,
     assignedTo: "Kim Clemmer",
     priority: "High",
@@ -286,23 +297,24 @@ const tickets = [
     location: "HQ Main Entrance",
     createdDate: "2026-01-07",
     updatedDate: "2026-01-07",
-    dueDate: "",
+    dueDate: "2026-01-08",
     category: "Security",
     subcategory: "Access Control",
     internalNotes: "Check power, cabling, controller logs.",
     attachments: "",
+    images: [],
     comments: [],
     activity: [
       { timestamp: "2026-01-07T09:10:00", user: "System", action: "Ticket created" },
-      { timestamp: "2026-01-07T09:30:00", user: "System", action: "Status changed to assigned" }
+      { timestamp: "2026-01-07T09:30:00", user: "System", action: "Status changed to in-progress" }
     ]
   },
   {
     id: 12,
-    title: "Shared drive permissions",
+    title: "Shared drive permissions for Projects2026",
     description: "Team cannot access new 'Projects2026' folder. Needs read/write for Marketing.",
     queue: "it-support",
-    status: "open",
+    status: "resolved",
     assigned: false,
     assignedTo: "",
     priority: "Low",
@@ -317,15 +329,17 @@ const tickets = [
     subcategory: "Permissions",
     internalNotes: "Confirm group membership and NTFS share ACL.",
     attachments: "",
+    images: [],
     comments: [],
     activity: [
-      { timestamp: "2026-01-07T09:40:00", user: "System", action: "Ticket created" }
+      { timestamp: "2026-01-07T09:40:00", user: "System", action: "Ticket created" },
+      { timestamp: "2026-01-07T10:15:00", user: "System", action: "Status changed to resolved" }
     ]
   },
   {
     id: 13,
     title: "Accounting app license renewal",
-    description: "Renew 15 licenses before expiration on Jan 15.",
+    description: "Renew 15 licenses before expiration on Jan 15. Critical for month-end close process.",
     queue: "it-applications",
     status: "open",
     assigned: false,
@@ -342,6 +356,7 @@ const tickets = [
     subcategory: "License",
     internalNotes: "Check vendor portal; PO is pending approval.",
     attachments: "",
+    images: [],
     comments: [],
     activity: [
       { timestamp: "2026-01-07T10:00:00", user: "System", action: "Ticket created" }
@@ -349,10 +364,10 @@ const tickets = [
   },
   {
     id: 14,
-    title: "Laptop battery replacement",
-    description: "User reports battery drains from 100% to 20% within 30 minutes.",
+    title: "Laptop battery replacement needed",
+    description: "Battery drains from 100% to 20% within 30 minutes even with minimal usage.",
     queue: "it-support",
-    status: "assigned",
+    status: "in-progress",
     assigned: true,
     assignedTo: "Andrew Ayala",
     priority: "Medium",
@@ -362,31 +377,33 @@ const tickets = [
     location: "Remote",
     createdDate: "2026-01-07",
     updatedDate: "2026-01-07",
-    dueDate: "",
+    dueDate: "2026-01-10",
     category: "Hardware",
     subcategory: "Laptop",
     internalNotes: "Check battery health via OEM tool; order replacement.",
     attachments: "",
+    images: [],
     comments: [
       {
         author: "John Smith",
         timestamp: "2026-01-07T10:15:00",
-        text: "Happens even with minimal usage."
+        text: "Happens even with minimal usage.",
+        images: []
       }
     ],
     activity: [
       { timestamp: "2026-01-07T10:10:00", user: "System", action: "Ticket created" },
-      { timestamp: "2026-01-07T10:30:00", user: "System", action: "Status changed to assigned" }
+      { timestamp: "2026-01-07T10:30:00", user: "System", action: "Status changed to in-progress" }
     ]
   },
   {
     id: 15,
-    title: "Patch management compliance",
-    description: "Monthly patch cycle verification—20 endpoints pending.",
+    title: "Monthly patch compliance verification",
+    description: "Monthly patch cycle verification—20 endpoints pending security updates.",
     queue: "it-systems",
-    status: "open",
-    assigned: false,
-    assignedTo: "",
+    status: "in-progress",
+    assigned: true,
+    assignedTo: "Peter Uhl",
     priority: "High",
     tags: ["patching", "compliance"],
     requesterName: "IT Operations",
@@ -399,6 +416,7 @@ const tickets = [
     subcategory: "Patch Management",
     internalNotes: "Review WSUS/SCCM reports; follow up with non-compliant users.",
     attachments: "patch-report-Jan.csv",
+    images: [],
     comments: [],
     activity: [
       { timestamp: "2026-01-07T10:45:00", user: "System", action: "Ticket created" }
@@ -407,7 +425,7 @@ const tickets = [
   {
     id: 16,
     title: "New conference room setup",
-    description: "Add display, conference phone, and room scheduler panel.",
+    description: "Add display, conference phone, and room scheduler panel to Conference Room C.",
     queue: "electrical-services",
     status: "open",
     assigned: false,
@@ -419,11 +437,12 @@ const tickets = [
     location: "HQ - Conference Room C",
     createdDate: "2026-01-07",
     updatedDate: "2026-01-07",
-    dueDate: "",
+    dueDate: "2026-01-17",
     category: "Facilities",
     subcategory: "AV",
     internalNotes: "Coordinate with vendors; verify power and network drops.",
     attachments: "roomC-specs.pdf",
+    images: [],
     comments: [],
     activity: [
       { timestamp: "2026-01-07T11:00:00", user: "System", action: "Ticket created" }
@@ -431,10 +450,10 @@ const tickets = [
   },
   {
     id: 17,
-    title: "2FA enrollment issue",
-    description: "User unable to enroll in MFA—QR code scan fails.",
+    title: "2FA enrollment issue with QR code",
+    description: "User unable to enroll in MFA—QR code scan fails on authenticator app.",
     queue: "it-security",
-    status: "assigned",
+    status: "resolved",
     assigned: true,
     assignedTo: "Kim Clemmer",
     priority: "Medium",
@@ -449,16 +468,17 @@ const tickets = [
     subcategory: "Identity",
     internalNotes: "Check time sync on device; confirm enrollment policy.",
     attachments: "",
+    images: [],
     comments: [],
     activity: [
       { timestamp: "2026-01-07T11:20:00", user: "System", action: "Ticket created" },
-      { timestamp: "2026-01-07T11:35:00", user: "System", action: "Status changed to assigned" }
+      { timestamp: "2026-01-07T11:50:00", user: "System", action: "Status changed to resolved" }
     ]
   },
   {
     id: 18,
-    title: "SharePoint site request",
-    description: "Create new site for 'Q1 Initiatives' with Marketing and Sales access.",
+    title: "SharePoint site request for Q1 Initiatives",
+    description: "Create new site for 'Q1 Initiatives' with Marketing and Sales access and proper permissions.",
     queue: "it-applications",
     status: "open",
     assigned: false,
@@ -470,11 +490,12 @@ const tickets = [
     location: "HQ",
     createdDate: "2026-01-07",
     updatedDate: "2026-01-07",
-    dueDate: "",
+    dueDate: "2026-01-14",
     category: "Applications",
     subcategory: "SharePoint",
     internalNotes: "Apply standard template; set owners and members groups.",
     attachments: "",
+    images: [],
     comments: [],
     activity: [
       { timestamp: "2026-01-07T11:40:00", user: "System", action: "Ticket created" }
@@ -482,8 +503,8 @@ const tickets = [
   },
   {
     id: 19,
-    title: "Power outage report",
-    description: "Brief outage affected building; verify UPS logs and server uptime.",
+    title: "Power outage incident report",
+    description: "Brief outage affected building; verify UPS logs and server uptime. All systems recovered.",
     queue: "building-grounds",
     status: "closed",
     assigned: true,
@@ -500,16 +521,177 @@ const tickets = [
     subcategory: "Electrical",
     internalNotes: "Event lasted ~3 minutes; UPS performed nominally.",
     attachments: "ups-log-0106.txt",
+    images: [],
     comments: [
       {
         author: "Facilities",
         timestamp: "2026-01-07T07:55:00",
-        text: "No safety incidents reported."
+        text: "No safety incidents reported.",
+        images: []
       }
     ],
     activity: [
       { timestamp: "2026-01-06T17:15:00", user: "System", action: "Ticket created" },
       { timestamp: "2026-01-07T08:20:00", user: "System", action: "Status changed to closed" }
+    ]
+  },
+  {
+    id: 20,
+    title: "Database backup verification",
+    description: "Verify that all database backups completed successfully. Last backup showed 95% completion.",
+    queue: "it-systems",
+    status: "resolved",
+    assigned: true,
+    assignedTo: "Peter Uhl",
+    priority: "High",
+    tags: ["backup", "database"],
+    requesterName: "IT Operations",
+    requesterEmail: "ops@example.com",
+    location: "Data Center A",
+    createdDate: "2026-01-05",
+    updatedDate: "2026-01-07",
+    dueDate: "",
+    category: "Infrastructure",
+    subcategory: "Backup",
+    internalNotes: "All backups verified and stored to cold storage.",
+    attachments: "backup-log-0107.txt",
+    images: [],
+    comments: [],
+    activity: [
+      { timestamp: "2026-01-05T09:00:00", user: "System", action: "Ticket created" },
+      { timestamp: "2026-01-07T14:30:00", user: "System", action: "Status changed to resolved" }
+    ]
+  },
+  {
+    id: 21,
+    title: "Mobile device management policy update",
+    description: "Update MDM policies for iOS and Android devices. Add new security requirements for BYOD.",
+    queue: "it-security",
+    status: "open",
+    assigned: false,
+    assignedTo: "",
+    priority: "Medium",
+    tags: ["mdm", "security", "mobile"],
+    requesterName: "CISO Office",
+    requesterEmail: "ciso@example.com",
+    location: "HQ",
+    createdDate: "2026-01-07",
+    updatedDate: "2026-01-07",
+    dueDate: "2026-01-21",
+    category: "Security",
+    subcategory: "Mobile",
+    internalNotes: "Coordinate with legal for compliance.",
+    attachments: "",
+    images: [],
+    comments: [],
+    activity: [
+      { timestamp: "2026-01-07T13:00:00", user: "System", action: "Ticket created" }
+    ]
+  },
+  {
+    id: 22,
+    title: "Backup generator maintenance",
+    description: "Schedule quarterly maintenance for backup generator. Last serviced 3 months ago.",
+    queue: "building-grounds",
+    status: "open",
+    assigned: false,
+    assignedTo: "",
+    priority: "Medium",
+    tags: ["generator", "maintenance"],
+    requesterName: "Facilities",
+    requesterEmail: "facilities@example.com",
+    location: "HQ - Mechanical Room",
+    createdDate: "2026-01-07",
+    updatedDate: "2026-01-07",
+    dueDate: "2026-01-17",
+    category: "Facilities",
+    subcategory: "Electrical",
+    internalNotes: "Contact vendor for scheduling.",
+    attachments: "",
+    images: [],
+    comments: [],
+    activity: [
+      { timestamp: "2026-01-07T13:30:00", user: "System", action: "Ticket created" }
+    ]
+  },
+  {
+    id: 23,
+    title: "CRM database optimization",
+    description: "CRM system experiencing slow query performance. Database indexes need optimization.",
+    queue: "it-applications",
+    status: "in-progress",
+    assigned: true,
+    assignedTo: "Andrew Ayala",
+    priority: "High",
+    tags: ["database", "performance", "crm"],
+    requesterName: "Sales Operations",
+    requesterEmail: "salesops@example.com",
+    location: "HQ",
+    createdDate: "2026-01-07",
+    updatedDate: "2026-01-07",
+    dueDate: "2026-01-09",
+    category: "Applications",
+    subcategory: "CRM",
+    internalNotes: "Run query analysis and rebuild indexes.",
+    attachments: "query-report.sql",
+    images: [],
+    comments: [],
+    activity: [
+      { timestamp: "2026-01-07T14:00:00", user: "System", action: "Ticket created" },
+      { timestamp: "2026-01-07T14:15:00", user: "System", action: "Status changed to in-progress" }
+    ]
+  },
+  {
+    id: 24,
+    title: "Office temperature control issues",
+    description: "Third floor reporting temperature fluctuations. Thermostat calibration needed.",
+    queue: "building-grounds",
+    status: "open",
+    assigned: false,
+    assignedTo: "",
+    priority: "Low",
+    tags: ["hvac", "climate-control"],
+    requesterName: "Office Manager",
+    requesterEmail: "admin@example.com",
+    location: "HQ - 3rd Floor",
+    createdDate: "2026-01-07",
+    updatedDate: "2026-01-07",
+    dueDate: "2026-01-12",
+    category: "Facilities",
+    subcategory: "HVAC",
+    internalNotes: "Check HVAC control system settings.",
+    attachments: "",
+    images: [],
+    comments: [],
+    activity: [
+      { timestamp: "2026-01-07T14:45:00", user: "System", action: "Ticket created" }
+    ]
+  },
+  {
+    id: 25,
+    title: "Microsoft Teams call quality improvement",
+    description: "Users reporting poor audio quality during Teams meetings. Network analysis needed.",
+    queue: "it-networking",
+    status: "in-progress",
+    assigned: true,
+    assignedTo: "Kim Clemmer",
+    priority: "Medium",
+    tags: ["teams", "voip", "network"],
+    requesterName: "Communications",
+    requesterEmail: "comms@example.com",
+    location: "HQ",
+    createdDate: "2026-01-07",
+    updatedDate: "2026-01-07",
+    dueDate: "2026-01-10",
+    category: "Networking",
+    subcategory: "VoIP",
+    internalNotes: "Check QoS settings and bandwidth allocation.",
+    attachments: "network-stats.csv",
+    images: [],
+    comments: [],
+    activity: [
+      { timestamp: "2026-01-07T15:00:00", user: "System", action: "Ticket created" },
+      { timestamp: "2026-01-07T15:20:00", user: "System", action: "Status changed to in-progress" }
     ]
   }
 ];
@@ -556,6 +738,7 @@ if (logoutBtn) {
         window.location.href = "index.html";
     });
 }
+
 // New/Edit ticket modal
 const newTicketBtn = document.getElementById("new-ticket-btn");
 const newTicketModal = document.getElementById("new-ticket-modal");
@@ -573,14 +756,12 @@ const newQueue = document.getElementById("new-queue");
 const newPriority = document.getElementById("new-priority");
 const newStatus = document.getElementById("new-status");
 const newAssignedTo = document.getElementById("new-assigned-to");
-const newTags = document.getElementById("new-tags");
 const newRequesterName = document.getElementById("new-requester-name");
 const newRequesterEmail = document.getElementById("new-requester-email");
 const newLocation = document.getElementById("new-location");
 const newDueDate = document.getElementById("new-due-date");
 const newCategory = document.getElementById("new-category");
 const newSubcategory = document.getElementById("new-subcategory");
-const newNotes = document.getElementById("new-notes");
 const newAttachments = document.getElementById("new-attachments");
 
 // Toast
@@ -703,6 +884,10 @@ newTicketBtn.addEventListener("click", () => {
     newPriority.value = "Medium";
     newStatus.value = "open";
     newAssignedTo.value = "";
+    // clear any previous description images when creating a new ticket
+    newDescriptionImages = [];
+    const newDescGallery = document.getElementById('new-description-images');
+    if (newDescGallery) newDescGallery.innerHTML = '';
     showModal(newTicketModal);
 });
 
@@ -717,6 +902,142 @@ window.addEventListener("click", e => {
     if (e.target === newTicketModal) hideModal(newTicketModal);
     if (e.target === modal) hideModal(modal);
 });
+
+// -------------------------------
+// SIDEBAR NAVIGATION (Tickets / Reports / Admin)
+// -------------------------------
+(function initSidebarNav(){
+    const sidebarItems = document.querySelectorAll('.sidebar li');
+    const queuePanel = document.querySelector('main .panel');
+    const ticketPanel = document.querySelector('.ticket-panel');
+    const reportsPanel = document.getElementById('reports-panel');
+    const adminPanel = document.getElementById('admin-panel');
+
+    function showTicketsView(){
+        if(queuePanel) queuePanel.classList.remove('hidden');
+        if(ticketPanel) ticketPanel.classList.remove('hidden');
+        if(reportsPanel) reportsPanel.classList.add('hidden');
+        if(adminPanel) adminPanel.classList.add('hidden');
+        updateTickets();
+    }
+
+    function showReportsView(){
+        if(queuePanel) queuePanel.classList.add('hidden');
+        if(ticketPanel) ticketPanel.classList.add('hidden');
+        if(reportsPanel) reportsPanel.classList.remove('hidden');
+        if(adminPanel) adminPanel.classList.add('hidden');
+        renderReports();
+    }
+
+    function showAdminView(){
+        if(queuePanel) queuePanel.classList.add('hidden');
+        if(ticketPanel) ticketPanel.classList.add('hidden');
+        if(reportsPanel) reportsPanel.classList.add('hidden');
+        if(adminPanel) adminPanel.classList.remove('hidden');
+        renderAdmin();
+    }
+
+    sidebarItems.forEach(li => {
+        li.addEventListener('click', () => {
+            sidebarItems.forEach(i => i.classList.remove('active'));
+            li.classList.add('active');
+            const text = li.textContent.trim().toLowerCase();
+            if(text.includes('tickets')) showTicketsView();
+            else if(text.includes('reports')) showReportsView();
+            else if(text.includes('admin')) showAdminView();
+        });
+    });
+})();
+
+// -------------------------------
+// REPORTS + ADMIN HELPERS
+// -------------------------------
+function renderReports(){
+    const byStatus = {};
+    const byQueue = {};
+    const byPriority = {};
+    tickets.forEach(t => {
+        byStatus[t.status] = (byStatus[t.status] || 0) + 1;
+        byQueue[t.queue] = (byQueue[t.queue] || 0) + 1;
+        byPriority[t.priority] = (byPriority[t.priority] || 0) + 1;
+    });
+
+    const statusEl = document.getElementById('report-by-status');
+    const queueEl = document.getElementById('report-by-queue');
+    const prioEl = document.getElementById('report-by-priority');
+
+    if(statusEl){
+        statusEl.innerHTML = Object.keys(byStatus).map(k => `<div>${k}: <strong>${byStatus[k]}</strong></div>`).join('');
+    }
+    if(queueEl){
+        queueEl.innerHTML = Object.keys(byQueue).map(k => `<div>${k}: <strong>${byQueue[k]}</strong></div>`).join('');
+    }
+    if(prioEl){
+        prioEl.innerHTML = Object.keys(byPriority).map(k => `<div>${k}: <strong>${byPriority[k]}</strong></div>`).join('');
+    }
+}
+
+function exportTicketsCSV(){
+    const headers = ['id','title','createdDate','queue','status','assignedTo','priority','requesterName','location'];
+    const rows = tickets.map(t => headers.map(h => `"${(t[h]||'').toString().replace(/"/g,'""')}"`).join(','));
+    const csv = [headers.join(','), ...rows].join('\n');
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'tickets-export.csv';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+}
+
+function renderAdmin(){
+    const listEl = document.getElementById('admin-users-list');
+    const users = JSON.parse(localStorage.getItem('users') || '[]');
+    if(!listEl) return;
+    if(users.length === 0){
+        listEl.innerHTML = '<div>No users found.</div>';
+        return;
+    }
+    const rows = users.map((u, idx) => `
+        <div class="admin-user-row" data-idx="${idx}" style="display:flex;align-items:center;gap:12px;padding:8px;border-bottom:1px solid #eee;">
+            <div style="flex:1;"><strong>${u.name}</strong> <div style="font-size:0.85rem;color:#666">${u.username} • ${u.role}</div></div>
+            <div>
+                <button class="btn-secondary admin-toggle-active">${u.active ? 'Deactivate' : 'Activate'}</button>
+            </div>
+        </div>
+    `).join('');
+    listEl.innerHTML = rows;
+
+    listEl.querySelectorAll('.admin-toggle-active').forEach((btn,i) => {
+        btn.addEventListener('click', () => {
+            users[i].active = !users[i].active;
+            localStorage.setItem('users', JSON.stringify(users));
+            renderAdmin();
+        });
+    });
+}
+
+const exportBtn = document.getElementById('export-reports-csv');
+if(exportBtn) exportBtn.addEventListener('click', exportTicketsCSV);
+
+const adminAddBtn = document.getElementById('admin-add-user');
+if(adminAddBtn){
+    adminAddBtn.addEventListener('click', () => {
+        const u = document.getElementById('admin-new-username');
+        const p = document.getElementById('admin-new-password');
+        const n = document.getElementById('admin-new-name');
+        const r = document.getElementById('admin-new-role');
+        if(!u || !p || !n || !r) return;
+        const users = JSON.parse(localStorage.getItem('users') || '[]');
+        if(!u.value.trim() || !p.value.trim()) { alert('Username and password required'); return; }
+        users.push({ username: u.value.trim(), password: p.value.trim(), name: n.value.trim() || u.value.trim(), role: r.value.trim() || 'tech', active: true });
+        localStorage.setItem('users', JSON.stringify(users));
+        u.value = p.value = n.value = r.value = '';
+        renderAdmin();
+    });
+}
 
 // -------------------------------
 // CREATE / EDIT TICKET SUBMIT
@@ -734,10 +1055,6 @@ newTicketForm.addEventListener("submit", e => {
     const todayStr = now.toISOString().slice(0, 10);
     const timestamp = now.toISOString();
 
-    const tagsArray = newTags.value
-        ? newTags.value.split(",").map(t => t.trim()).filter(t => t.length > 0)
-        : [];
-
     const assignedTo = newAssignedTo.value;
     const isAssigned = assignedTo !== "";
 
@@ -753,7 +1070,6 @@ newTicketForm.addEventListener("submit", e => {
         t.assigned = isAssigned;
         t.assignedTo = assignedTo;
         t.priority = newPriority.value;
-        t.tags = tagsArray;
         t.requesterName = newRequesterName.value.trim();
         t.requesterEmail = newRequesterEmail.value.trim();
         t.location = newLocation.value.trim();
@@ -761,8 +1077,9 @@ newTicketForm.addEventListener("submit", e => {
         t.dueDate = newDueDate.value;
         t.category = newCategory.value.trim();
         t.subcategory = newSubcategory.value.trim();
-        t.internalNotes = newNotes.value.trim();
         t.attachments = newAttachments.value.trim();
+        // save images attached via paste into the ticket
+        t.images = newDescriptionImages.length ? [...newDescriptionImages] : [];
 
         t.activity.push({
             timestamp,
@@ -789,7 +1106,7 @@ newTicketForm.addEventListener("submit", e => {
         assigned: isAssigned,
         assignedTo,
         priority: newPriority.value,
-        tags: tagsArray,
+        tags: [],
         requesterName: newRequesterName.value.trim(),
         requesterEmail: newRequesterEmail.value.trim(),
         location: newLocation.value.trim(),
@@ -798,8 +1115,9 @@ newTicketForm.addEventListener("submit", e => {
         dueDate: newDueDate.value,
         category: newCategory.value.trim(),
         subcategory: newSubcategory.value.trim(),
-        internalNotes: newNotes.value.trim(),
+        internalNotes: "",
         attachments: newAttachments.value.trim(),
+        images: newDescriptionImages.length ? [...newDescriptionImages] : [],
         comments: [],
         activity: [
             {
@@ -837,12 +1155,50 @@ function openTicketModal(ticket) {
     document.getElementById("modal-dates").textContent = `Created: ${ticket.createdDate} | Updated: ${ticket.updatedDate} | Due: ${ticket.dueDate || "N/A"}`;
     document.getElementById("modal-tags").textContent = `Tags: ${ticket.tags && ticket.tags.length ? ticket.tags.join(", ") : "None"}`;
     document.getElementById("modal-category").textContent = `Category: ${ticket.category || "N/A"} | Subcategory: ${ticket.subcategory || "N/A"}`;
-    document.getElementById("modal-notes").textContent = `Internal Notes: ${ticket.internalNotes || "None"} | Attachments: ${ticket.attachments || "None"}`;
+    
+    // Set ticket description
+    const descriptionDiv = document.getElementById("modal-description");
+    if (descriptionDiv) {
+        descriptionDiv.textContent = ticket.description || "No description provided.";
+    }
 
     modalStatusSelect.value = ticket.status;
     modalAssignSelect.value = ticket.assignedTo || "";
 
     modal.dataset.ticketId = ticket.id;
+
+    // render ticket images gallery
+    const ticketGallery = document.getElementById('modal-ticket-images');
+    if (ticketGallery) {
+        ticketGallery.innerHTML = '';
+        const imgs = ticket.images || [];
+        imgs.forEach(dataUrl => {
+            const div = document.createElement('div');
+            div.classList.add('image-gallery-item');
+            const img = document.createElement('img');
+            img.src = dataUrl;
+            img.style.cursor = 'pointer';
+            img.addEventListener('click', () => {
+                const modalView = document.createElement('div');
+                modalView.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);display:flex;align-items:center;justify-content:center;z-index:3000;';
+                const fullImg = document.createElement('img');
+                fullImg.src = dataUrl;
+                fullImg.style.maxWidth = '90vw';
+                fullImg.style.maxHeight = '90vh';
+                fullImg.style.objectFit = 'contain';
+                modalView.appendChild(fullImg);
+                modalView.addEventListener('click', () => modalView.remove());
+                document.body.appendChild(modalView);
+            });
+            div.appendChild(img);
+            ticketGallery.appendChild(div);
+        });
+    }
+
+    // reset any in-progress comment images when opening a ticket
+    commentImages = [];
+    const commentGallery = document.getElementById('modal-comment-images');
+    if (commentGallery) commentGallery.innerHTML = '';
 
     renderComments(ticket);
     renderActivity(ticket);
@@ -877,6 +1233,35 @@ function renderComments(ticket) {
                 ${c.text}
             </div>
         `;
+
+        // If comment has images, render them below the text
+        if (c.images && c.images.length) {
+            const gallery = document.createElement('div');
+            gallery.classList.add('image-gallery');
+            c.images.forEach((dataUrl) => {
+                const item = document.createElement('div');
+                item.classList.add('image-gallery-item');
+                const img = document.createElement('img');
+                img.src = dataUrl;
+                img.style.cursor = 'pointer';
+                img.addEventListener('click', () => {
+                    const modalView = document.createElement('div');
+                    modalView.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);display:flex;align-items:center;justify-content:center;z-index:3000;';
+                    const fullImg = document.createElement('img');
+                    fullImg.src = dataUrl;
+                    fullImg.style.maxWidth = '90vw';
+                    fullImg.style.maxHeight = '90vh';
+                    fullImg.style.objectFit = 'contain';
+                    modalView.appendChild(fullImg);
+                    modalView.addEventListener('click', () => modalView.remove());
+                    document.body.appendChild(modalView);
+                });
+                item.appendChild(img);
+                gallery.appendChild(item);
+            });
+            div.appendChild(gallery);
+        }
+
         modalCommentsList.appendChild(div);
     });
 }
@@ -923,10 +1308,14 @@ modalCommentAdd.addEventListener("click", () => {
     const now = new Date();
     const timestamp = now.toISOString();
 
+    // include any pasted images with the comment
+    const imagesForComment = commentImages.length ? [...commentImages] : [];
+
     t.comments.push({
         author: currentUser,
         timestamp,
-        text
+        text,
+        images: imagesForComment
     });
 
     t.activity.push({
@@ -936,6 +1325,10 @@ modalCommentAdd.addEventListener("click", () => {
     });
 
     modalCommentText.value = "";
+    // clear and re-render comment image gallery
+    commentImages = [];
+    const commentGallery = document.getElementById('modal-comment-images');
+    if (commentGallery) commentGallery.innerHTML = '';
     renderComments(t);
     renderActivity(t);
     showToast("Comment added");
@@ -960,15 +1353,17 @@ modalEditBtn.addEventListener("click", () => {
     newPriority.value = t.priority;
     newStatus.value = t.status;
     newAssignedTo.value = t.assignedTo || "";
-    newTags.value = t.tags.join(", ");
     newRequesterName.value = t.requesterName;
     newRequesterEmail.value = t.requesterEmail;
     newLocation.value = t.location;
     newDueDate.value = t.dueDate;
     newCategory.value = t.category;
     newSubcategory.value = t.subcategory;
-    newNotes.value = t.internalNotes;
     newAttachments.value = t.attachments;
+
+    // load any images attached to this ticket into the edit form
+    newDescriptionImages = t.images && t.images.length ? [...t.images] : [];
+    renderImageGallery('new-description-images', newDescriptionImages);
 
     hideModal(modal);
     showModal(newTicketModal);
@@ -1027,8 +1422,6 @@ modalAssignSave.addEventListener("click", () => {
     updateTickets();
     openTicketModal(t);
 });
-
-
 
 // -------------------------------
 // MAIN RENDER FUNCTION
@@ -1142,7 +1535,7 @@ function renderCards(ticketsToRender) {
         card.innerHTML = `
             <div class="ticket-title">
                 ${t.title}
-                <span class="priority-badge priority-${t.priority.toLowerCase()}">
+                <span class="priority-label priority-${t.priority.toLowerCase()}">
                     ${t.priority}
                 </span>
             </div>
@@ -1152,6 +1545,9 @@ function renderCards(ticketsToRender) {
                     ${t.status.toUpperCase()}
                 </span> • 
                 Assigned: ${t.assigned ? t.assignedTo || "Yes" : "No"}
+            </div>
+            <div class="ticket-meta" style="margin-top: 8px; color: #666; font-size: 13px;">
+                Created: ${t.createdDate}
             </div>
         `;
 
@@ -1172,6 +1568,7 @@ function renderTable(ticketsToRender) {
             <tr>
                 <th>ID</th>
                 <th>Title</th>
+                <th>Created</th>
                 <th>Queue</th>
                 <th>Status</th>
                 <th>Assigned To</th>
@@ -1188,11 +1585,12 @@ function renderTable(ticketsToRender) {
         row.innerHTML = `
             <td>${t.id}</td>
             <td>${t.title}</td>
+            <td>${t.createdDate}</td>
             <td>${t.queue}</td>
             <td><span class="status-${t.status}">${t.status.toUpperCase()}</span></td>
             <td>${t.assigned ? (t.assignedTo || "Assigned") : "Unassigned"}</td>
             <td>
-                <span class="priority-badge priority-${t.priority.toLowerCase()}">
+                <span class="priority-label priority-${t.priority.toLowerCase()}">
                     ${t.priority}
                 </span>
             </td>
@@ -1219,7 +1617,79 @@ function showToast(message) {
     toast.textContent = message;
     toast.classList.add("show");
     setTimeout(() => toast.classList.remove("show"), 2200);
-
 }
 
+// IMAGE STORAGE AND PASTE HANDLERS
+let newDescriptionImages = [];
+let commentImages = [];
 
+function handleImagePaste(e, imageArray, galleryElementId) {
+    const clipboardItems = e.clipboardData?.items || [];
+    for (let item of clipboardItems) {
+        if (item.type.indexOf("image") !== -1) {
+            e.preventDefault();
+            const file = item.getAsFile();
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    const dataUrl = event.target?.result;
+                    if (dataUrl && imageArray.length < 5) {
+                        imageArray.push(dataUrl);
+                        renderImageGallery(galleryElementId, imageArray);
+                        showToast(`Image added (${imageArray.length}/5)`);
+                    }
+                };
+                reader.readAsDataURL(file);
+            }
+            break;
+        }
+    }
+}
+
+function renderImageGallery(galleryElementId, imageArray) {
+    const gallery = document.getElementById(galleryElementId);
+    if (!gallery) return;
+    gallery.innerHTML = "";
+    imageArray.forEach((dataUrl, index) => {
+        const div = document.createElement("div");
+        div.classList.add("image-gallery-item");
+        const img = document.createElement("img");
+        img.src = dataUrl;
+        img.style.cursor = "pointer";
+        img.addEventListener("click", () => {
+            const modal = document.createElement("div");
+            modal.style.cssText = "position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);display:flex;align-items:center;justify-content:center;z-index:2000;cursor:pointer;";
+            const fullImg = document.createElement("img");
+            fullImg.src = dataUrl;
+            fullImg.style.maxWidth = "90vw";
+            fullImg.style.maxHeight = "90vh";
+            fullImg.style.objectFit = "contain";
+            modal.appendChild(fullImg);
+            modal.addEventListener("click", () => modal.remove());
+            document.body.appendChild(modal);
+        });
+        const removeBtn = document.createElement("button");
+        removeBtn.classList.add("remove-btn");
+        removeBtn.textContent = "✕";
+        removeBtn.addEventListener("click", () => {
+            imageArray.splice(index, 1);
+            renderImageGallery(galleryElementId, imageArray);
+        });
+        div.appendChild(img);
+        div.appendChild(removeBtn);
+        gallery.appendChild(div);
+    });
+}
+
+if (newDescription) {
+    newDescription.addEventListener("paste", (e) => {
+        handleImagePaste(e, newDescriptionImages, "new-description-images");
+    });
+}
+
+if (modalCommentText) {
+    modalCommentText.addEventListener("paste", (e) => {
+        handleImagePaste(e, commentImages, "modal-comment-images");
+    });
+}
+// (Old paste-to-text handler removed - gallery-only paste is used)

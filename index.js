@@ -1,6 +1,7 @@
 // -------------------------------
 // MOCK ACCOUNTS WITH ROLES
 // -------------------------------
+const DEFAULT_VERSION = "1.1"; // Increment this when you update defaultAccounts or tickets
 const defaultAccounts = [
     { username: "admin", password: "admin", name: "Administrator", role: "admin", active: true },
     { username: "puhl", password: "admin123", name: "Peter Uhl", role: "tech", active: true },
@@ -8,11 +9,21 @@ const defaultAccounts = [
     { username: "adayala", password: "network!", name: "Andrew Ayala", role: "tech", active: true }
 ];
 
-// Seed users into localStorage if not present
+// Seed users into localStorage if not present or version changed
 function seedUsers() {
-    const existing = localStorage.getItem("users");
-    if (!existing) {
+    const currentVersion = localStorage.getItem("defaultVersion");
+    if (currentVersion !== DEFAULT_VERSION) {
+        // Clear localStorage to reset everything
+        localStorage.clear();
+        // Set new defaults
         localStorage.setItem("users", JSON.stringify(defaultAccounts));
+        localStorage.setItem("defaultVersion", DEFAULT_VERSION);
+    } else {
+        // Ensure users exist (in case localStorage was cleared manually)
+        const existing = localStorage.getItem("users");
+        if (!existing) {
+            localStorage.setItem("users", JSON.stringify(defaultAccounts));
+        }
     }
 }
 

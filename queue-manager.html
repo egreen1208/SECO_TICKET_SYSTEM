@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Queue Manager - Ticket System</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .queue-manager {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .manager-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .manager-header h1 {
+            margin: 0;
+            color: #333;
+        }
+
+        .queue-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .queue-card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border-left: 4px solid #007bff;
+            position: relative;
+        }
+
+        .queue-card.inactive {
+            opacity: 0.6;
+            background: #f8f9fa;
+        }
+
+        .queue-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 15px;
+        }
+
+        .queue-icon {
+            font-size: 32px;
+            margin-right: 10px;
+        }
+
+        .queue-title {
+            flex: 1;
+        }
+
+        .queue-name {
+            font-size: 18px;
+            font-weight: 600;
+            margin: 0 0 5px 0;
+            color: #333;
+        }
+
+        .queue-id {
+            font-size: 12px;
+            color: #666;
+            font-family: monospace;
+        }
+
+        .queue-actions {
+            display: flex;
+            gap: 5px;
+        }
+
+        .queue-actions button {
+            padding: 5px 10px;
+            font-size: 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .btn-edit {
+            background: #007bff;
+            color: white;
+        }
+
+        .btn-delete {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-toggle {
+            background: #6c757d;
+            color: white;
+        }
+
+        .queue-description {
+            font-size: 14px;
+            color: #666;
+            margin: 10px 0;
+        }
+
+        .queue-meta {
+            display: flex;
+            gap: 15px;
+            font-size: 12px;
+            color: #666;
+            margin: 10px 0;
+        }
+
+        .queue-categories {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+        }
+
+        .queue-categories h4 {
+            font-size: 13px;
+            margin: 0 0 10px 0;
+            color: #555;
+        }
+
+        .category-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+
+        .category-badge {
+            background: #e9ecef;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            color: #495057;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 700px;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 30px;
+        }
+
+        .modal-header {
+            margin-bottom: 20px;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            color: #333;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .form-grid.full {
+            grid-template-columns: 1fr;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 60px;
+        }
+
+        .categories-editor {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 4px;
+        }
+
+        .categories-editor h3 {
+            margin: 0 0 15px 0;
+            font-size: 16px;
+            color: #333;
+        }
+
+        .category-group {
+            margin-bottom: 15px;
+            padding: 15px;
+            background: white;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+
+        .category-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .category-header input {
+            flex: 1;
+            padding: 6px 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        .subcategory-list {
+            margin-left: 20px;
+        }
+
+        .subcategory-item {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 5px;
+        }
+
+        .subcategory-item input {
+            flex: 1;
+            padding: 5px 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 13px;
+        }
+
+        .btn-add {
+            background: #28a745;
+            color: white;
+            padding: 5px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        .btn-remove {
+            background: #dc3545;
+            color: white;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .modal-footer {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+
+        .btn-primary {
+            background: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .color-picker-group {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .color-picker-group input[type="color"] {
+            width: 60px;
+            height: 38px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .parent-queue-badge {
+            background: #6c757d;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 10px;
+            margin-left: 5px;
+        }
+
+        .custom-field-item {
+            margin-bottom: 15px;
+            padding: 15px;
+            background: white;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+
+        .custom-field-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .custom-field-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .custom-field-options {
+            margin-top: 10px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 4px;
+        }
+
+        .option-item {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 5px;
+        }
+
+        .option-item input {
+            flex: 1;
+            padding: 4px 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+    <div class="queue-manager">
+        <div class="manager-header">
+            <div>
+                <h1>Queue Manager</h1>
+                <p style="margin: 5px 0 0 0; color: #666;">Create and manage ticket queues and categories</p>
+            </div>
+            <div>
+                <button class="btn-primary" id="addQueueBtn">+ Add Queue</button>
+                <button class="btn-secondary" onclick="window.location.href='admin.html'">Back to Admin</button>
+            </div>
+        </div>
+
+        <div id="queueGrid" class="queue-grid">
+            <!-- Queue cards will be rendered here -->
+        </div>
+    </div>
+
+    <!-- Add/Edit Queue Modal -->
+    <div id="queueModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Add New Queue</h2>
+            </div>
+
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="queueId">Queue ID *</label>
+                    <input type="text" id="queueId" placeholder="e.g., it-support" required>
+                    <small style="color: #666; margin-top: 3px;">Lowercase, hyphens only. Cannot be changed.</small>
+                </div>
+                <div class="form-group">
+                    <label for="queueName">Queue Name *</label>
+                    <input type="text" id="queueName" placeholder="e.g., IT Support" required>
+                </div>
+            </div>
+
+            <div class="form-grid full">
+                <div class="form-group">
+                    <label for="queueDescription">Description</label>
+                    <textarea id="queueDescription" placeholder="Brief description of this queue"></textarea>
+                </div>
+            </div>
+
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="queueIcon">Icon (Emoji)</label>
+                    <input type="text" id="queueIcon" placeholder="💻" maxlength="2">
+                </div>
+                <div class="form-group">
+                    <label for="queueColor">Color</label>
+                    <div class="color-picker-group">
+                        <input type="color" id="queueColor" value="#007bff">
+                        <input type="text" id="queueColorText" value="#007bff" pattern="^#[0-9A-Fa-f]{6}$">
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="queueParent">Parent Queue</label>
+                    <select id="queueParent">
+                        <option value="">None (Main Queue)</option>
+                    </select>
+                    <small style="color: #666; margin-top: 3px;">Sub-queues inherit permissions from parent</small>
+                </div>
+                <div class="form-group">
+                    <label for="queueOrder">Display Order</label>
+                    <input type="number" id="queueOrder" value="1" min="1">
+                </div>
+            </div>
+
+            <div class="categories-editor">
+                <h3>Custom Fields</h3>
+                <p style="font-size: 13px; color: #666; margin-bottom: 10px;">Add custom fields that appear in the ticket creation form for this queue</p>
+                <div id="customFieldsContainer">
+                    <!-- Custom fields will be rendered here -->
+                </div>
+                <button class="btn-add" id="addCustomFieldBtn">+ Add Custom Field</button>
+            </div>
+
+            <div class="categories-editor">
+                <h3>Categories & Subcategories</h3>
+                <div id="categoriesContainer">
+                    <!-- Categories will be rendered here -->
+                </div>
+                <button class="btn-add" id="addCategoryBtn">+ Add Category</button>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn-secondary" id="cancelQueueBtn">Cancel</button>
+                <button class="btn-primary" id="saveQueueBtn">Save Queue</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="queue-manager.js"></script>
+</body>
+</html>

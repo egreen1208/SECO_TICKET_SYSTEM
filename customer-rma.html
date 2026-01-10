@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submit an RMA Request - SECO Energy Service Portal</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="customer-page">
+
+    <header class="topbar">
+        <div class="topbar-left">
+            <img src="seco-logo.png" alt="SECO Energy Logo" class="logo">
+            <h1>Service Portal</h1>
+        </div>
+        <div class="topbar-right">
+            <a href="landing.html" class="pill-btn">Back to Portal</a>
+            <div class="dark-mode-toggle">
+                <label class="switch">
+                    <input type="checkbox" id="dark-mode-toggle">
+                    <span class="slider"></span>
+                </label>
+                <span class="dark-mode-label">Dark mode</span>
+            </div>
+        </div>
+    </header>
+
+    <div class="layout">
+        <main class="container customer-container">
+            <section class="panel customer-panel">
+                <h2>Submit an RMA / Warehouse Request</h2>
+                <p style="margin: -8px 0 16px; color: #666;">Returns, exchanges, parts requests, inventory inquiries, and shipment tracking.</p>
+                <form id="customer-ticket-form" class="customer-form">
+                    <fieldset class="form-section">
+                        <legend>Your Information</legend>
+                        <label>Full Name <span class="required">*</span>
+                            <input type="text" id="customer-name" required placeholder="John Doe">
+                        </label>
+                        <label>Email <span class="required">*</span>
+                            <input type="email" id="customer-email" required placeholder="john@example.com">
+                        </label>
+                        <label>Phone (Optional)
+                            <input type="tel" id="customer-phone" placeholder="(555) 123-4567">
+                        </label>
+                        <label>Department/Location <span class="required">*</span>
+                            <input type="text" id="customer-location" required placeholder="Building A, Room 201">
+                        </label>
+                    </fieldset>
+
+                    <fieldset class="form-section">
+                        <legend>Request Details</legend>
+                        <label>Department
+                            <select id="customer-queue" disabled>
+                                <option value="rma" selected>RMA / Warehouse</option>
+                            </select>
+                        </label>
+                        <label>Category <span class="required">*</span>
+                            <select id="customer-category" required>
+                                <option value="">Select category...</option>
+                            </select>
+                        </label>
+                        <label>Subcategory
+                            <select id="customer-subcategory">
+                                <option value="">Select subcategory...</option>
+                            </select>
+                        </label>
+                        <label>Item/Part Number
+                            <input type="text" id="customer-item-number" placeholder="SKU, Model, or Part Number">
+                        </label>
+                        <label>Quantity
+                            <input type="number" id="customer-quantity" min="1" value="1">
+                        </label>
+                        <label>Priority <span class="required">*</span>
+                            <select id="customer-priority" required>
+                                <option value="Low">Low</option>
+                                <option value="Medium" selected>Medium</option>
+                                <option value="High">High</option>
+                                <option value="Critical">Critical</option>
+                            </select>
+                        </label>
+                        <label>Subject <span class="required">*</span>
+                            <input type="text" id="customer-title" required placeholder="Brief description of your request">
+                        </label>
+                        <label for="customer-description" class="field-label">Details <span class="required">*</span></label>
+                        <textarea id="customer-description" rows="6" required placeholder="Describe the item, reason for return/request, condition, tracking number (if applicable), etc."></textarea>
+                    </fieldset>
+
+                    <div class="form-actions">
+                        <span id="customer-error" class="form-error"></span>
+                        <span id="customer-success" class="form-success"></span>
+                        <button type="submit" class="btn-primary">Submit RMA Request</button>
+                    </div>
+                </form>
+            </section>
+        </main>
+    </div>
+
+    <div id="toast" class="toast"></div>
+
+    <script src="app.js"></script>
+    <script>
+    // Auto-populate customer info from login
+    const customerInfo = localStorage.getItem('customerInfo');
+    if (customerInfo) {
+        const info = JSON.parse(customerInfo);
+        const nameField = document.getElementById('customer-name');
+        const emailField = document.getElementById('customer-email');
+        const phoneField = document.getElementById('customer-phone');
+        
+        if (nameField) nameField.value = info.name || '';
+        if (emailField) emailField.value = info.email || '';
+        if (phoneField) phoneField.value = info.phone || '';
+    } else {
+        window.location.href = 'index.html';
+    }
+
+    const forcedQueue = "rma";
+    const customerQueue = document.getElementById('customer-queue');
+    const customerCategory = document.getElementById('customer-category');
+    const customerSubcategory = document.getElementById('customer-subcategory');
+
+    if (customerQueue) {
+        customerQueue.value = forcedQueue;
+    }
+
+    function refreshCustomerCategories(presetCategory = "", presetSubcategory = "") {
+        populateCategorySelect(forcedQueue, customerCategory, customerSubcategory, presetCategory, presetSubcategory);
+    }
+
+    if (customerCategory) {
+        customerCategory.addEventListener('change', () => {
+            populateSubcategorySelect(forcedQueue, customerCategory.value, customerSubcategory);
+        });
+    }
+
+    refreshCustomerCategories();
+
+    document.getElementById('customer-ticket-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const itemNumber = document.getElementById('customer-item-number').value || 'N/A';
+        const quantity = document.getElementById('customer-quantity').value || '1';
+        
+        const newTicket = {
+            id: 'RMA-' + Math.random().toString(36).slice(2, 9).toUpperCase(),
+            title: document.getElementById('customer-title').value,
+            description: document.getElementById('customer-description').value + '\n\n--- Item Details ---\nItem/Part Number: ' + itemNumber + '\nQuantity: ' + quantity,
+            requesterName: document.getElementById('customer-name').value,
+            requesterEmail: document.getElementById('customer-email').value,
+            phone: document.getElementById('customer-phone').value || 'N/A',
+            location: document.getElementById('customer-location').value,
+            category: document.getElementById('customer-category').value,
+            subcategory: document.getElementById('customer-subcategory').value,
+            queue: forcedQueue,
+            priority: document.getElementById('customer-priority').value,
+            status: 'open',
+            assigned: false,
+            assignedTo: '',
+            createdDate: new Date().toISOString().split('T')[0],
+            updatedDate: new Date().toISOString().split('T')[0],
+            dueDate: '',
+            tags: ['rma', 'warehouse'],
+            images: [],
+            comments: [],
+            activity: [{ timestamp: new Date().toISOString(), user: 'Customer Portal', action: 'RMA request created' }]
+        };
+        if (!window.tickets) window.tickets = [];
+        window.tickets.push(newTicket);
+        localStorage.setItem('seco_tickets', JSON.stringify(window.tickets));
+        showToast('RMA request submitted successfully! Redirecting...');
+        setTimeout(() => { window.location.href = 'index.html'; }, 1800);
+    });
+    </script>
+</body>
+</html>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin - Technician Service Portal</title>
+    <title>User Management - Technician Service Portal</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body class="admin-page">
@@ -45,8 +45,8 @@
                 <li class="has-children open">
                     <button class="sidebar-toggle-btn" type="button">Admin ▾</button>
                     <ul class="submenu">
-                        <li class="active"><a href="admin.html">Admin Overview</a></li>
-                        <li><a href="admin-users.html">User Management</a></li>
+                        <li><a href="admin.html">Admin Overview</a></li>
+                        <li class="active"><a href="admin-users.html">User Management</a></li>
                         <li><a href="admin-system.html">System Management</a></li>
                     </ul>
                 </li>
@@ -56,22 +56,62 @@
         <!-- Main Content Area -->
         <main class="container">
 
-            <!-- Admin Overview Panel -->
-            <section class="panel">
-                <h2>Admin</h2>
-
-                <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap:16px; margin:16px 0;">
-                    <div class="admin-section" style="background:#f8f9fa; padding:18px; border-radius:10px;">
-                        <h3 style="margin-top:0;">User Management</h3>
-                        <p style="color:#555; margin:0 0 12px;">Add, edit, or deactivate staff accounts and permissions.</p>
-                        <button class="pill-btn pill-primary" onclick="window.location.href='admin-users.html'">Go to User Management</button>
+            <!-- User Management Panel -->
+            <section class="panel" id="admin-panel">
+                <h2>User Management</h2>
+                
+                <div class="admin-section">
+                    <h4 style="margin-top:12px;">Add New User</h4>
+                    <div class="form-grid">
+                        <label>Username <input type="text" id="admin-new-username"></label>
+                        <label>Password <input type="password" id="admin-new-password"></label>
+                        <label>Name <input type="text" id="admin-new-name"></label>
+                        <label>
+                            Role 
+                            <select id="admin-new-role" class="role-select">
+                                <option value="tech">Technician</option>
+                                <option value="admin">Administrator</option>
+                            </select>
+                        </label>
                     </div>
-
-                    <div class="admin-section" style="background:#f8f9fa; padding:18px; border-radius:10px;">
-                        <h3 style="margin-top:0;">System Management</h3>
-                        <p style="color:#555; margin:0 0 12px;">Configure queues, categories, and system settings.</p>
-                        <button class="pill-btn pill-primary" onclick="window.location.href='admin-system.html'">Go to System Management</button>
+                    
+                    <div class="permission-box">
+                        <h5 class="permission-heading">Queue Access</h5>
+                        <div id="admin-queue-checkboxes" class="checkbox-grid">
+                            <!-- Queue checkboxes will be dynamically generated -->
+                        </div>
                     </div>
+                    
+                    <div class="permission-box">
+                        <h5 class="permission-heading">Permissions</h5>
+                        <div id="admin-permissions-checkboxes" class="checkbox-grid">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="admin-new-can-create" checked>
+                                <span>Create Tickets</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="admin-new-can-edit" checked>
+                                <span>Edit Tickets</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="admin-new-can-delete">
+                                <span>Delete Tickets</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="admin-new-can-reports" checked>
+                                <span>View Reports</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="admin-new-can-export">
+                                <span>Export Data</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top:8px;"><button id="admin-add-user" class="btn-primary">Add User</button></div>
+
+                    <h4 style="margin-top:24px;">Existing Users</h4>
+                    <div id="admin-users-list"></div>
                 </div>
             </section>
 

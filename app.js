@@ -7,7 +7,7 @@ const tickets = [
     id: 1,
     title: "Fix broken light in hallway",
     description: "Light is out in hallway near break room. LED fixture appears to be faulty. Need to order replacement and schedule installation.",
-    queue: "building-grounds",
+    queue: "buildings-grounds",
     status: "open",
     assigned: false,
     assignedTo: "",
@@ -705,6 +705,269 @@ const priorityRank = {
 };
 
 // -------------------------------
+// DYNAMIC QUEUE CONFIGURATION
+// -------------------------------
+const DEFAULT_QUEUE_CONFIG = [
+    {
+        id: "buildings-grounds",
+        name: "Buildings & Grounds",
+        description: "Facilities and maintenance requests",
+        color: "#28a745",
+        icon: "🏢",
+        active: true,
+        parentQueue: null,
+        order: 1,
+        categories: {
+            "HVAC": ["Heating", "Cooling", "Ventilation", "Air Quality"],
+            "Plumbing": ["Leak", "Clog/Drain", "Fixture", "Restroom"],
+            "Carpentry": ["Doors/Frames", "Furniture", "Drywall", "Ceiling"],
+            "Grounds": ["Landscaping", "Debris/Trash", "Pest Control", "Irrigation"],
+            "Custodial": ["Spill/Cleanup", "Restocking", "Floor Care", "Disinfection"],
+            "Access/Keys": ["Locks/Keys", "Badges", "Door Hardware"]
+        },
+        customFields: [
+            {
+                id: "building",
+                label: "Building Name",
+                type: "dropdown",
+                required: true,
+                options: ["Main Building", "Warehouse", "Office A", "Office B"],
+                placeholder: "Select building"
+            },
+            {
+                id: "room_number",
+                label: "Room Number",
+                type: "text",
+                required: false,
+                placeholder: "e.g., 201"
+            }
+        ]
+    },
+    {
+        id: "electrical",
+        name: "Electrical Services",
+        description: "Electrical systems and power",
+        color: "#ffc107",
+        icon: "⚡",
+        active: true,
+        parentQueue: null,
+        order: 2,
+        categories: {
+            "Power": ["Outage", "Brownout", "Circuit/Breaker", "Panel"],
+            "Lighting": ["Interior Lighting", "Exterior Lighting", "Emergency Lighting", "Bulb/Ballast"],
+            "Equipment": ["Generator", "UPS", "Surge/Power Quality", "Equipment Hookup"],
+            "Safety": ["Egress/Exit Signs", "GFCI/AFCI", "Arc Flash", "Inspection"],
+            "Meters/Monitoring": ["Meter Issue", "Monitoring/SCADA", "Load Study"]
+        },
+        customFields: []
+    },
+    {
+        id: "moves",
+        name: "Move Requests",
+        description: "Office and equipment moves",
+        color: "#6f42c1",
+        icon: "📦",
+        active: true,
+        parentQueue: null,
+        order: 3,
+        categories: {
+            "Office Move": ["Furniture/Desk", "IT Equipment", "Full Office", "Cubicle/Workstation"],
+            "IT Relocation": ["Desktop/Laptop", "Phone", "Network Equipment", "User Permissions"],
+            "Facilities Move": ["Furniture Only", "Equipment Only", "Storage/Archive"],
+            "User Setup": ["Role Change", "Department Transfer", "Permissions Update"]
+        },
+        customFields: [
+            {
+                id: "move_from",
+                label: "Move From Location",
+                type: "text",
+                required: true,
+                placeholder: "Current location"
+            },
+            {
+                id: "move_to",
+                label: "Move To Location",
+                type: "text",
+                required: true,
+                placeholder: "Destination location"
+            },
+            {
+                id: "move_date",
+                label: "Preferred Move Date",
+                type: "date",
+                required: false
+            }
+        ]
+    },
+    {
+        id: "rma",
+        name: "RMA / Warehouse",
+        description: "Returns and inventory",
+        color: "#fd7e14",
+        icon: "📋",
+        active: true,
+        parentQueue: null,
+        order: 4,
+        categories: {
+            "Return/Exchange": ["Defective Item", "Wrong Item", "Warranty Return", "Credit Return"],
+            "Parts Request": ["Replacement Part", "Spare Part", "Consumables", "Emergency Stock"],
+            "Inventory": ["Stock Check", "Reorder Request", "Asset Tag", "Equipment Checkout"],
+            "Shipping": ["Incoming Shipment", "Outgoing Shipment", "Tracking Issue"]
+        },
+        customFields: []
+    },
+    {
+        id: "it",
+        name: "Information Technology",
+        description: "IT services and support",
+        color: "#007bff",
+        icon: "💻",
+        active: true,
+        parentQueue: null,
+        order: 5,
+        categories: {
+            "Account Access": ["Password Reset", "New Account", "Permissions Change", "MFA/SSO"],
+            "Hardware": ["Desktop/Laptop", "Printer/Scanner", "Mobile Device", "Peripherals"],
+            "Software": ["Install/Update", "Application Issue", "License/Access", "Productivity Suite"],
+            "Network": ["Connectivity", "VPN", "Wi-Fi", "Firewall/Proxy"],
+            "Phone/Telecom": ["VoIP Phone", "Extension/Forwarding", "Voicemail", "Conference"],
+            "Security": ["Phishing/Malware", "Antivirus", "Security Incident", "Encryption"]
+        },
+        customFields: [
+            {
+                id: "asset_tag",
+                label: "Asset Tag",
+                type: "text",
+                required: false,
+                placeholder: "e.g., IT-12345"
+            },
+            {
+                id: "urgent",
+                label: "Business Critical",
+                type: "checkbox",
+                required: false
+            }
+        ]
+    },
+    {
+        id: "it-support",
+        name: "IT Support",
+        description: "End-user support",
+        color: "#17a2b8",
+        icon: "🎧",
+        active: true,
+        parentQueue: "it",
+        order: 1,
+        categories: {
+            "Account Access": ["Password Reset", "New Account", "Permissions Change", "MFA/SSO"],
+            "Hardware": ["Desktop/Laptop", "Printer/Scanner", "Mobile Device", "Peripherals"],
+            "Software": ["Install/Update", "Application Issue", "License/Access", "Productivity Suite"]
+        },
+        customFields: []
+    },
+    {
+        id: "it-applications",
+        name: "IT Applications",
+        description: "Application support",
+        color: "#6610f2",
+        icon: "📱",
+        active: true,
+        parentQueue: "it",
+        order: 2,
+        categories: {
+            "Software": ["Install/Update", "Application Issue", "License/Access", "Productivity Suite"],
+            "Database": ["Access", "Query", "Performance", "Backup"],
+            "Business Apps": ["CRM", "ERP", "Finance", "HR Systems"]
+        },
+        customFields: []
+    },
+    {
+        id: "it-networking",
+        name: "IT Networking",
+        description: "Network infrastructure",
+        color: "#20c997",
+        icon: "🌐",
+        active: true,
+        parentQueue: "it",
+        order: 3,
+        categories: {
+            "Network": ["Connectivity", "VPN", "Wi-Fi", "Firewall/Proxy"],
+            "Infrastructure": ["Switch", "Router", "Cabling", "Rack/Cabinet"],
+            "Phone/Telecom": ["VoIP Phone", "Extension/Forwarding", "Voicemail", "Conference"]
+        },
+        customFields: []
+    },
+    {
+        id: "it-systems",
+        name: "IT Systems",
+        description: "Server and infrastructure",
+        color: "#e83e8c",
+        icon: "🖥️",
+        active: true,
+        parentQueue: "it",
+        order: 4,
+        categories: {
+            "Server": ["Windows Server", "Linux", "VMware", "Hyper-V"],
+            "Storage": ["SAN/NAS", "Backup", "Archive", "Capacity"],
+            "Cloud": ["Azure", "AWS", "O365", "Migration"]
+        },
+        customFields: []
+    },
+    {
+        id: "it-security",
+        name: "IT Security",
+        description: "Security and compliance",
+        color: "#dc3545",
+        icon: "🔒",
+        active: true,
+        parentQueue: "it",
+        order: 5,
+        categories: {
+            "Security": ["Phishing/Malware", "Antivirus", "Security Incident", "Encryption"],
+            "Access Control": ["MFA", "SSO", "Certificates", "VPN"],
+            "Compliance": ["Audit", "Policy", "Training", "Risk Assessment"]
+        },
+        customFields: []
+    }
+];
+
+// Initialize queue configuration from localStorage or defaults
+function getQueueConfig() {
+    const stored = localStorage.getItem("queueConfiguration");
+    if (stored) {
+        return JSON.parse(stored);
+    }
+    // First time: save defaults
+    localStorage.setItem("queueConfiguration", JSON.stringify(DEFAULT_QUEUE_CONFIG));
+    return DEFAULT_QUEUE_CONFIG;
+}
+
+function saveQueueConfig(config) {
+    localStorage.setItem("queueConfiguration", JSON.stringify(config));
+}
+
+// Get active queues only
+function getActiveQueues() {
+    return getQueueConfig().filter(q => q.active);
+}
+
+// Get queue by ID
+function getQueueById(id) {
+    return getQueueConfig().find(q => q.id === id);
+}
+
+// Legacy compatibility: build old-style category map from new config
+const queueCategoryOptions = {};
+function refreshCategoryOptions() {
+    const config = getQueueConfig();
+    config.forEach(q => {
+        const key = normalizeQueueKey(q.id);
+        queueCategoryOptions[key] = { categories: q.categories };
+    });
+}
+refreshCategoryOptions();
+
+// -------------------------------
 // STATE VARIABLES & DOM HOOKS
 // -------------------------------
 let selectedQueue = null;
@@ -713,6 +976,44 @@ let selectedPriorityFilter = "all";
 let viewMode = "cards";
 let editingTicketId = null;
 let currentUser = localStorage.getItem("currentUser") || "System";
+let currentUserRole = localStorage.getItem("currentUserRole") || "tech";
+let currentUserPermissions = JSON.parse(localStorage.getItem("currentUserPermissions") || "{}");
+
+// Permission helper functions
+function hasQueueAccess(queueId) {
+    if (!currentUserPermissions.queues) return true; // No restrictions if not set
+    if (currentUserPermissions.queues.includes("*")) return true; // Admin has all access
+    
+    // Normalize queue for comparison
+    const normalized = normalizeQueueKey(queueId);
+    
+    // Check if user has access to this queue or its parent
+    return currentUserPermissions.queues.some(q => {
+        const normalizedQ = normalizeQueueKey(q);
+        // Exact match or user has parent queue access
+        return normalizedQ === normalized || 
+               (normalized === "it" && q.startsWith("it")) ||
+               (queueId.startsWith("it-") && normalizedQ === "it");
+    });
+}
+
+function hasPermission(permission) {
+    if (currentUserRole === "admin") return true; // Admins have all permissions
+    return currentUserPermissions[permission] === true;
+}
+
+function getAccessibleQueues() {
+    if (!currentUserPermissions.queues || currentUserPermissions.queues.includes("*")) {
+        return ["buildings-grounds", "electrical", "it", "it-support", "it-applications", "it-networking", "it-systems", "it-security", "moves", "rma"];
+    }
+    
+    // Return user's assigned queues plus any sub-queues
+    const queues = [...currentUserPermissions.queues];
+    if (queues.includes("it")) {
+        queues.push("it-support", "it-applications", "it-networking", "it-systems", "it-security");
+    }
+    return queues;
+}
 
 const currentUserDisplay = document.getElementById("current-user-display");
 if (currentUserDisplay) {
@@ -763,6 +1064,8 @@ const newDueDate = document.getElementById("new-due-date");
 const newCategory = document.getElementById("new-category");
 const newSubcategory = document.getElementById("new-subcategory");
 const newAttachments = document.getElementById("new-attachments");
+const newTimeHours = document.getElementById("new-time-hours");
+const newTimeMinutes = document.getElementById("new-time-minutes");
 
 // Toast
 const toast = document.getElementById("toast");
@@ -775,13 +1078,346 @@ const modalStatusSelect = document.getElementById("modal-status-select");
 const modalStatusSave = document.getElementById("modal-status-save");
 const modalAssignSelect = document.getElementById("modal-assign-select");
 const modalAssignSave = document.getElementById("modal-assign-save");
+const modalQueueSelect = document.getElementById("modal-queue-select");
+const modalQueueSave = document.getElementById("modal-queue-save");
 const modalDeleteBtn = document.getElementById("modal-delete-btn");
+const modalTime = document.getElementById("modal-time");
+const modalTimerStart = document.getElementById("modal-timer-start");
+const modalTimerStop = document.getElementById("modal-timer-stop");
 
 // Comments & Activity DOM
 const modalCommentsList = document.getElementById("modal-comments-list");
 const modalCommentText = document.getElementById("modal-comment-text");
 const modalCommentAdd = document.getElementById("modal-comment-add");
 const modalActivityList = document.getElementById("modal-activity-list");
+const modalCommentHours = document.getElementById("modal-comment-hours");
+const modalCommentMinutes = document.getElementById("modal-comment-minutes");
+
+// -------------------------------
+// CATEGORY HELPERS
+// -------------------------------
+function normalizeQueueKey(q) {
+    if (!q) return "";
+    if (q === "it" || q.startsWith("it-")) return "it";
+    if (q === "building-grounds" || q === "buildings-grounds") return "buildings-grounds";
+    if (q === "electrical-services" || q === "electrical") return "electrical";
+    return q;
+}
+
+function getQueueFamilyOptions(currentQueue) {
+    const allQueues = getActiveQueues();
+    const accessibleQueues = getAccessibleQueues();
+    
+    // Determine the queue family
+    let familyRoot = currentQueue;
+    const currentQueueObj = getQueueById(currentQueue);
+    
+    if (currentQueueObj && currentQueueObj.parentQueue) {
+        familyRoot = currentQueueObj.parentQueue;
+    }
+    
+    // Get all queues in this family (parent + children)
+    const familyQueues = allQueues.filter(q => {
+        return (q.id === familyRoot || q.parentQueue === familyRoot) && 
+               accessibleQueues.includes(q.id);
+    }).sort((a, b) => {
+        // Sort: main queue first, then sub-queues by order
+        if (!a.parentQueue && b.parentQueue) return -1;
+        if (a.parentQueue && !b.parentQueue) return 1;
+        return a.order - b.order;
+    });
+    
+    return familyQueues.map(q => ({
+        value: q.id,
+        label: q.name
+    }));
+}
+
+function populateQueueDropdown(currentQueue) {
+    if (!newQueue) return;
+    const options = getQueueFamilyOptions(currentQueue);
+    newQueue.innerHTML = '<option value="">Select queue...</option>';
+    options.forEach(opt => {
+        const option = document.createElement("option");
+        option.value = opt.value;
+        option.textContent = opt.label;
+        newQueue.appendChild(option);
+    });
+}
+
+function getQueueCategories(queue) {
+    const key = normalizeQueueKey(queue);
+    return queueCategoryOptions[key] || null;
+}
+
+function populateCategorySelect(queue, categorySelect, subcategorySelect, presetCategory = "", presetSubcategory = "") {
+    if (!categorySelect) return;
+    const cfg = getQueueCategories(queue);
+    categorySelect.innerHTML = "";
+    const placeholder = document.createElement("option");
+    placeholder.value = "";
+    placeholder.textContent = "Select category...";
+    categorySelect.appendChild(placeholder);
+
+    if (cfg && cfg.categories) {
+        Object.keys(cfg.categories).forEach(cat => {
+            const opt = document.createElement("option");
+            opt.value = cat;
+            opt.textContent = cat;
+            categorySelect.appendChild(opt);
+        });
+    }
+
+    categorySelect.value = presetCategory || "";
+    populateSubcategorySelect(queue, categorySelect.value, subcategorySelect, presetSubcategory);
+}
+
+function populateSubcategorySelect(queue, categoryValue, subcategorySelect, presetSubcategory = "") {
+    if (!subcategorySelect) return;
+    const cfg = getQueueCategories(queue);
+    subcategorySelect.innerHTML = "";
+    const placeholder = document.createElement("option");
+    placeholder.value = "";
+    placeholder.textContent = "Select subcategory...";
+    subcategorySelect.appendChild(placeholder);
+
+    if (cfg && cfg.categories && categoryValue && cfg.categories[categoryValue]) {
+        cfg.categories[categoryValue].forEach(sub => {
+            const opt = document.createElement("option");
+            opt.value = sub;
+            opt.textContent = sub;
+            subcategorySelect.appendChild(opt);
+        });
+    }
+
+    subcategorySelect.value = presetSubcategory || "";
+}
+
+// -------------------------------
+// CUSTOM FIELDS RENDERING
+// -------------------------------
+function renderCustomFields(queueId, containerId, existingValues = {}) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    
+    container.innerHTML = "";
+    
+    const queue = getQueueById(queueId);
+    if (!queue || !queue.customFields || queue.customFields.length === 0) {
+        return; // No custom fields for this queue
+    }
+    
+    queue.customFields.forEach(field => {
+        const label = document.createElement("label");
+        label.textContent = field.label + (field.required ? " *" : "");
+        
+        let input;
+        const fieldValue = existingValues[field.id] || "";
+        
+        switch (field.type) {
+            case "textarea":
+                input = document.createElement("textarea");
+                input.id = `custom-field-${field.id}`;
+                input.className = "custom-field-input";
+                input.dataset.fieldId = field.id;
+                input.placeholder = field.placeholder || "";
+                input.value = fieldValue;
+                if (field.required) input.required = true;
+                break;
+                
+            case "number":
+                input = document.createElement("input");
+                input.type = "number";
+                input.id = `custom-field-${field.id}`;
+                input.className = "custom-field-input";
+                input.dataset.fieldId = field.id;
+                input.placeholder = field.placeholder || "";
+                input.value = fieldValue;
+                if (field.required) input.required = true;
+                break;
+                
+            case "date":
+                input = document.createElement("input");
+                input.type = "date";
+                input.id = `custom-field-${field.id}`;
+                input.className = "custom-field-input";
+                input.dataset.fieldId = field.id;
+                input.value = fieldValue;
+                if (field.required) input.required = true;
+                break;
+                
+            case "checkbox":
+                const checkboxWrapper = document.createElement("div");
+                checkboxWrapper.style.display = "flex";
+                checkboxWrapper.style.alignItems = "center";
+                checkboxWrapper.style.gap = "8px";
+                
+                input = document.createElement("input");
+                input.type = "checkbox";
+                input.id = `custom-field-${field.id}`;
+                input.className = "custom-field-input";
+                input.dataset.fieldId = field.id;
+                input.checked = fieldValue === true || fieldValue === "true";
+                if (field.required) input.required = true;
+                
+                checkboxWrapper.appendChild(input);
+                checkboxWrapper.appendChild(document.createTextNode(field.placeholder || ""));
+                label.appendChild(checkboxWrapper);
+                container.appendChild(label);
+                return; // Early return for checkbox
+                
+            case "dropdown":
+                input = document.createElement("select");
+                input.id = `custom-field-${field.id}`;
+                input.className = "custom-field-input";
+                input.dataset.fieldId = field.id;
+                if (field.required) input.required = true;
+                
+                const defaultOption = document.createElement("option");
+                defaultOption.value = "";
+                defaultOption.textContent = field.placeholder || "Select...";
+                input.appendChild(defaultOption);
+                
+                if (field.options) {
+                    field.options.forEach(opt => {
+                        const option = document.createElement("option");
+                        option.value = opt;
+                        option.textContent = opt;
+                        if (opt === fieldValue) option.selected = true;
+                        input.appendChild(option);
+                    });
+                }
+                break;
+                
+            case "radio":
+                const radioWrapper = document.createElement("div");
+                radioWrapper.style.display = "flex";
+                radioWrapper.style.flexDirection = "column";
+                radioWrapper.style.gap = "6px";
+                
+                if (field.options) {
+                    field.options.forEach((opt, idx) => {
+                        const radioLabel = document.createElement("label");
+                        radioLabel.style.display = "flex";
+                        radioLabel.style.alignItems = "center";
+                        radioLabel.style.gap = "6px";
+                        
+                        const radioInput = document.createElement("input");
+                        radioInput.type = "radio";
+                        radioInput.name = `custom-field-${field.id}`;
+                        radioInput.id = `custom-field-${field.id}-${idx}`;
+                        radioInput.className = "custom-field-input";
+                        radioInput.dataset.fieldId = field.id;
+                        radioInput.value = opt;
+                        if (opt === fieldValue) radioInput.checked = true;
+                        if (field.required) radioInput.required = true;
+                        
+                        radioLabel.appendChild(radioInput);
+                        radioLabel.appendChild(document.createTextNode(opt));
+                        radioWrapper.appendChild(radioLabel);
+                    });
+                }
+                
+                label.appendChild(radioWrapper);
+                container.appendChild(label);
+                return; // Early return for radio
+                
+            default: // text
+                input = document.createElement("input");
+                input.type = "text";
+                input.id = `custom-field-${field.id}`;
+                input.className = "custom-field-input";
+                input.dataset.fieldId = field.id;
+                input.placeholder = field.placeholder || "";
+                input.value = fieldValue;
+                if (field.required) input.required = true;
+                break;
+        }
+        
+        label.appendChild(input);
+        container.appendChild(label);
+    });
+}
+
+function collectCustomFieldValues(containerId) {
+    const container = document.getElementById(containerId);
+    if (!container) return {};
+    
+    const values = {};
+    const inputs = container.querySelectorAll(".custom-field-input");
+    
+    inputs.forEach(input => {
+        const fieldId = input.dataset.fieldId;
+        
+        if (input.type === "checkbox") {
+            values[fieldId] = input.checked;
+        } else if (input.type === "radio") {
+            if (input.checked) {
+                values[fieldId] = input.value;
+            }
+        } else {
+            values[fieldId] = input.value;
+        }
+    });
+    
+    return values;
+}
+
+function displayCustomFields(ticket) {
+    const container = document.getElementById("modal-custom-fields");
+    if (!container) return;
+    
+    container.innerHTML = "";
+    
+    const queue = getQueueById(ticket.queue);
+    if (!queue || !queue.customFields || queue.customFields.length === 0) {
+        return; // No custom fields for this queue
+    }
+    
+    const customFieldValues = ticket.customFieldValues || {};
+    const hasValues = Object.keys(customFieldValues).length > 0;
+    
+    if (!hasValues) return;
+    
+    // Create a section for custom fields
+    const header = document.createElement("h4");
+    header.style.marginBottom = "10px";
+    header.style.color = "#333";
+    header.style.fontSize = "14px";
+    header.textContent = "Additional Information";
+    container.appendChild(header);
+    
+    queue.customFields.forEach(field => {
+        const value = customFieldValues[field.id];
+        
+        if (value === undefined || value === null || value === "") {
+            return; // Skip empty values
+        }
+        
+        const fieldDiv = document.createElement("div");
+        fieldDiv.style.marginBottom = "8px";
+        fieldDiv.style.fontSize = "13px";
+        
+        const label = document.createElement("strong");
+        label.textContent = field.label + ": ";
+        label.style.color = "#555";
+        
+        const valueSpan = document.createElement("span");
+        
+        // Format value based on field type
+        if (field.type === "checkbox") {
+            valueSpan.textContent = value === true || value === "true" ? "Yes" : "No";
+        } else if (field.type === "date") {
+            valueSpan.textContent = value ? new Date(value).toLocaleDateString() : "";
+        } else {
+            valueSpan.textContent = value;
+        }
+        
+        fieldDiv.appendChild(label);
+        fieldDiv.appendChild(valueSpan);
+        container.appendChild(fieldDiv);
+    });
+}
 
 // -------------------------------
 // CURRENT USER SELECT
@@ -795,14 +1431,149 @@ if (currentUserSelect) {
 }
 
 // -------------------------------
+// RENDER QUEUE BUTTONS FROM CONFIGURATION
+// -------------------------------
+function renderQueueButtons() {
+    const container = document.getElementById("queue-buttons-container");
+    if (!container) return;
+    
+    container.innerHTML = "";
+    
+    const queues = getActiveQueues();
+    const accessibleQueues = getAccessibleQueues();
+    
+    // Separate main queues and sub-queues
+    const mainQueues = queues.filter(q => !q.parentQueue).sort((a, b) => a.order - b.order);
+    
+    mainQueues.forEach(queue => {
+        // Check if user has access to this queue or any of its sub-queues
+        const hasAccess = hasQueueAccess(queue.id);
+        const subQueues = queues.filter(sq => sq.parentQueue === queue.id && hasQueueAccess(sq.id))
+                                .sort((a, b) => a.order - b.order);
+        
+        if (!hasAccess && subQueues.length === 0) {
+            return; // Skip this queue entirely
+        }
+        
+        const queueGroup = document.createElement("div");
+        queueGroup.className = "queue-group";
+        
+        // Create main queue button if user has access
+        if (hasAccess) {
+            const mainBtn = document.createElement("button");
+            mainBtn.className = "queue-btn";
+            mainBtn.dataset.queue = queue.id;
+            mainBtn.textContent = `${queue.icon || '📋'} ${queue.name}`;
+            mainBtn.style.borderLeftColor = queue.color;
+            mainBtn.addEventListener("click", () => {
+                selectedQueue = queue.id;
+                updateTickets();
+            });
+            queueGroup.appendChild(mainBtn);
+        }
+        
+        // Create sub-queue buttons if there are any
+        if (subQueues.length > 0) {
+            const subGroup = document.createElement("div");
+            subGroup.className = "queue-subgroup";
+            subGroup.style.marginTop = "8px";
+            subGroup.style.display = "flex";
+            subGroup.style.flexWrap = "wrap";
+            subGroup.style.gap = "8px";
+            
+            subQueues.forEach(subQueue => {
+                const subBtn = document.createElement("button");
+                subBtn.className = "queue-btn";
+                subBtn.dataset.queue = subQueue.id;
+                subBtn.textContent = `${subQueue.icon || '📋'} ${subQueue.name}`;
+                subBtn.style.borderLeftColor = subQueue.color;
+                subBtn.addEventListener("click", () => {
+                    selectedQueue = subQueue.id;
+                    updateTickets();
+                });
+                subGroup.appendChild(subBtn);
+            });
+            
+            queueGroup.appendChild(subGroup);
+        }
+        
+        container.appendChild(queueGroup);
+    });
+}
+
+function initSidebarDropdown(){
+    const toggleBtns = document.querySelectorAll('.sidebar-toggle-btn');
+    const currentPage = window.location.pathname.split('/').pop();
+
+    // mark active links for the current page
+    document.querySelectorAll('.sidebar a').forEach(a => {
+        const href = a.getAttribute('href');
+        if (href && href === currentPage) {
+            a.closest('li')?.classList.add('active');
+        }
+    });
+
+    toggleBtns.forEach(btn => {
+        const parent = btn.closest('.has-children');
+        if (!parent) return;
+
+        const matchingChild = parent.querySelector(`a[href="${currentPage}"]`);
+        if (matchingChild) {
+            parent.classList.add('open');
+            matchingChild.closest('li')?.classList.add('active');
+        }
+
+        btn.addEventListener('click', () => {
+            parent.classList.toggle('open');
+        });
+    });
+}
+
+// Render queue buttons on load
+document.addEventListener("DOMContentLoaded", () => {
+    console.log("DOM loaded, initializing queues...");
+    const queueConfig = getQueueConfig();
+    console.log("Queue config loaded:", queueConfig.length, "queues");
+    renderQueueButtons();
+    renderAdminQueueCheckboxes();
+    renderAdmin(); // ensure existing users render on admin page load
+    initSidebarDropdown();
+    console.log("Queue buttons rendered");
+});
+
+// -------------------------------
 // QUEUE SELECTION
 // -------------------------------
-document.querySelectorAll(".queue-btn").forEach(btn => {
-    btn.addEventListener("click", () => {
-        selectedQueue = btn.dataset.queue;
-        updateTickets();
+const queueNewTicketBtn = document.getElementById("queue-new-ticket-btn");
+
+// Queue-specific +New Ticket button in tickets panel header
+if (queueNewTicketBtn) {
+    queueNewTicketBtn.addEventListener("click", () => {
+        if (selectedQueue) {
+            openNewTicketWithQueue(selectedQueue);
+        }
     });
-});
+}
+
+// New ticket category/subcategory dynamic options
+if (newQueue) {
+    newQueue.addEventListener("change", () => {
+        populateCategorySelect(newQueue.value, newCategory, newSubcategory);
+        renderCustomFields(newQueue.value, "new-custom-fields-container");
+    });
+}
+
+if (newCategory) {
+    newCategory.addEventListener("change", () => {
+        populateSubcategorySelect(newQueue.value, newCategory.value, newSubcategory);
+    });
+}
+
+// Initialize category options on load for new ticket modal
+if (newQueue) {
+    populateCategorySelect(newQueue.value || "it", newCategory, newSubcategory);
+    renderCustomFields(newQueue.value || "it", "new-custom-fields-container");
+}
 
 // -------------------------------
 // STATUS FILTER BUTTONS
@@ -848,34 +1619,40 @@ if (sortSelect) {
 // -------------------------------
 // SIDEBAR TOGGLE
 // -------------------------------
-sidebarToggle.addEventListener("click", () => {
-    sidebar.classList.toggle("collapsed");
-});
+if (sidebarToggle) {
+    sidebarToggle.addEventListener("click", () => {
+        sidebar.classList.toggle("collapsed");
+    });
+}
 
 // -------------------------------
 // DARK MODE TOGGLE
 // -------------------------------
-darkModeToggle.addEventListener("change", () => {
-    if (darkModeToggle.checked) {
-        document.body.classList.add("dark-mode");
-    } else {
-        document.body.classList.remove("dark-mode");
-    }
-});
+if (darkModeToggle) {
+    darkModeToggle.addEventListener("change", () => {
+        if (darkModeToggle.checked) {
+            document.body.classList.add("dark-mode");
+        } else {
+            document.body.classList.remove("dark-mode");
+        }
+    });
+}
 
 // -------------------------------
 // VIEW MODE TOGGLE
 // -------------------------------
-viewToggle.addEventListener("click", () => {
-    viewMode = viewMode === "cards" ? "table" : "cards";
-    viewToggle.textContent = `View: ${viewMode === "cards" ? "Cards" : "Table"}`;
-    updateTickets();
-});
+if (viewToggle) {
+    viewToggle.addEventListener("click", () => {
+        viewMode = viewMode === "cards" ? "table" : "cards";
+        viewToggle.textContent = `View: ${viewMode === "cards" ? "Cards" : "Table"}`;
+        updateTickets();
+    });
+}
 
 // -------------------------------
-// NEW TICKET MODAL OPEN
+// NEW TICKET MODAL OPEN (supports preset queue)
 // -------------------------------
-newTicketBtn.addEventListener("click", () => {
+function openNewTicketWithQueue(presetQueue) {
     editingTicketId = null;
     newTicketTitle.textContent = "Create New Ticket";
     newTicketSubmit.textContent = "Create Ticket";
@@ -884,23 +1661,37 @@ newTicketBtn.addEventListener("click", () => {
     newPriority.value = "Medium";
     newStatus.value = "open";
     newAssignedTo.value = "";
+    
+    // Populate queue dropdown filtered by current queue family
+    if (newQueue) {
+        const q = presetQueue || "it";
+        populateQueueDropdown(q);
+        newQueue.value = q;
+        populateCategorySelect(newQueue.value || "it", newCategory, newSubcategory);
+        renderCustomFields(q, "new-custom-fields-container");
+    }
+    
     // clear any previous description images when creating a new ticket
     newDescriptionImages = [];
     const newDescGallery = document.getElementById('new-description-images');
     if (newDescGallery) newDescGallery.innerHTML = '';
+    if (newTimeHours) newTimeHours.value = "";
+    if (newTimeMinutes) newTimeMinutes.value = "";
     showModal(newTicketModal);
-});
+}
+
+if (newTicketBtn) newTicketBtn.addEventListener("click", () => openNewTicketWithQueue("it"));
 
 // -------------------------------
 // CLOSE MODALS
 // -------------------------------
-newTicketClose.addEventListener("click", () => hideModal(newTicketModal));
-newTicketCancel.addEventListener("click", () => hideModal(newTicketModal));
-modalClose.addEventListener("click", () => hideModal(modal));
+if (newTicketClose) newTicketClose.addEventListener("click", () => hideModal(newTicketModal));
+if (newTicketCancel) newTicketCancel.addEventListener("click", () => hideModal(newTicketModal));
+if (modalClose) modalClose.addEventListener("click", () => hideModal(modal));
 
 window.addEventListener("click", e => {
-    if (e.target === newTicketModal) hideModal(newTicketModal);
-    if (e.target === modal) hideModal(modal);
+    if (newTicketModal && e.target === newTicketModal) hideModal(newTicketModal);
+    if (modal && e.target === modal) hideModal(modal);
 });
 
 // -------------------------------
@@ -956,10 +1747,12 @@ function renderReports(){
     const byStatus = {};
     const byQueue = {};
     const byPriority = {};
+    let totalTime = 0;
     tickets.forEach(t => {
         byStatus[t.status] = (byStatus[t.status] || 0) + 1;
         byQueue[t.queue] = (byQueue[t.queue] || 0) + 1;
         byPriority[t.priority] = (byPriority[t.priority] || 0) + 1;
+        totalTime += getTotalMinutes(t);
     });
 
     const statusEl = document.getElementById('report-by-status');
@@ -973,13 +1766,17 @@ function renderReports(){
         queueEl.innerHTML = Object.keys(byQueue).map(k => `<div>${k}: <strong>${byQueue[k]}</strong></div>`).join('');
     }
     if(prioEl){
-        prioEl.innerHTML = Object.keys(byPriority).map(k => `<div>${k}: <strong>${byPriority[k]}</strong></div>`).join('');
+        prioEl.innerHTML = Object.keys(byPriority).map(k => `<div>${k}: <strong>${byPriority[k]}</strong></div>`).join('') + `<div style="margin-top:16px; padding-top:16px; border-top:1px solid #ddd;">Total Time Logged: <strong>${formatMinutes(totalTime)}</strong></div>`;
     }
 }
 
 function exportTicketsCSV(){
-    const headers = ['id','title','createdDate','queue','status','assignedTo','priority','requesterName','location'];
-    const rows = tickets.map(t => headers.map(h => `"${(t[h]||'').toString().replace(/"/g,'""')}"`).join(','));
+    const headers = ['id','title','createdDate','queue','status','assignedTo','priority','requesterName','location','totalTime'];
+    const rows = tickets.map(t => {
+        const baseData = headers.slice(0, -1).map(h => `"${(t[h]||'').toString().replace(/"/g,'""')}"`).join(',');
+        const timeVal = `"${formatMinutes(getTotalMinutes(t))}"`;
+        return baseData + ',' + timeVal;
+    });
     const csv = [headers.join(','), ...rows].join('\n');
     const blob = new Blob([csv], { type: 'text/csv' });
     const url = URL.createObjectURL(blob);
@@ -995,19 +1792,32 @@ function exportTicketsCSV(){
 function renderAdmin(){
     const listEl = document.getElementById('admin-users-list');
     const users = JSON.parse(localStorage.getItem('users') || '[]');
+    
+    // Render queue checkboxes if on admin page
+    renderAdminQueueCheckboxes();
+    
     if(!listEl) return;
     if(users.length === 0){
         listEl.innerHTML = '<div>No users found.</div>';
         return;
     }
-    const rows = users.map((u, idx) => `
+    const rows = users.map((u, idx) => {
+        const queues = u.permissions && u.permissions.queues ? u.permissions.queues.join(', ') : 'None';
+        return `
         <div class="admin-user-row" data-idx="${idx}" style="display:flex;align-items:center;gap:12px;padding:8px;border-bottom:1px solid #eee;">
-            <div style="flex:1;"><strong>${u.name}</strong> <div style="font-size:0.85rem;color:#666">${u.username} • ${u.role}</div></div>
+            <div style="flex:1;">
+                <strong>${u.name}</strong> 
+                <div style="font-size:0.85rem;color:#666">${u.username} • ${u.role}</div>
+                <div style="font-size:0.8rem;color:#888;margin-top:4px;">Queues: ${queues}</div>
+            </div>
             <div>
+                <button class="btn-secondary admin-edit-user" data-idx="${idx}" style="margin-right:6px;">Edit</button>
+                <button class="btn-secondary admin-delete-user" data-idx="${idx}" style="margin-right:6px;">Delete</button>
                 <button class="btn-secondary admin-toggle-active">${u.active ? 'Deactivate' : 'Activate'}</button>
             </div>
         </div>
-    `).join('');
+    `;
+    }).join('');
     listEl.innerHTML = rows;
 
     listEl.querySelectorAll('.admin-toggle-active').forEach((btn,i) => {
@@ -1017,12 +1827,138 @@ function renderAdmin(){
             renderAdmin();
         });
     });
+
+    listEl.querySelectorAll('.admin-edit-user').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const idx = parseInt(btn.dataset.idx, 10);
+            const user = users[idx];
+            if (!user) return;
+            const u = document.getElementById('admin-new-username');
+            const p = document.getElementById('admin-new-password');
+            const n = document.getElementById('admin-new-name');
+            const r = document.getElementById('admin-new-role');
+            if (!u || !p || !n || !r) return;
+            u.value = user.username || '';
+            p.value = '';
+            n.value = user.name || '';
+            r.value = user.role || 'tech';
+
+            // set queues
+            const queueCheckboxes = document.querySelectorAll('.admin-new-queue-checkbox');
+            const userQueues = user.permissions?.queues || [];
+            const isAdmin = userQueues.includes('*') || user.role === 'admin';
+            queueCheckboxes.forEach(cb => {
+                cb.checked = isAdmin ? true : userQueues.includes(cb.value);
+            });
+
+            // permissions
+            const perms = user.permissions || {};
+            document.getElementById('admin-new-can-create').checked = !!perms.canCreateTickets;
+            document.getElementById('admin-new-can-edit').checked = !!perms.canEditTickets;
+            document.getElementById('admin-new-can-delete').checked = !!perms.canDeleteTickets;
+            document.getElementById('admin-new-can-reports').checked = !!perms.canViewReports;
+            document.getElementById('admin-new-can-export').checked = !!perms.canExportData;
+
+            editingUserIndex = idx;
+            adminAddBtn.textContent = 'Save Changes';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    });
+
+    listEl.querySelectorAll('.admin-delete-user').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const idx = parseInt(btn.dataset.idx, 10);
+            if (!Number.isInteger(idx)) return;
+            if (!confirm('Delete this user?')) return;
+            users.splice(idx, 1);
+            localStorage.setItem('users', JSON.stringify(users));
+            renderAdmin();
+        });
+    });
+}
+
+function renderAdminQueueCheckboxes() {
+    const container = document.getElementById('admin-queue-checkboxes');
+    if (!container) return;
+    
+    container.innerHTML = "";
+    
+    const queues = getActiveQueues();
+    const mainQueues = queues.filter(q => !q.parentQueue).sort((a, b) => a.order - b.order);
+    
+    mainQueues.forEach(queue => {
+        const label = document.createElement("label");
+        label.className = "checkbox-label";
+        
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.className = "admin-new-queue-checkbox";
+        checkbox.value = queue.id;
+        
+        const span = document.createElement("span");
+        span.textContent = `${queue.icon || '📋'} ${queue.name}`;
+        
+        label.appendChild(checkbox);
+        label.appendChild(span);
+        container.appendChild(label);
+        
+        // Add sub-queues
+        const subQueues = queues.filter(sq => sq.parentQueue === queue.id).sort((a, b) => a.order - b.order);
+        subQueues.forEach(subQueue => {
+            const subLabel = document.createElement("label");
+            subLabel.className = "checkbox-label";
+            subLabel.style.marginLeft = "20px";
+            subLabel.style.fontSize = "0.85rem";
+            
+            const subCheckbox = document.createElement("input");
+            subCheckbox.type = "checkbox";
+            subCheckbox.className = "admin-new-queue-checkbox";
+            subCheckbox.value = subQueue.id;
+            
+            const subSpan = document.createElement("span");
+            subSpan.textContent = `${subQueue.icon || '📋'} ${subQueue.name}`;
+            
+            subLabel.appendChild(subCheckbox);
+            subLabel.appendChild(subSpan);
+            container.appendChild(subLabel);
+        });
+    });
 }
 
 const exportBtn = document.getElementById('export-reports-csv');
 if(exportBtn) exportBtn.addEventListener('click', exportTicketsCSV);
 
 const adminAddBtn = document.getElementById('admin-add-user');
+let editingUserIndex = null;
+
+// Auto-select all when admin role is selected
+const adminRoleSelect = document.getElementById('admin-new-role');
+if (adminRoleSelect) {
+    adminRoleSelect.addEventListener('change', () => {
+        const isAdmin = adminRoleSelect.value === 'admin';
+        
+        // Auto-check all permissions
+        const permissionCheckboxes = [
+            'admin-new-can-create',
+            'admin-new-can-edit',
+            'admin-new-can-delete',
+            'admin-new-can-reports',
+            'admin-new-can-export'
+        ];
+        
+        permissionCheckboxes.forEach(id => {
+            const checkbox = document.getElementById(id);
+            if (checkbox) checkbox.checked = isAdmin;
+        });
+        
+        // Auto-check all queues
+        const queueCheckboxes = document.querySelectorAll('.admin-new-queue-checkbox');
+        queueCheckboxes.forEach(cb => {
+            cb.checked = isAdmin;
+        });
+    });
+}
+
 if(adminAddBtn){
     adminAddBtn.addEventListener('click', () => {
         const u = document.getElementById('admin-new-username');
@@ -1031,10 +1967,66 @@ if(adminAddBtn){
         const r = document.getElementById('admin-new-role');
         if(!u || !p || !n || !r) return;
         const users = JSON.parse(localStorage.getItem('users') || '[]');
-        if(!u.value.trim() || !p.value.trim()) { alert('Username and password required'); return; }
-        users.push({ username: u.value.trim(), password: p.value.trim(), name: n.value.trim() || u.value.trim(), role: r.value.trim() || 'tech', active: true });
+        const isEdit = editingUserIndex !== null;
+        if(!u.value.trim()) { alert('Username required'); return; }
+        if(!isEdit && !p.value.trim()) { alert('Username and password required'); return; }
+        
+        // Collect queue assignments
+        const queueCheckboxes = document.querySelectorAll('.admin-new-queue-checkbox');
+        const assignedQueues = Array.from(queueCheckboxes)
+            .filter(cb => cb.checked)
+            .map(cb => cb.value);
+        
+        // If admin role, grant all queues
+        const isAdmin = r.value.trim() === 'admin';
+        const queues = isAdmin ? ['*'] : assignedQueues;
+        
+        // Collect permissions
+        const permissions = {
+            queues: queues,
+            canCreateTickets: document.getElementById('admin-new-can-create')?.checked || false,
+            canEditTickets: document.getElementById('admin-new-can-edit')?.checked || false,
+            canDeleteTickets: document.getElementById('admin-new-can-delete')?.checked || false,
+            canViewReports: document.getElementById('admin-new-can-reports')?.checked || false,
+            canExportData: document.getElementById('admin-new-can-export')?.checked || false,
+            canManageUsers: isAdmin,
+            canManageQueues: isAdmin
+        };
+        
+        if (isEdit && users[editingUserIndex]) {
+            const existing = users[editingUserIndex];
+            existing.username = u.value.trim();
+            existing.name = n.value.trim() || u.value.trim();
+            existing.role = r.value.trim() || 'tech';
+            existing.permissions = permissions;
+            // Only update password if provided
+            if (p.value.trim()) {
+                existing.password = p.value.trim();
+            }
+        } else {
+            users.push({ 
+                username: u.value.trim(), 
+                password: p.value.trim(), 
+                name: n.value.trim() || u.value.trim(), 
+                role: r.value.trim() || 'tech', 
+                active: true,
+                permissions: permissions
+            });
+        }
+        
         localStorage.setItem('users', JSON.stringify(users));
-        u.value = p.value = n.value = r.value = '';
+        u.value = p.value = n.value = '';
+        editingUserIndex = null;
+        adminAddBtn.textContent = 'Add User';
+        
+        // Reset checkboxes
+        queueCheckboxes.forEach(cb => cb.checked = false);
+        document.getElementById('admin-new-can-create').checked = true;
+        document.getElementById('admin-new-can-edit').checked = true;
+        document.getElementById('admin-new-can-delete').checked = false;
+        document.getElementById('admin-new-can-reports').checked = true;
+        document.getElementById('admin-new-can-export').checked = false;
+        
         renderAdmin();
     });
 }
@@ -1081,6 +2073,21 @@ newTicketForm.addEventListener("submit", e => {
         // save images attached via paste into the ticket
         t.images = newDescriptionImages.length ? [...newDescriptionImages] : [];
 
+        // Collect custom field values
+        t.customFieldValues = collectCustomFieldValues("new-custom-fields-container");
+
+        // optional time logged via edit form
+        if (newTimeHours || newTimeMinutes) {
+            const h = parseInt((newTimeHours && newTimeHours.value) ? newTimeHours.value : "0", 10) || 0;
+            const m = parseInt((newTimeMinutes && newTimeMinutes.value) ? newTimeMinutes.value : "0", 10) || 0;
+            const editMinutes = Math.max(0, (h * 60) + m);
+            if (editMinutes > 0) {
+                t.timeEntries = Array.isArray(t.timeEntries) ? t.timeEntries : [];
+                t.timeEntries.push({ minutes: editMinutes, by: currentUser, timestamp, source: "edit" });
+                t.activity.push({ timestamp, user: currentUser, action: `Time logged (${formatMinutes(editMinutes)}) via edit form` });
+            }
+        }
+
         t.activity.push({
             timestamp,
             user: currentUser,
@@ -1118,7 +2125,9 @@ newTicketForm.addEventListener("submit", e => {
         internalNotes: "",
         attachments: newAttachments.value.trim(),
         images: newDescriptionImages.length ? [...newDescriptionImages] : [],
+        customFieldValues: collectCustomFieldValues("new-custom-fields-container"),
         comments: [],
+        timeEntries: [],
         activity: [
             {
                 timestamp,
@@ -1127,6 +2136,17 @@ newTicketForm.addEventListener("submit", e => {
             }
         ]
     };
+
+    // optional initial time via create form
+    if (newTimeHours || newTimeMinutes) {
+        const h0 = parseInt((newTimeHours && newTimeHours.value) ? newTimeHours.value : "0", 10) || 0;
+        const m0 = parseInt((newTimeMinutes && newTimeMinutes.value) ? newTimeMinutes.value : "0", 10) || 0;
+        const minutes0 = Math.max(0, (h0 * 60) + m0);
+        if (minutes0 > 0) {
+            ticket.timeEntries.push({ minutes: minutes0, by: currentUser, timestamp, source: "create" });
+            ticket.activity.push({ timestamp, user: currentUser, action: `Initial time logged (${formatMinutes(minutes0)})` });
+        }
+    }
 
     tickets.push(ticket);
 
@@ -1164,8 +2184,21 @@ function openTicketModal(ticket) {
 
     modalStatusSelect.value = ticket.status;
     modalAssignSelect.value = ticket.assignedTo || "";
+    if (modalQueueSelect) {
+        // Try to set exact queue, fallback to normalized main queue
+        modalQueueSelect.value = ticket.queue || "";
+        if (modalQueueSelect.value === "") {
+            modalQueueSelect.value = normalizeQueue(ticket.queue);
+        }
+    }
 
     modal.dataset.ticketId = ticket.id;
+    // set timer button states for this ticket
+    if (modalTimerStart && modalTimerStop) {
+        const running = (typeof activeTimers !== 'undefined') && activeTimers[ticket.id] ? true : false;
+        modalTimerStart.disabled = running;
+        modalTimerStop.disabled = !running;
+    }
 
     // render ticket images gallery
     const ticketGallery = document.getElementById('modal-ticket-images');
@@ -1199,6 +2232,16 @@ function openTicketModal(ticket) {
     commentImages = [];
     const commentGallery = document.getElementById('modal-comment-images');
     if (commentGallery) commentGallery.innerHTML = '';
+    if (modalCommentHours) modalCommentHours.value = "";
+    if (modalCommentMinutes) modalCommentMinutes.value = "";
+    // Update total time display
+    if (modalTime) {
+        const total = getTotalMinutes(ticket);
+        modalTime.textContent = `Total Time: ${formatMinutes(total)}`;
+    }
+
+    // Display custom field values
+    displayCustomFields(ticket);
 
     renderComments(ticket);
     renderActivity(ticket);
@@ -1233,6 +2276,14 @@ function renderComments(ticket) {
                 ${c.text}
             </div>
         `;
+
+        if (c.loggedMinutes && c.loggedMinutes > 0) {
+            const timeP = document.createElement("div");
+            timeP.style.fontSize = "12px";
+            timeP.style.color = "#666";
+            timeP.textContent = `Logged: ${formatMinutes(c.loggedMinutes)}`;
+            div.appendChild(timeP);
+        }
 
         // If comment has images, render them below the text
         if (c.images && c.images.length) {
@@ -1311,17 +2362,31 @@ modalCommentAdd.addEventListener("click", () => {
     // include any pasted images with the comment
     const imagesForComment = commentImages.length ? [...commentImages] : [];
 
+    // optional time from comment inputs
+    let minutesFromComment = 0;
+    if (modalCommentHours || modalCommentMinutes) {
+        const ch = parseInt((modalCommentHours && modalCommentHours.value) ? modalCommentHours.value : "0", 10) || 0;
+        const cm = parseInt((modalCommentMinutes && modalCommentMinutes.value) ? modalCommentMinutes.value : "0", 10) || 0;
+        minutesFromComment = Math.max(0, (ch * 60) + cm);
+    }
+
     t.comments.push({
         author: currentUser,
         timestamp,
         text,
-        images: imagesForComment
+        images: imagesForComment,
+        loggedMinutes: minutesFromComment > 0 ? minutesFromComment : 0
     });
+
+    if (minutesFromComment > 0) {
+        t.timeEntries = Array.isArray(t.timeEntries) ? t.timeEntries : [];
+        t.timeEntries.push({ minutes: minutesFromComment, by: currentUser, timestamp, source: "comment" });
+    }
 
     t.activity.push({
         timestamp,
         user: currentUser,
-        action: "Comment added"
+        action: minutesFromComment > 0 ? `Comment added • Time logged (${formatMinutes(minutesFromComment)})` : "Comment added"
     });
 
     modalCommentText.value = "";
@@ -1331,6 +2396,10 @@ modalCommentAdd.addEventListener("click", () => {
     if (commentGallery) commentGallery.innerHTML = '';
     renderComments(t);
     renderActivity(t);
+    if (modalTime) {
+        const total = getTotalMinutes(t);
+        modalTime.textContent = `Total Time: ${formatMinutes(total)}`;
+    }
     showToast("Comment added");
 });
 
@@ -1349,7 +2418,11 @@ modalEditBtn.addEventListener("click", () => {
 
     newTitle.value = t.title;
     newDescription.value = t.description;
+    
+    // Populate queue dropdown filtered by ticket's current queue family
+    populateQueueDropdown(t.queue);
     newQueue.value = t.queue;
+    
     newPriority.value = t.priority;
     newStatus.value = t.status;
     newAssignedTo.value = t.assignedTo || "";
@@ -1357,9 +2430,11 @@ modalEditBtn.addEventListener("click", () => {
     newRequesterEmail.value = t.requesterEmail;
     newLocation.value = t.location;
     newDueDate.value = t.dueDate;
-    newCategory.value = t.category;
-    newSubcategory.value = t.subcategory;
+    populateCategorySelect(t.queue, newCategory, newSubcategory, t.category, t.subcategory);
     newAttachments.value = t.attachments;
+
+    // Load custom fields with existing values
+    renderCustomFields(t.queue, "new-custom-fields-container", t.customFieldValues || {});
 
     // load any images attached to this ticket into the edit form
     newDescriptionImages = t.images && t.images.length ? [...t.images] : [];
@@ -1424,32 +2499,86 @@ modalAssignSave.addEventListener("click", () => {
 });
 
 // -------------------------------
+// MOVE TICKET TO (SUB-)QUEUE
+// -------------------------------
+modalQueueSave.addEventListener("click", () => {
+    const id = parseInt(modal.dataset.ticketId);
+    const t = tickets.find(t => t.id === id);
+    if (!t) return;
+
+    const newQueue = modalQueueSelect.value;
+    if (!newQueue) return;
+
+    const oldQueue = t.queue;
+    const now = new Date();
+    const todayStr = now.toISOString().slice(0, 10);
+    const timestamp = now.toISOString();
+
+    t.queue = newQueue;
+    t.updatedDate = todayStr;
+
+    t.activity.push({
+        timestamp,
+        user: currentUser,
+        action: `Moved from ${formatQueueTitle(oldQueue)} to ${formatQueueTitle(newQueue)}`
+    });
+
+    showToast("Queue updated");
+    updateTickets();
+    openTicketModal(t);
+});
+
+// -------------------------------
 // MAIN RENDER FUNCTION
 // -------------------------------
+function normalizeQueue(q) {
+    if (!q) return "";
+    if (q === "it" || q.startsWith("it-")) return "it";
+    if (q === "building-grounds" || q === "buildings-grounds") return "buildings-grounds";
+    if (q === "electrical-services" || q === "electrical") return "electrical";
+    if (q === "moves" || q === "move-request" || q === "move-requests") return "moves";
+    if (q === "rma" || q === "warehouse") return "rma";
+    return q;
+}
+
+function formatQueueTitle(q) {
+    const n = normalizeQueue(q);
+    if (n === "it") return "Information Technology";
+    if (n === "buildings-grounds") return "Buildings & Grounds";
+    if (n === "electrical") return "Electrical Services";
+    if (n === "moves") return "Move Requests";
+    if (n === "rma") return "RMA / Warehouse";
+    return (q || "").replace(/-/g, " ").replace(/^it-/, "IT ");
+}
+
 function updateTickets() {
     ticketList.innerHTML = "";
 
     if (!selectedQueue) {
         ticketHeader.textContent = "Tickets (Select a Queue)";
+        const queueNewTicketBtn = document.getElementById("queue-new-ticket-btn");
+        if (queueNewTicketBtn) queueNewTicketBtn.style.display = "none";
         return;
     }
 
-    // Format queue title
-    let formattedQueue = selectedQueue
-        .replace("it-all", "Information Technology")
-        .replace("it-", "IT ")
-        .replace("-", " ")
-        .toUpperCase();
+    // Show +New Ticket button when queue is selected
+    const queueNewTicketBtn = document.getElementById("queue-new-ticket-btn");
+    if (queueNewTicketBtn) queueNewTicketBtn.style.display = "block";
+
+    // Format queue title (simplified categories)
+    let formattedQueue = formatQueueTitle(selectedQueue);
 
     ticketHeader.textContent = `Tickets — ${formattedQueue}`;
 
     // FILTERING
     let filtered = tickets.filter(t => {
-        // Queue matching logic
-        const queueMatch =
-            selectedQueue === "it-all"
-                ? t.queue.startsWith("it-")
-                : t.queue === selectedQueue;
+        // Queue matching: if a specific IT sub-queue is selected, match exactly; otherwise compare normalized categories
+        let queueMatch;
+        if (selectedQueue && selectedQueue.startsWith("it-")) {
+            queueMatch = t.queue === selectedQueue;
+        } else {
+            queueMatch = normalizeQueue(t.queue) === normalizeQueue(selectedQueue);
+        }
 
         // Status filter
         const filterMatch =
@@ -1503,10 +2632,10 @@ function updateTickets() {
                 filtered.sort((a, b) => (a.assigned === true) - (b.assigned === true));
                 break;
             case "queue-az":
-                filtered.sort((a, b) => a.queue.localeCompare(b.queue));
+                filtered.sort((a, b) => formatQueueTitle(a.queue).localeCompare(formatQueueTitle(b.queue)));
                 break;
             case "queue-za":
-                filtered.sort((a, b) => b.queue.localeCompare(a.queue));
+                filtered.sort((a, b) => formatQueueTitle(b.queue).localeCompare(formatQueueTitle(a.queue)));
                 break;
         }
     }
@@ -1547,7 +2676,7 @@ function renderCards(ticketsToRender) {
                 Assigned: ${t.assigned ? t.assignedTo || "Yes" : "No"}
             </div>
             <div class="ticket-meta" style="margin-top: 8px; color: #666; font-size: 13px;">
-                Created: ${t.createdDate}
+                Created: ${t.createdDate} • Time: ${formatMinutes(getTotalMinutes(t))}
             </div>
         `;
 
@@ -1573,6 +2702,7 @@ function renderTable(ticketsToRender) {
                 <th>Status</th>
                 <th>Assigned To</th>
                 <th>Priority</th>
+                <th>Time</th>
             </tr>
         </thead>
         <tbody></tbody>
@@ -1594,6 +2724,7 @@ function renderTable(ticketsToRender) {
                     ${t.priority}
                 </span>
             </td>
+            <td>${formatMinutes(getTotalMinutes(t))}</td>
         `;
         row.addEventListener("click", () => openTicketModal(t));
         tbody.appendChild(row);
@@ -1610,6 +2741,7 @@ function showModal(el) {
 }
 
 function hideModal(el) {
+    if (!el) return;
     el.style.display = "none";
 }
 
@@ -1693,3 +2825,58 @@ if (modalCommentText) {
     });
 }
 // (Old paste-to-text handler removed - gallery-only paste is used)
+
+// -------------------------------
+// TIME TRACKING HELPERS & TIMER STATE
+// -------------------------------
+const activeTimers = {};
+
+function formatMinutes(mins) {
+    const m = Math.max(0, Math.floor(mins || 0));
+    const h = Math.floor(m / 60);
+    const r = m % 60;
+    if (h > 0 && r > 0) return `${h}h ${r}m`;
+    if (h > 0) return `${h}h`;
+    return `${r}m`;
+}
+
+function getTotalMinutes(ticket) {
+    const entries = Array.isArray(ticket.timeEntries) ? ticket.timeEntries : [];
+    return entries.reduce((sum, e) => sum + (e.minutes || 0), 0);
+}
+
+if (modalTimerStart) {
+    modalTimerStart.addEventListener("click", () => {
+        const id = parseInt(modal.dataset.ticketId);
+        if (!id) return;
+        if (activeTimers[id]) return; // already running
+        activeTimers[id] = { start: Date.now() };
+        modalTimerStart.disabled = true;
+        if (modalTimerStop) modalTimerStop.disabled = false;
+        showToast("Timer started");
+    });
+}
+
+if (modalTimerStop) {
+    modalTimerStop.addEventListener("click", () => {
+        const id = parseInt(modal.dataset.ticketId);
+        const t = tickets.find(t => t.id === id);
+        if (!t || !activeTimers[id]) return;
+        const started = activeTimers[id].start;
+        delete activeTimers[id];
+        const elapsedMs = Date.now() - started;
+        const minutes = Math.max(1, Math.round(elapsedMs / 60000));
+        const timestamp = new Date().toISOString();
+        t.timeEntries = Array.isArray(t.timeEntries) ? t.timeEntries : [];
+        t.timeEntries.push({ minutes, by: currentUser, timestamp, source: "timer" });
+        t.activity.push({ timestamp, user: currentUser, action: `Time logged (${formatMinutes(minutes)}) via timer` });
+        if (modalTimerStart) modalTimerStart.disabled = false;
+        if (modalTimerStop) modalTimerStop.disabled = true;
+        if (modalTime) {
+            const total = getTotalMinutes(t);
+            modalTime.textContent = `Total Time: ${formatMinutes(total)}`;
+        }
+        renderActivity(t);
+        showToast("Timer stopped & time logged");
+    });
+}

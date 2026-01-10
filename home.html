@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SECO Energy Service Portal</title>
+    <title>Technician Service Portal</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -13,7 +13,7 @@
         <div class="topbar-left">
             <button id="sidebar-toggle" class="icon-btn" title="Toggle sidebar">&#9776;</button>
             <img src="seco-logo.png" alt="SECO Energy Logo" class="logo">
-            <h1>SECO Energy Service Portal</h1>
+            <h1>Technician Service Portal</h1>
         </div>
 
         <div class="topbar-right">
@@ -42,7 +42,13 @@
             <ul>
                 <li class="active"><a href="home.html">Tickets</a></li>
                 <li><a href="reports.html">Reports</a></li>
-                <li><a href="admin.html">Admin</a></li>
+                <li class="has-children">
+                    <button class="sidebar-toggle-btn" type="button">Admin ▾</button>
+                    <ul class="submenu">
+                        <li><a href="admin-users.html">User Management</a></li>
+                        <li><a href="admin-system.html">System Management</a></li>
+                    </ul>
+                </li>
             </ul>
         </nav>
 
@@ -52,29 +58,9 @@
             <!-- Queue Selection Panel -->
             <section class="panel">
                 <h2>Select a Queue</h2>
-
-                <div class="queue-group">
-                    <h3>Facilities</h3>
-                    <button class="queue-btn" data-queue="building-grounds">Building &amp; Grounds</button>
-                </div>
-
-                <div class="queue-group">
-                    <h3>Electrical Services</h3>
-                    <button class="queue-btn" data-queue="electrical-services">Electrical Services</button>
-                </div>
-
-                <div class="queue-group">
-                    <h3>Information Technology</h3>
-
-                    <!-- Main IT queue (all IT tickets) -->
-                    <button class="queue-btn" data-queue="it-all">All IT Tickets</button>
-
-                    <!-- Sub queues -->
-                    <button class="queue-btn" data-queue="it-applications">Applications</button>
-                    <button class="queue-btn" data-queue="it-support">Support</button>
-                    <button class="queue-btn" data-queue="it-networking">Networking</button>
-                    <button class="queue-btn" data-queue="it-systems">Systems</button>
-                    <button class="queue-btn" data-queue="it-security">Security</button>
+                
+                <div id="queue-buttons-container">
+                    <!-- Queue buttons will be dynamically generated here -->
                 </div>
             </section>
 
@@ -83,6 +69,7 @@
 
                 <div class="ticket-panel-header">
                     <h2 id="ticket-header" class="ticket-title-centered">Tickets (Select a Queue)</h2>
+                    <button id="queue-new-ticket-btn" class="pill-btn pill-primary" style="display:none;">+ New Ticket</button>
                 </div>
 
                 <div class="ticket-controls">
@@ -144,6 +131,12 @@
                 <p id="modal-dates"></p>
                 <p id="modal-tags"></p>
                 <p id="modal-category"></p>
+                <p id="modal-time"></p>
+                
+                <!-- Custom Fields Display -->
+                <div id="modal-custom-fields" style="margin-top: 15px;">
+                    <!-- Custom field values will be displayed here -->
+                </div>
             </div>
 
             <!-- Ticket Description -->
@@ -160,6 +153,14 @@
                 <div class="comment-form">
                     <textarea id="modal-comment-text" rows="3" placeholder="Add a comment... (paste screenshots here)"></textarea>
                     <div id="modal-comment-images" class="image-gallery"></div>
+                    <div class="inline-control" style="gap:6px; align-items:center; margin:6px 0;">
+                        <label for="modal-comment-hours">Time:</label>
+                        <input type="number" id="modal-comment-hours" min="0" placeholder="h" style="width:64px;">
+                        <span>h</span>
+                        <input type="number" id="modal-comment-minutes" min="0" max="59" placeholder="m" style="width:64px;">
+                        <span>m</span>
+                        <span style="font-size:12px;color:var(--muted, #666);">(optional, logs time with comment)</span>
+                    </div>
                     <button id="modal-comment-add" class="btn-secondary">Add Comment</button>
                 </div>
             </div>
@@ -197,6 +198,36 @@
                     <button id="modal-assign-save" class="btn-secondary">Reassign</button>
                 </div>
 
+                <div class="inline-control">
+                    <label for="modal-queue-select">Queue/Sub-Queue:</label>
+                    <select id="modal-queue-select">
+                        <option value="">Select queue...</option>
+                        <!-- IT main + sub-queues -->
+                        <option value="it">Information Technology</option>
+                        <option value="it-support">IT Support</option>
+                        <option value="it-applications">IT Applications</option>
+                        <option value="it-networking">IT Networking</option>
+                        <option value="it-systems">IT Systems</option>
+                        <option value="it-security">IT Security</option>
+                        <!-- Buildings & Grounds (handle both variants) -->
+                        <option value="buildings-grounds">Buildings &amp; Grounds</option>
+                        <option value="building-grounds">Buildings &amp; Grounds</option>
+                        <!-- Electrical Services (handle both variants) -->
+                        <option value="electrical">Electrical Services</option>
+                        <option value="electrical-services">Electrical Services</option>
+                        <!-- Move Requests -->
+                        <option value="moves">Move Requests</option>
+                        <!-- RMA / Warehouse -->
+                        <option value="rma">RMA / Warehouse</option>
+                    </select>
+                    <button id="modal-queue-save" class="btn-secondary">Move</button>
+                </div>
+
+                <div class="inline-control">
+                    <label>Timer:</label>
+                    <button id="modal-timer-start" class="btn-secondary">Start Timer</button>
+                    <button id="modal-timer-stop" class="btn-secondary" disabled>Stop &amp; Log</button>
+                </div>
                 
             </div>
         </div>
@@ -228,13 +259,16 @@
                             Queue<span class="required">*</span>
                             <select id="new-queue" required>
                                 <option value="">Select queue...</option>
-                                <option value="building-grounds">Building &amp; Grounds</option>
-                                <option value="electrical-services">Electrical Services</option>
-                                <option value="it-applications">IT Applications</option>
+                                <option value="buildings-grounds">Buildings &amp; Grounds</option>
+                                <option value="electrical">Electrical Services</option>
+                                <option value="it">Information Technology (IT)</option>
                                 <option value="it-support">IT Support</option>
+                                <option value="it-applications">IT Applications</option>
                                 <option value="it-networking">IT Networking</option>
                                 <option value="it-systems">IT Systems</option>
                                 <option value="it-security">IT Security</option>
+                                <option value="moves">Move Requests</option>
+                                <option value="rma">RMA / Warehouse</option>
                             </select>
                         </label>
 
@@ -297,18 +331,36 @@
 
                         <label>
                             Category
-                            <input type="text" id="new-category" placeholder="Hardware, Software, Network...">
+                            <select id="new-category">
+                                <option value="">Select category...</option>
+                            </select>
                         </label>
 
                         <label>
                             Subcategory
-                            <input type="text" id="new-subcategory" placeholder="Laptop, Firewall, VPN...">
+                            <select id="new-subcategory">
+                                <option value="">Select subcategory...</option>
+                            </select>
                         </label>
+                        
+                        <!-- Custom Fields Container -->
+                        <div id="new-custom-fields-container">
+                            <!-- Custom fields will be dynamically rendered here -->
+                        </div>
 
                         <label>
                             Attachments
                             <input type="text" id="new-attachments" placeholder="e.g., screenshot.png (simulated)">
                         </label>
+
+                        <div class="inline-control" style="gap:6px; align-items:center; margin-top:8px;">
+                            <label for="new-time-hours">Initial Time Spent:</label>
+                            <input type="number" id="new-time-hours" min="0" placeholder="h" style="width:64px;">
+                            <span>h</span>
+                            <input type="number" id="new-time-minutes" min="0" max="59" placeholder="m" style="width:64px;">
+                            <span>m</span>
+                            <span style="font-size:12px;color:var(--muted, #666);">(optional)</span>
+                        </div>
                     </div>
                 </div>
 

@@ -119,8 +119,14 @@
         const techUsername = document.getElementById("tech-username");
         const techPassword = document.getElementById("tech-password");
 
+        // Check if already logged in
+        const existingToken = localStorage.getItem('authToken');
+        if (existingToken) {
+            window.location.href = "home.html";
+        }
+
         if (techLoginBtn) {
-            techLoginBtn.addEventListener("click", () => {
+            techLoginBtn.addEventListener("click", async () => {
                 techLoginError.textContent = "";
 
                 const user = techUsername.value.trim();
@@ -131,41 +137,48 @@
                     return;
                 }
 
-                const users = JSON.parse(localStorage.getItem("users") || "[]");
+                // Disable button during login
+                techLoginBtn.disabled = true;
+                techLoginBtn.textContent = "Logging in...";
 
-                const account = users.find(
-                    a => a.username.toLowerCase() === user.toLowerCase() &&
-                         a.password === pass &&
-                         a.active !== false
-                );
+                try {
+                    // Call backend API for authentication
+                    const response = await fetch('/api/auth/login', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            username: user,
+                            password: pass
+                        })
+                    });
 
-                if (!account) {
-                    techLoginError.textContent = "Invalid credentials or inactive account.";
-                    return;
+                    const data = await response.json();
+
+                    if (!response.ok) {
+                        techLoginError.textContent = data.error || "Invalid credentials";
+                        techLoginBtn.disabled = false;
+                        techLoginBtn.textContent = "Log In";
+                        return;
+                    }
+
+                    // Store authentication token and user info
+                    localStorage.setItem("authToken", data.token);
+                    localStorage.setItem("currentUser", data.user.fullName);
+                    localStorage.setItem("currentUserRole", data.user.role);
+                    localStorage.setItem("currentUsername", data.user.username);
+                    localStorage.setItem("currentUserId", data.user.id);
+
+                    // Redirect to staff dashboard
+                    window.location.href = "home.html";
+
+                } catch (error) {
+                    console.error('Login error:', error);
+                    techLoginError.textContent = "Connection error. Please try again.";
+                    techLoginBtn.disabled = false;
+                    techLoginBtn.textContent = "Log In";
                 }
-
-                // Check if user has tech or admin role
-                if (account.role !== "tech" && account.role !== "admin") {
-                    techLoginError.textContent = "Access restricted to staff only.";
-                    return;
-                }
-
-                // Save logged-in user + role
-                localStorage.setItem("currentUser", account.name);
-                localStorage.setItem("currentUserRole", account.role);
-                localStorage.setItem("currentUsername", account.username);
-
-                // Log login event
-                const logs = JSON.parse(localStorage.getItem("systemLogs") || "[]");
-                logs.push({
-                    timestamp: new Date().toISOString(),
-                    user: account.name,
-                    action: "Logged in (Staff Portal)"
-                });
-                localStorage.setItem("systemLogs", JSON.stringify(logs));
-
-                // Redirect to staff dashboard
-                window.location.href = "home.html";
             });
         }
 

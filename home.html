@@ -17,10 +17,6 @@
         </div>
 
         <div class="topbar-right">
-            <button id="new-ticket-btn" class="pill-btn pill-primary">+ New Ticket</button>
-
-            <button id="view-toggle" class="pill-btn">View: Cards</button>
-            
             <div id="current-user-display" class="pill-btn"></div>
             <button id="logout-btn" class="pill-btn">Logout</button>
 
@@ -59,7 +55,7 @@
             <section class="panel">
                 <h2>Select a Queue</h2>
                 
-                <div id="queue-buttons-container">
+                <div id="queue-buttons-container" class="scrollable-content">
                     <!-- Queue buttons will be dynamically generated here -->
                 </div>
             </section>
@@ -69,44 +65,80 @@
 
                 <div class="ticket-panel-header">
                     <h2 id="ticket-header" class="ticket-title-centered">Tickets (Select a Queue)</h2>
-                    <button id="queue-new-ticket-btn" class="pill-btn pill-primary" style="display:none;">+ New Ticket</button>
+                    <div style="display:flex; gap:8px; align-items:center;">
+                        <div class="view-dropdown">
+                            <button id="view-dropdown-btn" class="pill-btn pill-secondary">View</button>
+                            <div id="view-dropdown-menu" class="view-dropdown-menu">
+                                <div class="view-option" data-view="list-cards">List - Cards</div>
+                                <div class="view-option" data-view="list-table">List - Table</div>
+                                <div class="view-option" data-view="board">Board</div>
+                            </div>
+                        </div>
+                        <button id="queue-new-ticket-btn" class="pill-btn pill-primary" style="display:none;">+ New Ticket</button>
+                    </div>
                 </div>
 
-                <div class="ticket-controls">
+                <div class="ticket-controls" id="list-view-controls">
                     <input type="text" id="ticket-search" placeholder="Search tickets...">
 
                     <select id="ticket-sort">
+                        <option value="all">All (No Sort)</option>
                         <option value="newest">Newest</option>
                         <option value="oldest">Oldest</option>
                         <option value="az">Title A–Z</option>
                         <option value="za">Title Z–A</option>
                         <option value="priority-high">Priority: High → Low</option>
                         <option value="priority-low">Priority: Low → High</option>
+                        <option value="status-open">Status: Open First</option>
+                        <option value="status-progress">Status: In Progress First</option>
+                        <option value="status-pending">Status: Pending First</option>
+                        <option value="status-resolved">Status: Resolved First</option>
+                        <option value="status-closed">Status: Closed First</option>
                         <option value="assigned-first">Assigned → Unassigned</option>
                         <option value="unassigned-first">Unassigned → Assigned</option>
                         <option value="queue-az">Queue A–Z</option>
                         <option value="queue-za">Queue Z–A</option>
                     </select>
 
-                    <div class="filters">
-                        <button class="filter-btn active" data-filter="open">Open</button>
-                        <button class="filter-btn" data-filter="closed">Closed</button>
-                        <button class="filter-btn" data-filter="assigned">Assigned</button>
-                        <button class="filter-btn" data-filter="unassigned">Unassigned</button>
-                    </div>
+                    <select id="status-filter">
+                        <option value="all">All Statuses</option>
+                        <option value="open">Open</option>
+                        <option value="in-progress">In Progress</option>
+                        <option value="pending">Pending</option>
+                        <option value="resolved">Resolved</option>
+                        <option value="closed">Closed</option>
+                        <option value="assigned">Assigned</option>
+                        <option value="unassigned">Unassigned</option>
+                    </select>
+
+                    <select id="priority-select">
+                        <option value="all">All Priorities</option>
+                        <option value="Low">Low</option>
+                        <option value="Medium">Medium</option>
+                        <option value="High">High</option>
+                        <option value="Critical">Critical</option>
+                    </select>
+
+                    <select id="technician-select">
+                        <option value="all">All Technicians</option>
+                        <option value="Peter Uhl">Peter Uhl</option>
+                        <option value="Kim Clemmer">Kim Clemmer</option>
+                        <option value="Les Duffy">Les Duffy</option>
+                        <option value="Andrew Ayala">Andrew Ayala</option>
+                        <option value="Ercell Green">Ercell Green</option>
+                        <option value="Alex Richards">Alex Richards</option>
+                        <option value="unassigned">Unassigned Only</option>
+                    </select>
                 </div>
 
-                <div class="priority-filters">
-                    <span>Priority:</span>
-                    <button class="priority-filter-btn active" data-priority="all">All</button>
-                    <button class="priority-filter-btn" data-priority="Low">Low</button>
-                    <button class="priority-filter-btn" data-priority="Medium">Medium</button>
-                    <button class="priority-filter-btn" data-priority="High">High</button>
-                    <button class="priority-filter-btn" data-priority="Critical">Critical</button>
-                </div>
-
+                <!-- List View -->
                 <div id="ticket-list" class="ticket-list">
                     <!-- Tickets will be injected here by JavaScript -->
+                </div>
+
+                <!-- Board View -->
+                <div id="ticket-board" class="ticket-board" style="display:none;">
+                    <!-- Board columns will be injected here by JavaScript -->
                 </div>
             </section>
 
@@ -117,118 +149,171 @@
     <!-- Ticket Detail Modal -->
     <div id="ticket-modal" class="modal">
         <div class="modal-content modal-detail">
-            <span id="modal-close" class="modal-close">&times;</span>
-            <h2 id="modal-title"></h2>
-
-            <div class="modal-meta">
-                <p id="modal-id"></p>
-                <p id="modal-status"></p>
-                <p id="modal-assigned"></p>
-                <p id="modal-priority"></p>
-                <p id="modal-queue"></p>
-                <p id="modal-requester"></p>
-                <p id="modal-location"></p>
-                <p id="modal-dates"></p>
-                <p id="modal-tags"></p>
-                <p id="modal-category"></p>
-                <p id="modal-time"></p>
-                
-                <!-- Custom Fields Display -->
-                <div id="modal-custom-fields" style="margin-top: 15px;">
-                    <!-- Custom field values will be displayed here -->
-                </div>
+            <div class="modal-header-sticky">
+                <span id="modal-close" class="modal-close">&times;</span>
+                <h2 id="modal-title"></h2>
             </div>
 
-            <!-- Ticket Description -->
-            <h3 class="modal-section-header">Description</h3>
-            <div id="modal-description" class="modal-description"></div>
-
-            <!-- Ticket Images -->
-            <div id="modal-ticket-images" class="image-gallery" style="margin-top:12px;"></div>
-
-            <!-- Comments Section -->
-            <div class="modal-section">
-                <h3>Comments</h3>
-                <div id="modal-comments-list" class="comments-list"></div>
-                <div class="comment-form">
-                    <textarea id="modal-comment-text" rows="3" placeholder="Add a comment... (paste screenshots here)"></textarea>
-                    <div id="modal-comment-images" class="image-gallery"></div>
-                    <div class="inline-control" style="gap:6px; align-items:center; margin:6px 0;">
-                        <label for="modal-comment-hours">Time:</label>
-                        <input type="number" id="modal-comment-hours" min="0" placeholder="h" style="width:64px;">
-                        <span>h</span>
-                        <input type="number" id="modal-comment-minutes" min="0" max="59" placeholder="m" style="width:64px;">
-                        <span>m</span>
-                        <span style="font-size:12px;color:var(--muted, #666);">(optional, logs time with comment)</span>
+            <div class="modal-body-scrollable">
+                <div class="modal-meta">
+                    <p id="modal-id"></p>
+                    
+                    <!-- Editable Status -->
+                    <div style="margin-bottom:10px;">
+                        <strong>Status:</strong>
+                        <select id="modal-status-select" style="margin-left:8px; padding:4px 8px; border-radius:4px; border:1px solid #ccc;">
+                            <option value="Open">Open</option>
+                            <option value="In Progress">In Progress</option>
+                            <option value="Pending">Pending</option>
+                            <option value="Resolved">Resolved</option>
+                            <option value="Closed">Closed</option>
+                        </select>
                     </div>
-                    <button id="modal-comment-add" class="btn-secondary">Add Comment</button>
+                    
+                    <!-- Editable Assignee -->
+                    <div style="margin-bottom:10px;">
+                        <strong>Assigned To:</strong>
+                        <select id="modal-assigned-select" style="margin-left:8px; padding:4px 8px; border-radius:4px; border:1px solid #ccc;">
+                            <option value="">Unassigned</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Editable Queue -->
+                    <div style="margin-bottom:10px;">
+                        <strong>Queue:</strong>
+                        <select id="modal-queue-select" style="margin-left:8px; padding:4px 8px; border-radius:4px; border:1px solid #ccc;">
+                        </select>
+                    </div>
+                    
+                    <p id="modal-priority"></p>
+                    <p id="modal-requester"></p>
+                    <p id="modal-location"></p>
+                    <p id="modal-dates"></p>
+                    <p id="modal-tags"></p>
+                    <p id="modal-category"></p>
+                    <p id="modal-time"></p>
+                    
+                    <!-- Custom Fields Display -->
+                    <div id="modal-custom-fields" style="margin-top: 15px;">
+                        <!-- Custom field values will be displayed here -->
+                    </div>
+                </div>
+
+                <!-- Ticket Description -->
+                <h3 class="modal-section-header">Description</h3>
+                <div id="modal-description" class="modal-description"></div>
+
+                <!-- Ticket Images -->
+                <div id="modal-ticket-images" class="image-gallery" style="margin-top:12px;"></div>
+
+                <!-- Comments Section -->
+                <div class="modal-section">
+                    <h3>Comments and Activity</h3>
+                    <div id="modal-comments-list" class="comments-list"></div>
+                    <div class="comment-form" style="background:#f8f9fa; padding:16px; border-radius:8px; border:2px solid #e0e0e0;">
+                        <!-- Text Editing Toolbar -->
+                        <div id="text-toolbar" style="display:flex; gap:4px; margin-bottom:10px; padding:8px; background:white; border-radius:4px; border:1px solid #ddd; flex-wrap:wrap;">
+                            <button type="button" class="text-tool-btn" data-command="bold" title="Bold (Ctrl+B)">
+                                <strong>B</strong>
+                            </button>
+                            <button type="button" class="text-tool-btn" data-command="italic" title="Italic (Ctrl+I)">
+                                <em>I</em>
+                            </button>
+                            <button type="button" class="text-tool-btn" data-command="underline" title="Underline (Ctrl+U)">
+                                <u>U</u>
+                            </button>
+                            <button type="button" class="text-tool-btn" data-command="strikeThrough" title="Strikethrough">
+                                <s>S</s>
+                            </button>
+                            <span style="border-left:1px solid #ddd; margin:0 4px;"></span>
+                            <button type="button" class="text-tool-btn" data-command="insertUnorderedList" title="Bullet List">
+                                • List
+                            </button>
+                            <button type="button" class="text-tool-btn" data-command="insertOrderedList" title="Numbered List">
+                                1. List
+                            </button>
+                            <span style="border-left:1px solid #ddd; margin:0 4px;"></span>
+                            <button type="button" class="text-tool-btn" data-command="justifyLeft" title="Align Left">
+                                ≡
+                            </button>
+                            <button type="button" class="text-tool-btn" data-command="justifyCenter" title="Align Center">
+                                ≡
+                            </button>
+                            <button type="button" class="text-tool-btn" data-command="justifyRight" title="Align Right">
+                                ≡
+                            </button>
+                            <span style="border-left:1px solid #ddd; margin:0 4px;"></span>
+                            <button type="button" class="text-tool-btn" data-command="createLink" title="Insert Link">
+                                🔗
+                            </button>
+                            <button type="button" class="text-tool-btn" data-command="removeFormat" title="Clear Formatting">
+                                ✕
+                            </button>
+                        </div>
+                        
+                        <div id="modal-comment-text" contenteditable="true" style="min-height:100px; padding:12px; border:1px solid #ccc; border-radius:4px; background:white; margin-bottom:10px; overflow-y:auto; max-height:300px;" placeholder="Add a comment... (paste screenshots here)"></div>
+                        <div id="modal-comment-images" class="image-gallery"></div>
+                        
+                        <!-- Session Time Display -->
+                        <div style="display:flex; gap:16px; align-items:center; margin-top:12px; padding-top:12px; border-top:1px solid #ddd;">
+                            <div style="display:flex; gap:8px; align-items:center;">
+                                <strong>Session Time:</strong> 
+                                <span id="modal-session-time" style="font-size:1.1rem; color:#0078ff;">00:00:00</span>
+                            </div>
+                            <button type="button" id="modal-manual-time-btn" class="btn-secondary" style="font-size:0.85rem; padding:4px 12px;">+ Manual Entry</button>
+                        </div>
+                        <div style="font-size:0.85rem; color:#666; margin-top:8px;">
+                            ⓘ Session time will be logged automatically when you save. Use Manual Entry to log time for past work.
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <!-- Activity Log Section -->
-            <div class="modal-section">
-                <h3>Activity Log</h3>
-                <div id="modal-activity-list" class="activity-list"></div>
-            </div>
-
-            <div class="modal-actions">
+            <div class="modal-actions-sticky">                <button id="modal-save-btn" class="btn-primary" style="background:#28a745;">Save Changes</button>                <button id="modal-save-close-btn" class="btn-primary" style="background:#007bff;">Save and Close</button>
                 <button id="modal-edit-btn" class="btn-primary">Edit Ticket</button>
+            </div>
+        </div>
+    </div>
 
-                <div class="inline-control">
-                    <label for="modal-status-select">Status:</label>
-                    <select id="modal-status-select">
-                        <option value="open">Open</option>
-                        <option value="assigned">Assigned</option>
-                        <option value="closed">Closed</option>
-                    </select>
-                    <button id="modal-status-save" class="btn-secondary">Update</button>
-                </div>
-
-                <div class="inline-control">
-                    <label for="modal-assign-select">Assigned To:</label>
-                    <select id="modal-assign-select">
-                        <option value="">Unassigned</option>
-                        <option value="Peter Uhl">Peter Uhl</option>
-                        <option value="Kim Clemmer">Kim Clemmer</option>
-                        <option value="Les Duffy">Les Duffy</option>
-                        <option value="Andrew Ayala">Andrew Ayala</option>
-                        <option value="Ercell Green">Ercell Green</option>
-                        <option value="Alex Richards">Alex Richards</option>
-                    </select>
-                    <button id="modal-assign-save" class="btn-secondary">Reassign</button>
-                </div>
-
-                <div class="inline-control">
-                    <label for="modal-queue-select">Queue/Sub-Queue:</label>
-                    <select id="modal-queue-select">
-                        <option value="">Select queue...</option>
-                        <!-- IT main + sub-queues -->
-                        <option value="it">Information Technology</option>
-                        <option value="it-support">IT Support</option>
-                        <option value="it-applications">IT Applications</option>
-                        <option value="it-networking">IT Networking</option>
-                        <option value="it-systems">IT Systems</option>
-                        <option value="it-security">IT Security</option>
-                        <!-- Buildings & Grounds (handle both variants) -->
-                        <option value="buildings-grounds">Buildings &amp; Grounds</option>
-                        <option value="building-grounds">Buildings &amp; Grounds</option>
-                        <!-- Electrical Services (handle both variants) -->
-                        <option value="electrical">Electrical Services</option>
-                        <option value="electrical-services">Electrical Services</option>
-                        <!-- Move Requests -->
-                        <option value="moves">Move Requests</option>
-                        <!-- RMA / Warehouse -->
-                        <option value="rma">RMA / Warehouse</option>
-                    </select>
-                    <button id="modal-queue-save" class="btn-secondary">Move</button>
-                </div>
-
-                <div class="inline-control">
-                    <label>Timer:</label>
-                    <button id="modal-timer-start" class="btn-secondary">Start Timer</button>
-                    <button id="modal-timer-stop" class="btn-secondary" disabled>Stop &amp; Log</button>
+    <!-- Manual Time Entry Modal -->
+    <div id="manual-time-modal" class="modal">
+        <div class="modal-content" style="max-width:550px; border-radius:12px; box-shadow:0 10px 40px rgba(0,0,0,0.2);">
+            <span id="manual-time-close" class="modal-close">&times;</span>
+            <h2 style="margin-bottom:24px; color:#333; font-size:24px;">⏱ Manual Time Entry</h2>
+            
+            <div style="background:#f8f9fa; padding:20px; border-radius:8px; margin-bottom:20px;">
+                <label style="display:block; margin-bottom:12px; font-weight:600; color:#555; font-size:14px;">📅 Date & Time Worked</label>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:20px;">
+                    <div>
+                        <label style="display:block; margin-bottom:6px; font-size:12px; color:#666;">Date</label>
+                        <input type="date" id="manual-time-date" style="width:100%; padding:10px 12px; border:2px solid #e0e0e0; border-radius:6px; font-size:14px; transition:border-color 0.2s;">
+                    </div>
+                    <div>
+                        <label style="display:block; margin-bottom:6px; font-size:12px; color:#666;">Time</label>
+                        <input type="time" id="manual-time-time" style="width:100%; padding:10px 12px; border:2px solid #e0e0e0; border-radius:6px; font-size:14px; transition:border-color 0.2s;">
+                    </div>
                 </div>
                 
+                <label style="display:block; margin-bottom:12px; font-weight:600; color:#555; font-size:14px;">⏳ Time Duration</label>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+                    <div>
+                        <label style="display:block; margin-bottom:6px; font-size:12px; color:#666;">Hours</label>
+                        <input type="number" id="manual-hours-input" min="0" placeholder="0" style="width:100%; padding:10px 12px; border:2px solid #e0e0e0; border-radius:6px; font-size:16px; font-weight:600; color:#0078ff; transition:border-color 0.2s;">
+                    </div>
+                    <div>
+                        <label style="display:block; margin-bottom:6px; font-size:12px; color:#666;">Minutes</label>
+                        <input type="number" id="manual-minutes-input" min="0" max="59" placeholder="0" style="width:100%; padding:10px 12px; border:2px solid #e0e0e0; border-radius:6px; font-size:16px; font-weight:600; color:#0078ff; transition:border-color 0.2s;">
+                    </div>
+                </div>
+            </div>
+            
+            <div style="font-size:13px; color:#666; margin-bottom:20px; padding:12px; background:#fff3cd; border-left:4px solid #ffc107; border-radius:4px;">
+                ℹ️ Use this to log time for work completed in the past. For current work, use the automatic session timer.
+            </div>
+            
+            <div style="display:flex; gap:12px; justify-content:flex-end;">
+                <button id="manual-time-cancel" class="btn-secondary" style="padding:10px 24px; font-size:14px;">Cancel</button>
+                <button id="manual-time-save" class="btn-primary" style="background:#28a745; padding:10px 24px; font-size:14px; font-weight:600;">✓ Add Time Entry</button>
             </div>
         </div>
     </div>
@@ -285,9 +370,11 @@
                         <label>
                             Status<span class="required">*</span>
                             <select id="new-status" required>
-                                <option value="open" selected>Open</option>
-                                <option value="assigned">Assigned</option>
-                                <option value="closed">Closed</option>
+                                <option value="Open" selected>Open</option>
+                                <option value="In Progress">In Progress</option>
+                                <option value="Pending">Pending</option>
+                                <option value="Resolved">Resolved</option>
+                                <option value="Closed">Closed</option>
                             </select>
                         </label>
 
@@ -352,14 +439,23 @@
                             Attachments
                             <input type="text" id="new-attachments" placeholder="e.g., screenshot.png (simulated)">
                         </label>
-
-                        <div class="inline-control" style="gap:6px; align-items:center; margin-top:8px;">
-                            <label for="new-time-hours">Initial Time Spent:</label>
-                            <input type="number" id="new-time-hours" min="0" placeholder="h" style="width:64px;">
-                            <span>h</span>
-                            <input type="number" id="new-time-minutes" min="0" max="59" placeholder="m" style="width:64px;">
-                            <span>m</span>
-                            <span style="font-size:12px;color:var(--muted, #666);">(optional)</span>
+                        <!-- Time Tracking Section -->
+                        <div style="background:#f8f9fa; padding:12px; border-radius:8px; border:1px solid #e0e0e0; margin-top:12px;">
+                            <div style="display:flex; gap:12px; align-items:center; margin-bottom:8px;">
+                                <strong>Session Time:</strong>
+                                <span id="new-ticket-session-time" style="font-size:1.1rem; color:#0078ff;">00:00:00</span>
+                            </div>
+                            <div class="inline-control" style="gap:8px; align-items:center;">
+                                <label for="new-time-hours"><strong>Initial Time Spent:</strong></label>
+                                <input type="number" id="new-time-hours" min="0" placeholder="Hours" style="width:70px; padding:4px 8px;" value="0">
+                                <span>h</span>
+                                <input type="number" id="new-time-minutes" min="0" max="59" placeholder="Min" style="width:70px; padding:4px 8px;" value="0">
+                                <span>m</span>
+                                <button type="button" id="new-use-session-btn" class="btn-secondary" style="font-size:0.85rem; padding:4px 12px;">Use Session Time</button>
+                            </div>
+                            <div style="font-size:0.85rem; color:#666; margin-top:6px;">
+                                ⓘ Time will be logged when ticket is created
+                            </div>
                         </div>
                     </div>
                 </div>

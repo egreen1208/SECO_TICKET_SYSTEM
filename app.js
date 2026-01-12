@@ -693,6 +693,835 @@ const tickets = [
       { timestamp: "2026-01-07T15:00:00", user: "System", action: "Ticket created" },
       { timestamp: "2026-01-07T15:20:00", user: "System", action: "Status changed to in-progress" }
     ]
+  },
+  {
+    id: 26,
+    title: "Windows update deployment to workstations",
+    description: "Deploy latest Windows security patches to all workstations in phases.",
+    queue: "it-systems",
+    status: "Pending",
+    assigned: true,
+    assignedTo: "Les Duffy",
+    priority: "High",
+    tags: ["patching", "windows", "deployment"],
+    requesterName: "IT Operations",
+    requesterEmail: "ops@example.com",
+    location: "All Locations",
+    createdDate: "2026-01-08",
+    updatedDate: "2026-01-08",
+    dueDate: "2026-01-15",
+    category: "Infrastructure",
+    subcategory: "Patch Management",
+    internalNotes: "Awaiting change approval board meeting.",
+    attachments: "patch-schedule.xlsx",
+    images: [],
+    comments: [],
+    activity: [
+      { timestamp: "2026-01-08T08:00:00", user: "System", action: "Ticket created" },
+      { timestamp: "2026-01-08T09:00:00", user: "System", action: "Status changed to Pending" }
+    ]
+  },
+  {
+    id: 27,
+    title: "New employee laptop setup",
+    description: "Configure laptop for new sales representative starting Monday. Include VPN, CRM, and Office suite.",
+    queue: "it-support",
+    status: "In Progress",
+    assigned: true,
+    assignedTo: "Ercell Green",
+    priority: "Medium",
+    tags: ["onboarding", "hardware", "setup"],
+    requesterName: "HR Department",
+    requesterEmail: "hr@example.com",
+    location: "HQ",
+    createdDate: "2026-01-08",
+    updatedDate: "2026-01-08",
+    dueDate: "2026-01-12",
+    category: "User Management",
+    subcategory: "Onboarding",
+    internalNotes: "Laptop received, imaging in progress.",
+    attachments: "",
+    images: [],
+    comments: [],
+    activity: [
+      { timestamp: "2026-01-08T08:30:00", user: "System", action: "Ticket created" },
+      { timestamp: "2026-01-08T10:00:00", user: "System", action: "Status changed to In Progress" }
+    ]
+  },
+  {
+    id: 28,
+    title: "Data retention policy implementation",
+    description: "Implement new 7-year data retention policy for financial records in document management system.",
+    queue: "it-applications",
+    status: "Open",
+    assigned: true,
+    assignedTo: "Alex Richards",
+    priority: "Medium",
+    tags: ["compliance", "data-retention", "policy"],
+    requesterName: "Legal Department",
+    requesterEmail: "legal@example.com",
+    location: "HQ",
+    createdDate: "2026-01-08",
+    updatedDate: "2026-01-08",
+    dueDate: "2026-01-20",
+    category: "Applications",
+    subcategory: "Document Management",
+    internalNotes: "Review system capabilities and configuration options.",
+    attachments: "retention-policy-v2.pdf",
+    images: [],
+    comments: [],
+    activity: [
+      { timestamp: "2026-01-08T09:00:00", user: "System", action: "Ticket created" }
+    ]
+  },
+  {
+    id: 29,
+    title: "Parking lot lighting repair",
+    description: "Several lights not working in north parking lot. Safety concern for evening staff.",
+    queue: "buildings-grounds",
+    status: "In Progress",
+    assigned: true,
+    assignedTo: "Les Duffy",
+    priority: "High",
+    tags: ["lighting", "safety", "facilities"],
+    requesterName: "Security",
+    requesterEmail: "security@example.com",
+    location: "HQ - North Parking Lot",
+    createdDate: "2026-01-08",
+    updatedDate: "2026-01-08",
+    dueDate: "2026-01-09",
+    category: "Facilities",
+    subcategory: "Lighting",
+    internalNotes: "Electrician scheduled for tomorrow morning.",
+    attachments: "",
+    images: [],
+    comments: [],
+    activity: [
+      { timestamp: "2026-01-08T09:30:00", user: "System", action: "Ticket created" },
+      { timestamp: "2026-01-08T10:00:00", user: "System", action: "Status changed to In Progress" }
+    ]
+  },
+  {
+    id: 30,
+    title: "SSL certificate renewal for intranet",
+    description: "Intranet SSL certificate expires in 14 days. Renew and install before expiration.",
+    queue: "it-security",
+    status: "Open",
+    assigned: true,
+    assignedTo: "Alex Richards",
+    priority: "Critical",
+    tags: ["ssl", "certificate", "security"],
+    requesterName: "IT Security",
+    requesterEmail: "security@example.com",
+    location: "Data Center",
+    createdDate: "2026-01-08",
+    updatedDate: "2026-01-08",
+    dueDate: "2026-01-18",
+    category: "Security",
+    subcategory: "Certificates",
+    internalNotes: "Certificate request submitted to CA.",
+    attachments: "",
+    images: [],
+    comments: [],
+    activity: [
+      { timestamp: "2026-01-08T10:00:00", user: "System", action: "Ticket created" }
+    ]
+  },
+  {
+    id: 31,
+    title: "Video surveillance camera offline",
+    description: "Camera #12 in warehouse offline. Cannot view feed from monitoring station.",
+    queue: "it-security",
+    status: "Resolved",
+    assigned: true,
+    assignedTo: "Ercell Green",
+    priority: "Medium",
+    tags: ["camera", "surveillance", "hardware"],
+    requesterName: "Warehouse Manager",
+    requesterEmail: "warehouse@example.com",
+    location: "Warehouse - Bay 3",
+    createdDate: "2026-01-08",
+    updatedDate: "2026-01-08",
+    dueDate: "",
+    category: "Security",
+    subcategory: "Surveillance",
+    internalNotes: "Power adapter replaced. Camera back online.",
+    attachments: "",
+    images: [],
+    comments: [],
+    activity: [
+      { timestamp: "2026-01-08T10:30:00", user: "System", action: "Ticket created" },
+      { timestamp: "2026-01-08T11:30:00", user: "System", action: "Status changed to Resolved" }
+    ]
+  },
+  {
+    id: 32,
+    title: "Network switch upgrade in server room",
+    description: "Replace aging 1Gb switch with new 10Gb model to improve data center throughput.",
+    queue: "it-networking",
+    status: "Pending",
+    assigned: true,
+    assignedTo: "Peter Uhl",
+    priority: "Medium",
+    tags: ["network", "switch", "upgrade"],
+    requesterName: "IT Infrastructure",
+    requesterEmail: "infrastructure@example.com",
+    location: "Data Center A",
+    createdDate: "2026-01-08",
+    updatedDate: "2026-01-08",
+    dueDate: "2026-01-25",
+    category: "Networking",
+    subcategory: "Hardware",
+    internalNotes: "Waiting for equipment delivery. Installation during maintenance window.",
+    attachments: "switch-config.txt",
+    images: [],
+    comments: [],
+    activity: [
+      { timestamp: "2026-01-08T11:00:00", user: "System", action: "Ticket created" },
+      { timestamp: "2026-01-08T11:15:00", user: "System", action: "Status changed to Pending" }
+    ]
+  },
+  {
+    id: 33,
+    title: "Cloud storage quota increase request",
+    description: "Marketing team exceeded cloud storage quota. Requesting 500GB increase for campaign assets.",
+    queue: "it-applications",
+    status: "Resolved",
+    assigned: true,
+    assignedTo: "Andrew Ayala",
+    priority: "Low",
+    tags: ["cloud", "storage", "quota"],
+    requesterName: "Marketing Team",
+    requesterEmail: "marketing@example.com",
+    location: "HQ",
+    createdDate: "2026-01-08",
+    updatedDate: "2026-01-08",
+    dueDate: "",
+    category: "Applications",
+    subcategory: "Cloud Storage",
+    internalNotes: "Quota increased and confirmed with user.",
+    attachments: "",
+    images: [],
+    comments: [],
+    activity: [
+      { timestamp: "2026-01-08T11:30:00", user: "System", action: "Ticket created" },
+      { timestamp: "2026-01-08T12:00:00", user: "System", action: "Status changed to Resolved" }
+    ]
+  },
+  {
+    id: 34,
+    title: "Desk phone not receiving calls",
+    description: "Extension 4521 can make outbound calls but inbound calls go straight to voicemail.",
+    queue: "it-networking",
+    status: "Closed",
+    assigned: true,
+    assignedTo: "Kim Clemmer",
+    priority: "Medium",
+    tags: ["voip", "phone", "pbx"],
+    requesterName: "Sarah Johnson",
+    requesterEmail: "sarah.johnson@example.com",
+    location: "HQ - Office 312",
+    createdDate: "2026-01-08",
+    updatedDate: "2026-01-08",
+    dueDate: "",
+    category: "Networking",
+    subcategory: "VoIP",
+    internalNotes: "Call forwarding was inadvertently enabled. Disabled and tested.",
+    attachments: "",
+    images: [],
+    comments: [],
+    activity: [
+      { timestamp: "2026-01-08T12:00:00", user: "System", action: "Ticket created" },
+      { timestamp: "2026-01-08T12:30:00", user: "System", action: "Status changed to Resolved" },
+      { timestamp: "2026-01-08T13:00:00", user: "System", action: "Status changed to Closed" }
+    ]
+  },
+  {
+    id: 35,
+    title: "Office furniture move for reorg",
+    description: "Rearrange desks and furniture on 2nd floor for departmental reorganization.",
+    queue: "moves",
+    status: "Open",
+    assigned: true,
+    assignedTo: "Les Duffy",
+    priority: "Low",
+    tags: ["move", "furniture", "facilities"],
+    requesterName: "Office Manager",
+    requesterEmail: "admin@example.com",
+    location: "HQ - 2nd Floor",
+    createdDate: "2026-01-08",
+    updatedDate: "2026-01-08",
+    dueDate: "2026-01-18",
+    category: "Facilities",
+    subcategory: "Moves",
+    internalNotes: "Coordinate with affected departments. Schedule for weekend.",
+    attachments: "floor-plan-new.pdf",
+    images: [],
+    comments: [],
+    activity: [
+      { timestamp: "2026-01-08T13:00:00", user: "System", action: "Ticket created" }
+    ]
+  },
+  {
+    id: 36,
+    title: "RMA process for defective monitors",
+    description: "Three monitors displaying color artifacts. Need RMA and replacement under warranty.",
+    queue: "rma",
+    status: "In Progress",
+    assigned: true,
+    assignedTo: "Ercell Green",
+    priority: "Medium",
+    tags: ["rma", "monitor", "hardware"],
+    requesterName: "IT Support",
+    requesterEmail: "support@example.com",
+    location: "HQ",
+    createdDate: "2026-01-08",
+    updatedDate: "2026-01-08",
+    dueDate: "2026-01-15",
+    category: "Hardware",
+    subcategory: "Monitor",
+    internalNotes: "RMA numbers obtained. Shipping labels printed.",
+    attachments: "",
+    images: [],
+    comments: [],
+    activity: [
+      { timestamp: "2026-01-08T13:30:00", user: "System", action: "Ticket created" },
+      { timestamp: "2026-01-08T14:00:00", user: "System", action: "Status changed to In Progress" }
+    ]
+  },
+  {
+    id: 37,
+    title: "Active Directory password reset automation",
+    description: "Implement self-service password reset portal for Active Directory users to reduce helpdesk calls.",
+    queue: "it-support",
+    status: "Open",
+    assigned: true,
+    assignedTo: "Ercell Green",
+    priority: "Medium",
+    tags: ["active-directory", "automation", "password"],
+    requesterName: "IT Manager",
+    requesterEmail: "itmanager@example.com",
+    location: "HQ",
+    createdDate: "2026-01-09",
+    updatedDate: "2026-01-09",
+    dueDate: "2026-01-25",
+    category: "User Management",
+    subcategory: "Active Directory",
+    internalNotes: "Research self-service password reset solutions.",
+    attachments: "",
+    images: [],
+    comments: [],
+    activity: [
+      { timestamp: "2026-01-09T08:00:00", user: "System", action: "Ticket created" }
+    ]
+  },
+  {
+    id: 38,
+    title: "Laptop won't connect to corporate WiFi",
+    description: "User laptop can see the WiFi network but fails to authenticate. Other devices work fine.",
+    queue: "it-support",
+    status: "In Progress",
+    assigned: true,
+    assignedTo: "Ercell Green",
+    priority: "High",
+    tags: ["wifi", "authentication", "troubleshooting"],
+    requesterName: "Michael Brown",
+    requesterEmail: "michael.brown@example.com",
+    location: "HQ - 4th Floor",
+    createdDate: "2026-01-09",
+    updatedDate: "2026-01-09",
+    dueDate: "2026-01-09",
+    category: "Networking",
+    subcategory: "Wireless",
+    internalNotes: "Check WiFi profile settings and certificate validity.",
+    attachments: "",
+    images: [],
+    comments: [],
+    activity: [
+      { timestamp: "2026-01-09T08:30:00", user: "System", action: "Ticket created" },
+      { timestamp: "2026-01-09T09:00:00", user: "System", action: "Status changed to In Progress" }
+    ]
+  },
+  {
+    id: 39,
+    title: "Microsoft Office activation issue",
+    description: "Office 365 showing 'Product Unlicensed' message despite valid subscription.",
+    queue: "it-applications",
+    status: "Resolved",
+    assigned: true,
+    assignedTo: "Ercell Green",
+    priority: "Medium",
+    tags: ["office365", "licensing", "activation"],
+    requesterName: "Finance Team",
+    requesterEmail: "finance@example.com",
+    location: "HQ",
+    createdDate: "2026-01-09",
+    updatedDate: "2026-01-09",
+    dueDate: "",
+    category: "Applications",
+    subcategory: "Office 365",
+    internalNotes: "Ran Office activation troubleshooter. Issue resolved.",
+    attachments: "",
+    images: [],
+    comments: [],
+    activity: [
+      { timestamp: "2026-01-09T09:00:00", user: "System", action: "Ticket created" },
+      { timestamp: "2026-01-09T09:45:00", user: "System", action: "Status changed to Resolved" }
+    ]
+  },
+  {
+    id: 40,
+    title: "Server monitoring alert - High CPU usage",
+    description: "Application server CPU at 95% for last 30 minutes. Investigate and optimize if needed.",
+    queue: "it-systems",
+    status: "In Progress",
+    assigned: true,
+    assignedTo: "Ercell Green",
+    priority: "Critical",
+    tags: ["server", "performance", "cpu"],
+    requesterName: "Monitoring System",
+    requesterEmail: "alerts@example.com",
+    location: "Data Center A",
+    createdDate: "2026-01-09",
+    updatedDate: "2026-01-09",
+    dueDate: "2026-01-09",
+    category: "Infrastructure",
+    subcategory: "Server",
+    internalNotes: "Reviewing process list and recent deployments.",
+    attachments: "",
+    images: [],
+    comments: [],
+    activity: [
+      { timestamp: "2026-01-09T10:00:00", user: "System", action: "Ticket created" },
+      { timestamp: "2026-01-09T10:05:00", user: "System", action: "Status changed to In Progress" }
+    ]
+  },
+  {
+    id: 41,
+    title: "Desktop computer blue screen error",
+    description: "Workstation experiencing BSOD with DRIVER_IRQL_NOT_LESS_OR_EQUAL error code.",
+    queue: "it-support",
+    status: "Open",
+    assigned: true,
+    assignedTo: "Ercell Green",
+    priority: "High",
+    tags: ["hardware", "bsod", "troubleshooting"],
+    requesterName: "Accounting",
+    requesterEmail: "accounting@example.com",
+    location: "HQ - 3rd Floor",
+    createdDate: "2026-01-09",
+    updatedDate: "2026-01-09",
+    dueDate: "2026-01-10",
+    category: "Hardware",
+    subcategory: "Desktop",
+    internalNotes: "Run memory diagnostics and driver updates.",
+    attachments: "minidump.dmp",
+    images: [],
+    comments: [],
+    activity: [
+      { timestamp: "2026-01-09T10:30:00", user: "System", action: "Ticket created" }
+    ]
+  },
+  {
+    id: 42,
+    title: "Antivirus software update deployment",
+    description: "Deploy latest antivirus definition updates to all endpoints across organization.",
+    queue: "it-security",
+    status: "Pending",
+    assigned: true,
+    assignedTo: "Ercell Green",
+    priority: "High",
+    tags: ["antivirus", "security", "deployment"],
+    requesterName: "IT Security",
+    requesterEmail: "security@example.com",
+    location: "All Locations",
+    createdDate: "2026-01-09",
+    updatedDate: "2026-01-09",
+    dueDate: "2026-01-11",
+    category: "Security",
+    subcategory: "Endpoint Protection",
+    internalNotes: "Schedule deployment during maintenance window.",
+    attachments: "",
+    images: [],
+    comments: [],
+    activity: [
+      { timestamp: "2026-01-09T11:00:00", user: "System", action: "Ticket created" },
+      { timestamp: "2026-01-09T11:15:00", user: "System", action: "Status changed to Pending" }
+    ]
+  },
+  {
+    id: 43,
+    title: "Email signature template update",
+    description: "Create and deploy new company-wide email signature template with updated branding.",
+    queue: "it-applications",
+    status: "Open",
+    assigned: true,
+    assignedTo: "Ercell Green",
+    priority: "Low",
+    tags: ["email", "branding", "template"],
+    requesterName: "Marketing",
+    requesterEmail: "marketing@example.com",
+    location: "HQ",
+    createdDate: "2026-01-09",
+    updatedDate: "2026-01-09",
+    dueDate: "2026-01-16",
+    category: "Applications",
+    subcategory: "Email",
+    internalNotes: "Coordinate with marketing for design approval.",
+    attachments: "signature-template.html",
+    images: [],
+    comments: [],
+    activity: [
+      { timestamp: "2026-01-09T11:30:00", user: "System", action: "Ticket created" }
+    ]
+  },
+  {
+    id: 44,
+    title: "Zoom meeting room equipment setup",
+    description: "Configure new Zoom Room in Conference Room D with camera, microphone, and display.",
+    queue: "it-support",
+    status: "In Progress",
+    assigned: true,
+    assignedTo: "Ercell Green",
+    priority: "Medium",
+    tags: ["zoom", "conferencing", "av"],
+    requesterName: "Facilities",
+    requesterEmail: "facilities@example.com",
+    location: "HQ - Conference Room D",
+    createdDate: "2026-01-09",
+    updatedDate: "2026-01-09",
+    dueDate: "2026-01-12",
+    category: "Applications",
+    subcategory: "Conferencing",
+    internalNotes: "Equipment arrived. Installation in progress.",
+    attachments: "",
+    images: [],
+    comments: [],
+    activity: [
+      { timestamp: "2026-01-09T12:00:00", user: "System", action: "Ticket created" },
+      { timestamp: "2026-01-09T13:00:00", user: "System", action: "Status changed to In Progress" }
+    ]
+  },
+  {
+    id: 45,
+    title: "Network printer queue stuck",
+    description: "Print jobs queued but not printing. Printer shows online but won't process jobs.",
+    queue: "it-support",
+    status: "Resolved",
+    assigned: true,
+    assignedTo: "Ercell Green",
+    priority: "Medium",
+    tags: ["printer", "network", "troubleshooting"],
+    requesterName: "HR Department",
+    requesterEmail: "hr@example.com",
+    location: "HQ - 1st Floor",
+    createdDate: "2026-01-09",
+    updatedDate: "2026-01-09",
+    dueDate: "",
+    category: "Hardware",
+    subcategory: "Printer",
+    internalNotes: "Cleared print queue and restarted print spooler service.",
+    attachments: "",
+    images: [],
+    comments: [],
+    activity: [
+      { timestamp: "2026-01-09T13:30:00", user: "System", action: "Ticket created" },
+      { timestamp: "2026-01-09T14:00:00", user: "System", action: "Status changed to Resolved" }
+    ]
+  },
+  {
+    id: 46,
+    title: "Outlook calendar sync issues with mobile",
+    description: "Calendar events not syncing between Outlook desktop and mobile app.",
+    queue: "it-applications",
+    status: "Open",
+    assigned: true,
+    assignedTo: "Ercell Green",
+    priority: "Medium",
+    tags: ["outlook", "calendar", "sync"],
+    requesterName: "Executive Team",
+    requesterEmail: "executives@example.com",
+    location: "HQ",
+    createdDate: "2026-01-09",
+    updatedDate: "2026-01-09",
+    dueDate: "2026-01-10",
+    category: "Applications",
+    subcategory: "Outlook",
+    internalNotes: "Check ActiveSync settings and mailbox permissions.",
+    attachments: "",
+    images: [],
+    comments: [],
+    activity: [
+      { timestamp: "2026-01-09T14:30:00", user: "System", action: "Ticket created" }
+    ]
+  },
+  {
+    id: 47,
+    title: "Software license compliance audit",
+    description: "Conduct quarterly software license compliance audit for all IT applications.",
+    queue: "it-applications",
+    status: "In Progress",
+    assigned: true,
+    assignedTo: "Ercell Green",
+    priority: "Medium",
+    tags: ["licensing", "compliance", "audit"],
+    requesterName: "IT Manager",
+    requesterEmail: "itmanager@example.com",
+    location: "HQ",
+    createdDate: "2026-01-09",
+    updatedDate: "2026-01-09",
+    dueDate: "2026-01-20",
+    category: "Applications",
+    subcategory: "License Management",
+    internalNotes: "Generate inventory report from asset management system.",
+    attachments: "",
+    images: [],
+    comments: [],
+    activity: [
+      { timestamp: "2026-01-09T15:00:00", user: "System", action: "Ticket created" },
+      { timestamp: "2026-01-09T15:30:00", user: "System", action: "Status changed to In Progress" }
+    ]
+  },
+  {
+    id: 48,
+    title: "USB ports not working on laptop",
+    description: "All USB ports on laptop stopped functioning. Tried different devices with same result.",
+    queue: "it-support",
+    status: "Open",
+    assigned: true,
+    assignedTo: "Ercell Green",
+    priority: "High",
+    tags: ["hardware", "usb", "laptop"],
+    requesterName: "Sales Team",
+    requesterEmail: "sales@example.com",
+    location: "Remote",
+    createdDate: "2026-01-09",
+    updatedDate: "2026-01-09",
+    dueDate: "2026-01-11",
+    category: "Hardware",
+    subcategory: "Laptop",
+    internalNotes: "Check USB controller drivers and BIOS settings.",
+    attachments: "",
+    images: [],
+    comments: [],
+    activity: [
+      { timestamp: "2026-01-09T15:45:00", user: "System", action: "Ticket created" }
+    ]
+  },
+  {
+    id: 49,
+    title: "Database backup verification failure",
+    description: "Automated backup verification for customer database failed. Investigate backup integrity.",
+    queue: "it-systems",
+    status: "Critical",
+    assigned: true,
+    assignedTo: "Ercell Green",
+    priority: "Critical",
+    tags: ["database", "backup", "verification"],
+    requesterName: "Database Admin",
+    requesterEmail: "dba@example.com",
+    location: "Data Center B",
+    createdDate: "2026-01-10",
+    updatedDate: "2026-01-10",
+    dueDate: "2026-01-10",
+    category: "Infrastructure",
+    subcategory: "Database",
+    internalNotes: "Run manual backup and verify restore capability.",
+    attachments: "backup-log.txt",
+    images: [],
+    comments: [],
+    activity: [
+      { timestamp: "2026-01-10T07:00:00", user: "System", action: "Ticket created" }
+    ]
+  },
+  {
+    id: 50,
+    title: "Remote desktop connection timeout",
+    description: "Remote users unable to connect via RDP. Connection times out during authentication.",
+    queue: "it-networking",
+    status: "In Progress",
+    assigned: true,
+    assignedTo: "Ercell Green",
+    priority: "High",
+    tags: ["rdp", "remote", "networking"],
+    requesterName: "Remote Workers",
+    requesterEmail: "remote@example.com",
+    location: "Remote",
+    createdDate: "2026-01-10",
+    updatedDate: "2026-01-10",
+    dueDate: "2026-01-10",
+    category: "Networking",
+    subcategory: "Remote Access",
+    internalNotes: "Check RDP gateway and firewall rules.",
+    attachments: "",
+    images: [],
+    comments: [],
+    activity: [
+      { timestamp: "2026-01-10T08:00:00", user: "System", action: "Ticket created" },
+      { timestamp: "2026-01-10T08:15:00", user: "System", action: "Status changed to In Progress" }
+    ]
+  },
+  {
+    id: 51,
+    title: "Group policy not applying to workstations",
+    description: "New GPO settings not applying to domain-joined computers despite force update attempts.",
+    queue: "it-systems",
+    status: "Open",
+    assigned: true,
+    assignedTo: "Ercell Green",
+    priority: "Medium",
+    tags: ["group-policy", "active-directory", "troubleshooting"],
+    requesterName: "IT Operations",
+    requesterEmail: "ops@example.com",
+    location: "HQ",
+    createdDate: "2026-01-10",
+    updatedDate: "2026-01-10",
+    dueDate: "2026-01-12",
+    category: "Infrastructure",
+    subcategory: "Active Directory",
+    internalNotes: "Review GPO inheritance and replication status.",
+    attachments: "",
+    images: [],
+    comments: [],
+    activity: [
+      { timestamp: "2026-01-10T09:00:00", user: "System", action: "Ticket created" }
+    ]
+  },
+  {
+    id: 52,
+    title: "Web browser crashing repeatedly",
+    description: "Chrome browser crashes every 10-15 minutes on multiple user computers.",
+    queue: "it-support",
+    status: "Resolved",
+    assigned: true,
+    assignedTo: "Ercell Green",
+    priority: "Medium",
+    tags: ["browser", "chrome", "troubleshooting"],
+    requesterName: "Customer Service",
+    requesterEmail: "customerservice@example.com",
+    location: "HQ - 2nd Floor",
+    createdDate: "2026-01-10",
+    updatedDate: "2026-01-10",
+    dueDate: "",
+    category: "Applications",
+    subcategory: "Web Browser",
+    internalNotes: "Disabled problematic extension. Issue resolved.",
+    attachments: "",
+    images: [],
+    comments: [],
+    activity: [
+      { timestamp: "2026-01-10T10:00:00", user: "System", action: "Ticket created" },
+      { timestamp: "2026-01-10T10:45:00", user: "System", action: "Status changed to Resolved" }
+    ]
+  },
+  {
+    id: 53,
+    title: "Shared mailbox permissions request",
+    description: "Add three users to support@example.com shared mailbox with full access permissions.",
+    queue: "it-applications",
+    status: "Resolved",
+    assigned: true,
+    assignedTo: "Ercell Green",
+    priority: "Low",
+    tags: ["email", "permissions", "shared-mailbox"],
+    requesterName: "Customer Support",
+    requesterEmail: "support@example.com",
+    location: "HQ",
+    createdDate: "2026-01-10",
+    updatedDate: "2026-01-10",
+    dueDate: "",
+    category: "Applications",
+    subcategory: "Email",
+    internalNotes: "Permissions granted via Exchange Admin Center.",
+    attachments: "",
+    images: [],
+    comments: [],
+    activity: [
+      { timestamp: "2026-01-10T11:00:00", user: "System", action: "Ticket created" },
+      { timestamp: "2026-01-10T11:20:00", user: "System", action: "Status changed to Resolved" }
+    ]
+  },
+  {
+    id: 54,
+    title: "File server disk space warning",
+    description: "File server at 85% capacity. Need to clean up old files or expand storage.",
+    queue: "it-systems",
+    status: "In Progress",
+    assigned: true,
+    assignedTo: "Ercell Green",
+    priority: "Medium",
+    tags: ["storage", "file-server", "capacity"],
+    requesterName: "IT Operations",
+    requesterEmail: "ops@example.com",
+    location: "Data Center A",
+    createdDate: "2026-01-10",
+    updatedDate: "2026-01-10",
+    dueDate: "2026-01-14",
+    category: "Infrastructure",
+    subcategory: "Storage",
+    internalNotes: "Running disk cleanup and identifying large files.",
+    attachments: "storage-report.xlsx",
+    images: [],
+    comments: [],
+    activity: [
+      { timestamp: "2026-01-10T12:00:00", user: "System", action: "Ticket created" },
+      { timestamp: "2026-01-10T12:30:00", user: "System", action: "Status changed to In Progress" }
+    ]
+  },
+  {
+    id: 55,
+    title: "Multi-factor authentication enrollment help",
+    description: "User needs assistance enrolling in MFA system for secure access to applications.",
+    queue: "it-security",
+    status: "Closed",
+    assigned: true,
+    assignedTo: "Ercell Green",
+    priority: "Low",
+    tags: ["mfa", "security", "enrollment"],
+    requesterName: "New Employee",
+    requesterEmail: "newuser@example.com",
+    location: "HQ",
+    createdDate: "2026-01-10",
+    updatedDate: "2026-01-10",
+    dueDate: "",
+    category: "Security",
+    subcategory: "Identity",
+    internalNotes: "Walked user through enrollment process. Completed successfully.",
+    attachments: "",
+    images: [],
+    comments: [],
+    activity: [
+      { timestamp: "2026-01-10T13:00:00", user: "System", action: "Ticket created" },
+      { timestamp: "2026-01-10T13:30:00", user: "System", action: "Status changed to Resolved" },
+      { timestamp: "2026-01-10T14:00:00", user: "System", action: "Status changed to Closed" }
+    ]
+  },
+  {
+    id: 56,
+    title: "Application performance optimization",
+    description: "Internal CRM application loading slowly. Users experiencing 30+ second page load times.",
+    queue: "it-applications",
+    status: "In Progress",
+    assigned: true,
+    assignedTo: "Ercell Green",
+    priority: "High",
+    tags: ["performance", "optimization", "crm"],
+    requesterName: "Sales Operations",
+    requesterEmail: "salesops@example.com",
+    location: "HQ",
+    createdDate: "2026-01-10",
+    updatedDate: "2026-01-10",
+    dueDate: "2026-01-13",
+    category: "Applications",
+    subcategory: "CRM",
+    internalNotes: "Analyzing application logs and database queries.",
+    attachments: "performance-metrics.pdf",
+    images: [],
+    comments: [],
+    activity: [
+      { timestamp: "2026-01-10T14:30:00", user: "System", action: "Ticket created" },
+      { timestamp: "2026-01-10T15:00:00", user: "System", action: "Status changed to In Progress" }
+    ]
   }
 ];
 
@@ -971,8 +1800,9 @@ refreshCategoryOptions();
 // STATE VARIABLES & DOM HOOKS
 // -------------------------------
 let selectedQueue = null;
-let selectedFilter = "open";
+let selectedFilter = "all";
 let selectedPriorityFilter = "all";
+let selectedTechnician = "all";
 let viewMode = "cards";
 let editingTicketId = null;
 let currentUser = localStorage.getItem("currentUser") || "System";
@@ -1029,7 +1859,6 @@ const sortSelect = document.getElementById("ticket-sort");
 const sidebar = document.getElementById("sidebar");
 const sidebarToggle = document.getElementById("sidebar-toggle");
 const darkModeToggle = document.getElementById("dark-mode-toggle");
-const viewToggle = document.getElementById("view-toggle");
 const currentUserSelect = document.getElementById("current-user-select");
 
 const logoutBtn = document.getElementById("logout-btn");
@@ -1040,8 +1869,7 @@ if (logoutBtn) {
     });
 }
 
-// New/Edit ticket modal
-const newTicketBtn = document.getElementById("new-ticket-btn");
+// New/Edit ticket modal (top bar button removed - using queue buttons now)
 const newTicketModal = document.getElementById("new-ticket-modal");
 const newTicketClose = document.getElementById("new-ticket-close");
 const newTicketCancel = document.getElementById("new-ticket-cancel");
@@ -1066,6 +1894,8 @@ const newSubcategory = document.getElementById("new-subcategory");
 const newAttachments = document.getElementById("new-attachments");
 const newTimeHours = document.getElementById("new-time-hours");
 const newTimeMinutes = document.getElementById("new-time-minutes");
+const newTicketSessionTime = document.getElementById("new-ticket-session-time");
+const newUseSessionBtn = document.getElementById("new-use-session-btn");
 
 // Toast
 const toast = document.getElementById("toast");
@@ -1075,23 +1905,44 @@ const modal = document.getElementById("ticket-modal");
 const modalClose = document.getElementById("modal-close");
 const modalEditBtn = document.getElementById("modal-edit-btn");
 const modalStatusSelect = document.getElementById("modal-status-select");
-const modalStatusSave = document.getElementById("modal-status-save");
-const modalAssignSelect = document.getElementById("modal-assign-select");
-const modalAssignSave = document.getElementById("modal-assign-save");
+const modalAssignedSelect = document.getElementById("modal-assigned-select");
 const modalQueueSelect = document.getElementById("modal-queue-select");
-const modalQueueSave = document.getElementById("modal-queue-save");
 const modalDeleteBtn = document.getElementById("modal-delete-btn");
 const modalTime = document.getElementById("modal-time");
-const modalTimerStart = document.getElementById("modal-timer-start");
-const modalTimerStop = document.getElementById("modal-timer-stop");
 
 // Comments & Activity DOM
 const modalCommentsList = document.getElementById("modal-comments-list");
 const modalCommentText = document.getElementById("modal-comment-text");
-const modalCommentAdd = document.getElementById("modal-comment-add");
-const modalActivityList = document.getElementById("modal-activity-list");
-const modalCommentHours = document.getElementById("modal-comment-hours");
-const modalCommentMinutes = document.getElementById("modal-comment-minutes");
+const modalSaveBtn = document.getElementById("modal-save-btn");
+
+// Time tracking DOM elements
+const modalSaveCloseBtn = document.getElementById("modal-save-close-btn");
+const modalSessionTime = document.getElementById("modal-session-time");
+const modalManualTimeBtn = document.getElementById("modal-manual-time-btn");
+
+// Manual time entry modal DOM elements
+const manualTimeModal = document.getElementById("manual-time-modal");
+const manualTimeClose = document.getElementById("manual-time-close");
+const manualTimeCancel = document.getElementById("manual-time-cancel");
+const manualTimeSave = document.getElementById("manual-time-save");
+const manualTimeDate = document.getElementById("manual-time-date");
+const manualTimeTime = document.getElementById("manual-time-time");
+const manualHoursInput = document.getElementById("manual-hours-input");
+const manualMinutesInput = document.getElementById("manual-minutes-input");
+
+// Time tracking state
+let timeTrackingInterval = null;
+let sessionStartTime = null;
+let currentTrackingTicketId = null;
+let sessionElapsedSeconds = 0;
+
+// New ticket session time tracking
+let newTicketTimeInterval = null;
+let newTicketSessionStart = null;
+let newTicketElapsedSeconds = 0;
+
+// View mode state
+let currentView = 'list'; // 'list' or 'board'
 
 // -------------------------------
 // CATEGORY HELPERS
@@ -1538,6 +2389,8 @@ document.addEventListener("DOMContentLoaded", () => {
     renderAdminQueueCheckboxes();
     renderAdmin(); // ensure existing users render on admin page load
     initSidebarDropdown();
+    initTextToolbar();
+    initCommentPasteHandler();
     console.log("Queue buttons rendered");
 });
 
@@ -1576,34 +2429,37 @@ if (newQueue) {
 }
 
 // -------------------------------
-// STATUS FILTER BUTTONS
+// STATUS FILTER DROPDOWN
 // -------------------------------
-document.querySelectorAll(".filter-btn").forEach(btn => {
-    btn.addEventListener("click", () => {
-        document.querySelectorAll(".filter-btn").forEach(b =>
-            b.classList.remove("active")
-        );
-        btn.classList.add("active");
-
-        selectedFilter = btn.dataset.filter;
+const statusFilter = document.getElementById('status-filter');
+if (statusFilter) {
+    statusFilter.addEventListener('change', () => {
+        selectedFilter = statusFilter.value;
         updateTickets();
     });
-});
+}
 
 // -------------------------------
-// PRIORITY FILTER BUTTONS
+// PRIORITY FILTER DROPDOWN
 // -------------------------------
-document.querySelectorAll(".priority-filter-btn").forEach(btn => {
-    btn.addEventListener("click", () => {
-        document.querySelectorAll(".priority-filter-btn").forEach(b =>
-            b.classList.remove("active")
-        );
-        btn.classList.add("active");
-
-        selectedPriorityFilter = btn.dataset.priority;
+const prioritySelect = document.getElementById('priority-select');
+if (prioritySelect) {
+    prioritySelect.addEventListener('change', () => {
+        selectedPriorityFilter = prioritySelect.value;
         updateTickets();
     });
-});
+}
+
+// -------------------------------
+// TECHNICIAN FILTER DROPDOWN
+// -------------------------------
+const technicianSelect = document.getElementById('technician-select');
+if (technicianSelect) {
+    technicianSelect.addEventListener('change', () => {
+        selectedTechnician = technicianSelect.value;
+        updateTickets();
+    });
+}
 
 // -------------------------------
 // SEARCH + SORT EVENTS
@@ -1614,6 +2470,48 @@ if (searchInput) {
 
 if (sortSelect) {
     sortSelect.addEventListener("change", updateTickets);
+}
+
+// -------------------------------
+// VIEW DROPDOWN BUTTON (LIST/BOARD + CARDS/TABLE)
+// -------------------------------
+const viewDropdownBtn = document.getElementById('view-dropdown-btn');
+const viewDropdownMenu = document.getElementById('view-dropdown-menu');
+
+if (viewDropdownBtn && viewDropdownMenu) {
+    // Toggle dropdown on button click
+    viewDropdownBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        viewDropdownMenu.classList.toggle('show');
+    });
+
+    // Handle option selection
+    const viewOptions = document.querySelectorAll('.view-option');
+    viewOptions.forEach(option => {
+        option.addEventListener('click', () => {
+            const value = option.dataset.view;
+            if (value === 'board') {
+                currentView = 'board';
+                viewMode = 'cards';
+            } else if (value === 'list-cards') {
+                currentView = 'list';
+                viewMode = 'cards';
+            } else if (value === 'list-table') {
+                currentView = 'list';
+                viewMode = 'table';
+            }
+            
+            // Close dropdown
+            viewDropdownMenu.classList.remove('show');
+            
+            updateTickets();
+        });
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', () => {
+        viewDropdownMenu.classList.remove('show');
+    });
 }
 
 // -------------------------------
@@ -1639,17 +2537,6 @@ if (darkModeToggle) {
 }
 
 // -------------------------------
-// VIEW MODE TOGGLE
-// -------------------------------
-if (viewToggle) {
-    viewToggle.addEventListener("click", () => {
-        viewMode = viewMode === "cards" ? "table" : "cards";
-        viewToggle.textContent = `View: ${viewMode === "cards" ? "Cards" : "Table"}`;
-        updateTickets();
-    });
-}
-
-// -------------------------------
 // NEW TICKET MODAL OPEN (supports preset queue)
 // -------------------------------
 function openNewTicketWithQueue(presetQueue) {
@@ -1659,7 +2546,7 @@ function openNewTicketWithQueue(presetQueue) {
     newTicketError.textContent = "";
     newTicketForm.reset();
     newPriority.value = "Medium";
-    newStatus.value = "open";
+    newStatus.value = "Open";
     newAssignedTo.value = "";
     
     // Populate queue dropdown filtered by current queue family
@@ -1675,12 +2562,453 @@ function openNewTicketWithQueue(presetQueue) {
     newDescriptionImages = [];
     const newDescGallery = document.getElementById('new-description-images');
     if (newDescGallery) newDescGallery.innerHTML = '';
-    if (newTimeHours) newTimeHours.value = "";
-    if (newTimeMinutes) newTimeMinutes.value = "";
+    if (newTimeHours) newTimeHours.value = "0";
+    if (newTimeMinutes) newTimeMinutes.value = "0";
+    
+    // Start session time tracking for new ticket
+    startNewTicketTimeTracking();
+    
     showModal(newTicketModal);
 }
 
-if (newTicketBtn) newTicketBtn.addEventListener("click", () => openNewTicketWithQueue("it"));
+// Top bar new ticket button removed - now using queue-specific buttons
+
+// -------------------------------
+// TEXT TOOLBAR FUNCTIONS
+// -------------------------------
+function initTextToolbar() {
+    const toolbar = document.getElementById('text-toolbar');
+    if (!toolbar) return;
+    
+    const buttons = toolbar.querySelectorAll('.text-tool-btn');
+    buttons.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const command = btn.dataset.command;
+            
+            if (command === 'createLink') {
+                const url = prompt('Enter the URL:');
+                if (url) {
+                    document.execCommand(command, false, url);
+                }
+            } else {
+                document.execCommand(command, false, null);
+            }
+            
+            // Keep focus on contenteditable
+            modalCommentText.focus();
+        });
+    });
+}
+
+function initCommentPasteHandler() {
+    if (!modalCommentText) return;
+    
+    // Handle paste events to capture images
+    modalCommentText.addEventListener('paste', (e) => {
+        const items = e.clipboardData.items;
+        for (let i = 0; i < items.length; i++) {
+            if (items[i].type.indexOf('image') !== -1) {
+                e.preventDefault();
+                const blob = items[i].getAsFile();
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    commentImages.push(event.target.result);
+                    renderCommentImages();
+                };
+                reader.readAsDataURL(blob);
+            }
+        }
+    });
+    
+    // Add placeholder functionality for contenteditable
+    modalCommentText.addEventListener('focus', () => {
+        if (modalCommentText.textContent === '') {
+            modalCommentText.innerHTML = '';
+        }
+    });
+    
+    modalCommentText.addEventListener('blur', () => {
+        if (modalCommentText.textContent.trim() === '') {
+            modalCommentText.innerHTML = '';
+        }
+    });
+}
+
+function renderCommentImages() {
+    const gallery = document.getElementById('modal-comment-images');
+    if (!gallery) return;
+    
+    gallery.innerHTML = '';
+    commentImages.forEach((dataUrl, idx) => {
+        const item = document.createElement('div');
+        item.classList.add('image-gallery-item');
+        item.style.position = 'relative';
+        
+        const img = document.createElement('img');
+        img.src = dataUrl;
+        
+        const removeBtn = document.createElement('button');
+        removeBtn.textContent = '×';
+        removeBtn.style.cssText = 'position:absolute; top:4px; right:4px; background:red; color:white; border:none; border-radius:50%; width:24px; height:24px; cursor:pointer; font-size:16px; line-height:1;';
+        removeBtn.addEventListener('click', () => {
+            commentImages.splice(idx, 1);
+            renderCommentImages();
+        });
+        
+        item.appendChild(img);
+        item.appendChild(removeBtn);
+        gallery.appendChild(item);
+    });
+}
+
+// Use Session Time button (for ticket modal)
+// Use Session Time button (for new ticket modal)
+if (newUseSessionBtn) {
+    newUseSessionBtn.addEventListener('click', () => {
+        const totalMinutes = Math.floor(newTicketElapsedSeconds / 60);
+        const hours = Math.floor(totalMinutes / 60);
+        const minutes = totalMinutes % 60;
+        
+        if (newTimeHours) newTimeHours.value = hours;
+        if (newTimeMinutes) newTimeMinutes.value = minutes;
+        
+        showToast('Session time copied to initial time');
+    });
+}
+
+// New Ticket Session Time Tracking Functions
+function startNewTicketTimeTracking() {
+    stopNewTicketTimeTracking();
+    
+    newTicketSessionStart = Date.now();
+    newTicketElapsedSeconds = 0;
+    
+    if (newTicketSessionTime) {
+        updateNewTicketSessionTimeDisplay();
+        newTicketTimeInterval = setInterval(updateNewTicketSessionTimeDisplay, 1000);
+    }
+}
+
+function stopNewTicketTimeTracking() {
+    if (newTicketTimeInterval) {
+        clearInterval(newTicketTimeInterval);
+        newTicketTimeInterval = null;
+    }
+    newTicketSessionStart = null;
+    newTicketElapsedSeconds = 0;
+}
+
+function updateNewTicketSessionTimeDisplay() {
+    if (!newTicketSessionStart) return;
+    
+    const elapsed = Math.floor((Date.now() - newTicketSessionStart) / 1000);
+    newTicketElapsedSeconds = elapsed;
+    
+    const hours = Math.floor(elapsed / 3600);
+    const minutes = Math.floor((elapsed % 3600) / 60);
+    const seconds = elapsed % 60;
+    
+    const display = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    
+    if (newTicketSessionTime) {
+        newTicketSessionTime.textContent = display;
+    }
+}
+
+// -------------------------------
+// TIME TRACKING EVENT LISTENERS
+// -------------------------------
+if (modalManualTimeBtn) {
+    modalManualTimeBtn.addEventListener('click', () => {
+        // Set defaults to current date and time
+        const now = new Date();
+        const dateStr = now.toISOString().split('T')[0];
+        const timeStr = now.toTimeString().slice(0, 5);
+        
+        if (manualTimeDate) manualTimeDate.value = dateStr;
+        if (manualTimeTime) manualTimeTime.value = timeStr;
+        if (manualHoursInput) manualHoursInput.value = '';
+        if (manualMinutesInput) manualMinutesInput.value = '';
+        
+        showModal(manualTimeModal);
+    });
+}
+
+if (manualTimeClose) {
+    manualTimeClose.addEventListener('click', () => hideModal(manualTimeModal));
+}
+
+if (manualTimeCancel) {
+    manualTimeCancel.addEventListener('click', () => hideModal(manualTimeModal));
+}
+
+if (manualTimeSave) {
+    manualTimeSave.addEventListener('click', () => {
+        const id = parseInt(modal.dataset.ticketId);
+        const t = tickets.find(t => t.id === id);
+        if (!t) return;
+        
+        const hours = parseInt(manualHoursInput.value) || 0;
+        const minutes = parseInt(manualMinutesInput.value) || 0;
+        const totalMinutes = (hours * 60) + minutes;
+        
+        if (totalMinutes <= 0) {
+            showToast('Please enter time duration');
+            return;
+        }
+        
+        // Create custom timestamp from date and time inputs
+        const dateValue = manualTimeDate.value;
+        const timeValue = manualTimeTime.value;
+        const customTimestamp = new Date(`${dateValue}T${timeValue}`).toISOString();
+        
+        // Add to time entries
+        t.timeEntries = Array.isArray(t.timeEntries) ? t.timeEntries : [];
+        t.timeEntries.push({
+            minutes: totalMinutes,
+            by: currentUser,
+            timestamp: customTimestamp,
+            source: 'manual'
+        });
+        
+        // Add activity log
+        t.activity.push({
+            timestamp: new Date().toISOString(),
+            user: currentUser,
+            action: `Time logged manually (${formatMinutes(totalMinutes)}) for ${dateValue} ${timeValue}`
+        });
+        
+        // Update displays
+        if (modalTime) {
+            const total = getTotalMinutes(t);
+            modalTime.textContent = `Total Time: ${formatMinutes(total)}`;
+        }
+        renderActivity(t);
+        renderComments(t);
+        
+        hideModal(manualTimeModal);
+        showToast('Manual time entry added');
+    });
+}
+
+// Save Changes button
+if (modalSaveBtn) {
+    modalSaveBtn.addEventListener('click', () => {
+        const id = parseInt(modal.dataset.ticketId);
+        const t = tickets.find(t => t.id === id);
+        if (!t) return;
+
+        const now = new Date();
+        const timestamp = now.toISOString();
+        
+        // Get comment text from contenteditable div
+        const commentText = modalCommentText.innerHTML.trim();
+        
+        // Automatically use session time (convert seconds to minutes)
+        const sessionMinutes = Math.floor(sessionElapsedSeconds / 60);
+        
+        // Check for status/assignee/queue changes
+        const oldStatus = t.status;
+        const oldAssigned = t.assignedTo;
+        const oldQueue = t.queue;
+        
+        const newStatus = modalStatusSelect ? modalStatusSelect.value : t.status;
+        const newAssigned = modalAssignedSelect ? modalAssignedSelect.value : t.assignedTo;
+        const newQueue = modalQueueSelect ? modalQueueSelect.value : t.queue;
+        
+        // Track changes
+        const changes = [];
+        if (oldStatus !== newStatus) {
+            changes.push(`Status changed from "${oldStatus}" to "${newStatus}"`);
+            t.status = newStatus;
+        }
+        if (oldAssigned !== newAssigned) {
+            changes.push(`Assigned changed from "${oldAssigned || 'Unassigned'}" to "${newAssigned || 'Unassigned'}"`);
+            t.assignedTo = newAssigned;
+        }
+        if (oldQueue !== newQueue) {
+            const oldQueueName = getQueueById(oldQueue)?.name || oldQueue;
+            const newQueueName = getQueueById(newQueue)?.name || newQueue;
+            changes.push(`Queue changed from "${oldQueueName}" to "${newQueueName}"`);
+            t.queue = newQueue;
+        }
+        
+        // Add comment if there's text or session time
+        if (commentText || sessionMinutes > 0) {
+            const imagesForComment = commentImages.length ? [...commentImages] : [];
+            
+            t.comments.push({
+                author: currentUser,
+                timestamp,
+                text: commentText,
+                images: imagesForComment,
+                loggedMinutes: sessionMinutes
+            });
+            
+            // Log time entry if session time exists
+            if (sessionMinutes > 0) {
+                if (!t.timeEntries) t.timeEntries = [];
+                t.timeEntries.push({
+                    by: currentUser,
+                    timestamp,
+                    minutes: sessionMinutes,
+                    source: 'auto'
+                });
+            }
+            
+            t.activity.push({
+                timestamp,
+                user: currentUser,
+                action: commentText ? "Comment added" : "Time logged"
+            });
+            
+            // Clear comment input
+            modalCommentText.innerHTML = "";
+            commentImages = [];
+            const commentGallery = document.getElementById('modal-comment-images');
+            if (commentGallery) commentGallery.innerHTML = '';
+        }
+        
+        // Log changes in comments
+        if (changes.length > 0) {
+            t.comments.push({
+                author: currentUser,
+                timestamp,
+                text: `<em>${changes.join('<br>')}</em>`,
+                images: [],
+                loggedMinutes: 0
+            });
+            
+            changes.forEach(change => {
+                t.activity.push({
+                    timestamp,
+                    user: currentUser,
+                    action: change
+                });
+            });
+        }
+        
+        // Save to localStorage
+        localStorage.setItem('tickets', JSON.stringify(tickets));
+        
+        // Update displays
+        if (modalTime) {
+            const total = getTotalMinutes(t);
+            modalTime.textContent = `Total Time: ${formatMinutes(total)}`;
+        }
+        renderComments(t);
+        
+        // Reset session
+        sessionElapsedSeconds = 0;
+        sessionStartTime = Date.now();
+        if (modalSessionTime) {
+            modalSessionTime.textContent = '00:00:00';
+        }
+        
+        showToast("Changes saved");
+        renderTickets(); // Refresh ticket list to show status/queue changes
+    });
+}
+
+if (modalSaveCloseBtn) {
+    modalSaveCloseBtn.addEventListener('click', () => {
+        const id = parseInt(modal.dataset.ticketId);
+        const t = tickets.find(t => t.id === id);
+        if (!t) return;
+
+        const now = new Date();
+        const timestamp = now.toISOString();
+        
+        // Get comment text from contenteditable div
+        const commentText = modalCommentText.innerHTML.trim();
+        
+        // Automatically use session time (convert seconds to minutes)
+        const sessionMinutes = Math.floor(sessionElapsedSeconds / 60);
+        
+        // Check for status/assignee/queue changes
+        const oldStatus = t.status;
+        const oldAssigned = t.assignedTo;
+        const oldQueue = t.queue;
+        
+        const newStatus = modalStatusSelect ? modalStatusSelect.value : t.status;
+        const newAssigned = modalAssignedSelect ? modalAssignedSelect.value : t.assignedTo;
+        const newQueue = modalQueueSelect ? modalQueueSelect.value : t.queue;
+        
+        // Track changes
+        const changes = [];
+        if (oldStatus !== newStatus) {
+            changes.push(`Status changed from "${oldStatus}" to "${newStatus}"`);
+            t.status = newStatus;
+        }
+        if (oldAssigned !== newAssigned) {
+            changes.push(`Assigned changed from "${oldAssigned || 'Unassigned'}" to "${newAssigned || 'Unassigned'}"`);
+            t.assignedTo = newAssigned;
+        }
+        if (oldQueue !== newQueue) {
+            const oldQueueName = getQueueById(oldQueue)?.name || oldQueue;
+            const newQueueName = getQueueById(newQueue)?.name || newQueue;
+            changes.push(`Queue changed from "${oldQueueName}" to "${newQueueName}"`);
+            t.queue = newQueue;
+        }
+        
+        // Add comment if there's text or session time
+        if (commentText || sessionMinutes > 0) {
+            const imagesForComment = commentImages.length ? [...commentImages] : [];
+            
+            t.comments.push({
+                author: currentUser,
+                timestamp,
+                text: commentText,
+                images: imagesForComment,
+                loggedMinutes: sessionMinutes
+            });
+            
+            // Log time entry if session time exists
+            if (sessionMinutes > 0) {
+                if (!t.timeEntries) t.timeEntries = [];
+                t.timeEntries.push({
+                    by: currentUser,
+                    timestamp,
+                    minutes: sessionMinutes,
+                    source: 'auto'
+                });
+            }
+            
+            t.activity.push({
+                timestamp,
+                user: currentUser,
+                action: commentText ? "Comment added" : "Time logged"
+            });
+        }
+        
+        // Log changes in comments
+        if (changes.length > 0) {
+            t.comments.push({
+                author: currentUser,
+                timestamp,
+                text: `<em>${changes.join('<br>')}</em>`,
+                images: [],
+                loggedMinutes: 0
+            });
+            
+            changes.forEach(change => {
+                t.activity.push({
+                    timestamp,
+                    user: currentUser,
+                    action: change
+                });
+            });
+        }
+        
+        // Save to localStorage
+        localStorage.setItem('tickets', JSON.stringify(tickets));
+        
+        updateTickets();
+        hideModal(modal);
+        showToast("Changes saved");
+    });
+}
 
 // -------------------------------
 // CLOSE MODALS
@@ -1692,6 +3020,7 @@ if (modalClose) modalClose.addEventListener("click", () => hideModal(modal));
 window.addEventListener("click", e => {
     if (newTicketModal && e.target === newTicketModal) hideModal(newTicketModal);
     if (modal && e.target === modal) hideModal(modal);
+    if (manualTimeModal && e.target === manualTimeModal) hideModal(manualTimeModal);
 });
 
 // -------------------------------
@@ -2158,6 +3487,9 @@ newTicketForm.addEventListener("submit", e => {
     }
 
     updateTickets();
+    
+    // Open the newly created ticket and start time tracking
+    openTicketModal(ticket);
 });
 
 // -------------------------------
@@ -2166,10 +3498,39 @@ newTicketForm.addEventListener("submit", e => {
 function openTicketModal(ticket) {
     document.getElementById("modal-title").textContent = ticket.title;
     document.getElementById("modal-id").textContent = `Ticket ID: ${ticket.id}`;
-    document.getElementById("modal-status").textContent = `Status: ${ticket.status}`;
-    document.getElementById("modal-assigned").textContent = `Assigned To: ${ticket.assigned ? (ticket.assignedTo || "Assigned") : "Unassigned"}`;
+    
+    // Populate status dropdown
+    if (modalStatusSelect) {
+        modalStatusSelect.value = ticket.status || "Open";
+    }
+    
+    // Populate assignee dropdown
+    if (modalAssignedSelect) {
+        const users = JSON.parse(localStorage.getItem('users') || '[]');
+        modalAssignedSelect.innerHTML = '<option value="">Unassigned</option>';
+        users.forEach(user => {
+            const option = document.createElement('option');
+            option.value = user.username;
+            option.textContent = user.name || user.username;
+            modalAssignedSelect.appendChild(option);
+        });
+        modalAssignedSelect.value = ticket.assignedTo || "";
+    }
+    
+    // Populate queue dropdown
+    if (modalQueueSelect) {
+        const queues = getActiveQueues();
+        modalQueueSelect.innerHTML = '';
+        queues.forEach(q => {
+            const option = document.createElement('option');
+            option.value = q.id;
+            option.textContent = `${q.icon || '📋'} ${q.name}`;
+            modalQueueSelect.appendChild(option);
+        });
+        modalQueueSelect.value = ticket.queue || "it";
+    }
+    
     document.getElementById("modal-priority").textContent = `Priority: ${ticket.priority}`;
-    document.getElementById("modal-queue").textContent = `Queue: ${ticket.queue}`;
     document.getElementById("modal-requester").textContent = `Requester: ${ticket.requesterName || "N/A"} (${ticket.requesterEmail || "no email"})`;
     document.getElementById("modal-location").textContent = `Location: ${ticket.location || "N/A"}`;
     document.getElementById("modal-dates").textContent = `Created: ${ticket.createdDate} | Updated: ${ticket.updatedDate} | Due: ${ticket.dueDate || "N/A"}`;
@@ -2182,23 +3543,7 @@ function openTicketModal(ticket) {
         descriptionDiv.textContent = ticket.description || "No description provided.";
     }
 
-    modalStatusSelect.value = ticket.status;
-    modalAssignSelect.value = ticket.assignedTo || "";
-    if (modalQueueSelect) {
-        // Try to set exact queue, fallback to normalized main queue
-        modalQueueSelect.value = ticket.queue || "";
-        if (modalQueueSelect.value === "") {
-            modalQueueSelect.value = normalizeQueue(ticket.queue);
-        }
-    }
-
     modal.dataset.ticketId = ticket.id;
-    // set timer button states for this ticket
-    if (modalTimerStart && modalTimerStop) {
-        const running = (typeof activeTimers !== 'undefined') && activeTimers[ticket.id] ? true : false;
-        modalTimerStart.disabled = running;
-        modalTimerStop.disabled = !running;
-    }
 
     // render ticket images gallery
     const ticketGallery = document.getElementById('modal-ticket-images');
@@ -2228,12 +3573,12 @@ function openTicketModal(ticket) {
         });
     }
 
-    // reset any in-progress comment images when opening a ticket
+    // reset any in-progress comment images and inputs when opening a ticket
     commentImages = [];
     const commentGallery = document.getElementById('modal-comment-images');
     if (commentGallery) commentGallery.innerHTML = '';
-    if (modalCommentHours) modalCommentHours.value = "";
-    if (modalCommentMinutes) modalCommentMinutes.value = "";
+    if (modalCommentText) modalCommentText.innerHTML = '';
+    
     // Update total time display
     if (modalTime) {
         const total = getTotalMinutes(ticket);
@@ -2243,8 +3588,10 @@ function openTicketModal(ticket) {
     // Display custom field values
     displayCustomFields(ticket);
 
+    // Start time tracking for this ticket
+    startTimeTracking(ticket.id);
+
     renderComments(ticket);
-    renderActivity(ticket);
 
     showModal(modal);
 }
@@ -2255,62 +3602,104 @@ function openTicketModal(ticket) {
 function renderComments(ticket) {
     modalCommentsList.innerHTML = "";
 
-    if (!ticket.comments || ticket.comments.length === 0) {
-        modalCommentsList.innerHTML = "<p>No comments yet.</p>";
+    // Get all comments and activity entries
+    const items = [];
+    
+    // Add comments
+    if (ticket.comments && ticket.comments.length > 0) {
+        ticket.comments.forEach(c => {
+            items.push({
+                type: 'comment',
+                data: c,
+                timestamp: c.timestamp
+            });
+        });
+    }
+    
+    // Add activity log entries
+    if (ticket.activity && ticket.activity.length > 0) {
+        ticket.activity.forEach(a => {
+            items.push({
+                type: 'activity',
+                data: a,
+                timestamp: a.timestamp
+            });
+        });
+    }
+    
+    if (items.length === 0) {
+        modalCommentsList.innerHTML = "<p>No comments or activity yet.</p>";
         return;
     }
 
-    const sorted = [...ticket.comments].sort(
-        (a, b) => new Date(b.timestamp) - new Date(a.timestamp)
-    );
+    // Sort by timestamp, newest first
+    const sorted = items.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
 
-    sorted.forEach(c => {
+    sorted.forEach(item => {
         const div = document.createElement("div");
-        div.classList.add("comment-item");
-        const dateStr = new Date(c.timestamp).toLocaleString();
-        div.innerHTML = `
-            <div class="comment-header">
-                <strong>${c.author}</strong> <span>${dateStr}</span>
-            </div>
-            <div class="comment-body">
-                ${c.text}
-            </div>
-        `;
+        
+        if (item.type === 'comment') {
+            const c = item.data;
+            div.classList.add("comment-item");
+            const dateStr = new Date(c.timestamp).toLocaleString();
+            div.innerHTML = `
+                <div class="comment-header">
+                    <strong>${c.author}</strong> <span>${dateStr}</span>
+                </div>
+                <div class="comment-body">
+                    ${c.text}
+                </div>
+            `;
 
-        if (c.loggedMinutes && c.loggedMinutes > 0) {
-            const timeP = document.createElement("div");
-            timeP.style.fontSize = "12px";
-            timeP.style.color = "#666";
-            timeP.textContent = `Logged: ${formatMinutes(c.loggedMinutes)}`;
-            div.appendChild(timeP);
-        }
+            if (c.loggedMinutes && c.loggedMinutes > 0) {
+                const timeP = document.createElement("div");
+                timeP.style.fontSize = "13px";
+                timeP.style.color = "#0078ff";
+                timeP.style.marginTop = "8px";
+                timeP.style.fontWeight = "600";
+                timeP.innerHTML = `⏱ Time Worked: ${formatMinutes(c.loggedMinutes)}`;
+                div.appendChild(timeP);
+            }
 
-        // If comment has images, render them below the text
-        if (c.images && c.images.length) {
-            const gallery = document.createElement('div');
-            gallery.classList.add('image-gallery');
-            c.images.forEach((dataUrl) => {
-                const item = document.createElement('div');
-                item.classList.add('image-gallery-item');
-                const img = document.createElement('img');
-                img.src = dataUrl;
-                img.style.cursor = 'pointer';
-                img.addEventListener('click', () => {
-                    const modalView = document.createElement('div');
-                    modalView.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);display:flex;align-items:center;justify-content:center;z-index:3000;';
-                    const fullImg = document.createElement('img');
-                    fullImg.src = dataUrl;
-                    fullImg.style.maxWidth = '90vw';
-                    fullImg.style.maxHeight = '90vh';
-                    fullImg.style.objectFit = 'contain';
-                    modalView.appendChild(fullImg);
-                    modalView.addEventListener('click', () => modalView.remove());
-                    document.body.appendChild(modalView);
+            // If comment has images, render them below the text
+            if (c.images && c.images.length) {
+                const gallery = document.createElement('div');
+                gallery.classList.add('image-gallery');
+                c.images.forEach((dataUrl) => {
+                    const item = document.createElement('div');
+                    item.classList.add('image-gallery-item');
+                    const img = document.createElement('img');
+                    img.src = dataUrl;
+                    img.style.cursor = 'pointer';
+                    img.addEventListener('click', () => {
+                        const modalView = document.createElement('div');
+                        modalView.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);display:flex;align-items:center;justify-content:center;z-index:3000;';
+                        const fullImg = document.createElement('img');
+                        fullImg.src = dataUrl;
+                        fullImg.style.maxWidth = '90vw';
+                        fullImg.style.maxHeight = '90vh';
+                        fullImg.style.objectFit = 'contain';
+                        modalView.appendChild(fullImg);
+                        modalView.addEventListener('click', () => modalView.remove());
+                        document.body.appendChild(modalView);
+                    });
+                    item.appendChild(img);
+                    gallery.appendChild(item);
                 });
-                item.appendChild(img);
-                gallery.appendChild(item);
-            });
-            div.appendChild(gallery);
+                div.appendChild(gallery);
+            }
+        } else if (item.type === 'activity') {
+            const a = item.data;
+            div.classList.add("comment-item");
+            div.style.background = "#f9f9f9";
+            div.style.borderLeft = "3px solid #999";
+            div.style.padding = "8px 12px";
+            const dateStr = new Date(a.timestamp).toLocaleString();
+            div.innerHTML = `
+                <div style="font-size:0.9rem; color:#666;">
+                    <strong>${a.user}</strong> - ${a.action} <span style="font-size:0.85rem; color:#999; margin-left:8px;">${dateStr}</span>
+                </div>
+            `;
         }
 
         modalCommentsList.appendChild(div);
@@ -2346,62 +3735,7 @@ function renderActivity(ticket) {
 }
 
 // -------------------------------
-// ADD COMMENT
-// -------------------------------
-modalCommentAdd.addEventListener("click", () => {
-    const id = parseInt(modal.dataset.ticketId);
-    const t = tickets.find(t => t.id === id);
-    if (!t) return;
-
-    const text = modalCommentText.value.trim();
-    if (!text) return;
-
-    const now = new Date();
-    const timestamp = now.toISOString();
-
-    // include any pasted images with the comment
-    const imagesForComment = commentImages.length ? [...commentImages] : [];
-
-    // optional time from comment inputs
-    let minutesFromComment = 0;
-    if (modalCommentHours || modalCommentMinutes) {
-        const ch = parseInt((modalCommentHours && modalCommentHours.value) ? modalCommentHours.value : "0", 10) || 0;
-        const cm = parseInt((modalCommentMinutes && modalCommentMinutes.value) ? modalCommentMinutes.value : "0", 10) || 0;
-        minutesFromComment = Math.max(0, (ch * 60) + cm);
-    }
-
-    t.comments.push({
-        author: currentUser,
-        timestamp,
-        text,
-        images: imagesForComment,
-        loggedMinutes: minutesFromComment > 0 ? minutesFromComment : 0
-    });
-
-    if (minutesFromComment > 0) {
-        t.timeEntries = Array.isArray(t.timeEntries) ? t.timeEntries : [];
-        t.timeEntries.push({ minutes: minutesFromComment, by: currentUser, timestamp, source: "comment" });
-    }
-
-    t.activity.push({
-        timestamp,
-        user: currentUser,
-        action: minutesFromComment > 0 ? `Comment added • Time logged (${formatMinutes(minutesFromComment)})` : "Comment added"
-    });
-
-    modalCommentText.value = "";
-    // clear and re-render comment image gallery
-    commentImages = [];
-    const commentGallery = document.getElementById('modal-comment-images');
-    if (commentGallery) commentGallery.innerHTML = '';
-    renderComments(t);
-    renderActivity(t);
-    if (modalTime) {
-        const total = getTotalMinutes(t);
-        modalTime.textContent = `Total Time: ${formatMinutes(total)}`;
-    }
-    showToast("Comment added");
-});
+// Comments are now saved via Save Changes button
 
 // -------------------------------
 // EDIT TICKET BUTTON
@@ -2440,93 +3774,14 @@ modalEditBtn.addEventListener("click", () => {
     newDescriptionImages = t.images && t.images.length ? [...t.images] : [];
     renderImageGallery('new-description-images', newDescriptionImages);
 
+    // Stop tracking on current ticket and save time
+    stopTimeTracking(true);
+
     hideModal(modal);
     showModal(newTicketModal);
 });
 
-// -------------------------------
-// CHANGE STATUS
-// -------------------------------
-modalStatusSave.addEventListener("click", () => {
-    const id = parseInt(modal.dataset.ticketId);
-    const t = tickets.find(t => t.id === id);
-    if (!t) return;
-
-    const now = new Date();
-    const todayStr = now.toISOString().slice(0, 10);
-    const timestamp = now.toISOString();
-
-    t.status = modalStatusSelect.value;
-    t.updatedDate = todayStr;
-
-    t.activity.push({
-        timestamp,
-        user: currentUser,
-        action: `Status changed to ${t.status}`
-    });
-
-    showToast(`Status updated to ${t.status}`);
-    updateTickets();
-    openTicketModal(t);
-});
-
-// -------------------------------
-// REASSIGN TICKET
-// -------------------------------
-modalAssignSave.addEventListener("click", () => {
-    const id = parseInt(modal.dataset.ticketId);
-    const t = tickets.find(t => t.id === id);
-    if (!t) return;
-
-    const now = new Date();
-    const todayStr = now.toISOString().slice(0, 10);
-    const timestamp = now.toISOString();
-
-    const assignedTo = modalAssignSelect.value;
-    t.assignedTo = assignedTo;
-    t.assigned = assignedTo !== "";
-    t.updatedDate = todayStr;
-
-    t.activity.push({
-        timestamp,
-        user: currentUser,
-        action: `Reassigned to ${assignedTo || "Unassigned"}`
-    });
-
-    showToast(`Ticket reassigned`);
-    updateTickets();
-    openTicketModal(t);
-});
-
-// -------------------------------
-// MOVE TICKET TO (SUB-)QUEUE
-// -------------------------------
-modalQueueSave.addEventListener("click", () => {
-    const id = parseInt(modal.dataset.ticketId);
-    const t = tickets.find(t => t.id === id);
-    if (!t) return;
-
-    const newQueue = modalQueueSelect.value;
-    if (!newQueue) return;
-
-    const oldQueue = t.queue;
-    const now = new Date();
-    const todayStr = now.toISOString().slice(0, 10);
-    const timestamp = now.toISOString();
-
-    t.queue = newQueue;
-    t.updatedDate = todayStr;
-
-    t.activity.push({
-        timestamp,
-        user: currentUser,
-        action: `Moved from ${formatQueueTitle(oldQueue)} to ${formatQueueTitle(newQueue)}`
-    });
-
-    showToast("Queue updated");
-    updateTickets();
-    openTicketModal(t);
-});
+// Status, assign, and queue changes removed - functionality moved to Edit Ticket
 
 // -------------------------------
 // MAIN RENDER FUNCTION
@@ -2552,7 +3807,11 @@ function formatQueueTitle(q) {
 }
 
 function updateTickets() {
-    ticketList.innerHTML = "";
+    const ticketListEl = document.getElementById('ticket-list');
+    const ticketBoardEl = document.getElementById('ticket-board');
+    
+    if (ticketListEl) ticketListEl.innerHTML = "";
+    if (ticketBoardEl) ticketBoardEl.innerHTML = "";
 
     if (!selectedQueue) {
         ticketHeader.textContent = "Tickets (Select a Queue)";
@@ -2582,8 +3841,12 @@ function updateTickets() {
 
         // Status filter
         const filterMatch =
-            (selectedFilter === "open" && t.status === "open") ||
-            (selectedFilter === "closed" && t.status === "closed") ||
+            selectedFilter === "all" ||
+            (selectedFilter === "open" && (t.status === "Open" || t.status === "open")) ||
+            (selectedFilter === "in-progress" && (t.status === "In Progress" || t.status === "in-progress")) ||
+            (selectedFilter === "pending" && (t.status === "Pending" || t.status === "pending")) ||
+            (selectedFilter === "resolved" && (t.status === "Resolved" || t.status === "resolved")) ||
+            (selectedFilter === "closed" && (t.status === "Closed" || t.status === "closed")) ||
             (selectedFilter === "assigned" && t.assigned === true) ||
             (selectedFilter === "unassigned" && t.assigned === false);
 
@@ -2592,16 +3855,24 @@ function updateTickets() {
             selectedPriorityFilter === "all" ||
             t.priority === selectedPriorityFilter;
 
+        // Technician filter
+        const technicianMatch =
+            selectedTechnician === "all" ||
+            (selectedTechnician === "unassigned" && (!t.assigned || !t.assignedTo)) ||
+            (selectedTechnician !== "unassigned" && t.assignedTo === selectedTechnician);
+
         // Search filter
         const searchMatch = searchInput
             ? t.title.toLowerCase().includes(searchInput.value.toLowerCase())
             : true;
 
-        return queueMatch && filterMatch && priorityMatch && searchMatch;
+        return queueMatch && filterMatch && priorityMatch && technicianMatch && searchMatch;
     });
 
     // SORTING
-    if (sortSelect) {
+    if (sortSelect && sortSelect.value !== 'all') {
+        const statusOrder = { 'Open': 1, 'In Progress': 2, 'Pending': 3, 'Resolved': 4, 'Closed': 5 };
+        
         switch (sortSelect.value) {
             case "az":
                 filtered.sort((a, b) => a.title.localeCompare(b.title));
@@ -2625,6 +3896,41 @@ function updateTickets() {
                     (a, b) => priorityRank[a.priority] - priorityRank[b.priority]
                 );
                 break;
+            case "status-open":
+                filtered.sort((a, b) => {
+                    if (a.status === 'Open' && b.status !== 'Open') return -1;
+                    if (a.status !== 'Open' && b.status === 'Open') return 1;
+                    return (statusOrder[a.status] || 99) - (statusOrder[b.status] || 99);
+                });
+                break;
+            case "status-progress":
+                filtered.sort((a, b) => {
+                    if (a.status === 'In Progress' && b.status !== 'In Progress') return -1;
+                    if (a.status !== 'In Progress' && b.status === 'In Progress') return 1;
+                    return (statusOrder[a.status] || 99) - (statusOrder[b.status] || 99);
+                });
+                break;
+            case "status-pending":
+                filtered.sort((a, b) => {
+                    if (a.status === 'Pending' && b.status !== 'Pending') return -1;
+                    if (a.status !== 'Pending' && b.status === 'Pending') return 1;
+                    return (statusOrder[a.status] || 99) - (statusOrder[b.status] || 99);
+                });
+                break;
+            case "status-resolved":
+                filtered.sort((a, b) => {
+                    if (a.status === 'Resolved' && b.status !== 'Resolved') return -1;
+                    if (a.status !== 'Resolved' && b.status === 'Resolved') return 1;
+                    return (statusOrder[a.status] || 99) - (statusOrder[b.status] || 99);
+                });
+                break;
+            case "status-closed":
+                filtered.sort((a, b) => {
+                    if (a.status === 'Closed' && b.status !== 'Closed') return -1;
+                    if (a.status !== 'Closed' && b.status === 'Closed') return 1;
+                    return (statusOrder[a.status] || 99) - (statusOrder[b.status] || 99);
+                });
+                break;
             case "assigned-first":
                 filtered.sort((a, b) => (b.assigned === true) - (a.assigned === true));
                 break;
@@ -2640,23 +3946,36 @@ function updateTickets() {
         }
     }
 
-    // RENDER
-    if (filtered.length === 0) {
-        ticketList.innerHTML = "<p>No tickets found.</p>";
-        return;
-    }
-
-    if (viewMode === "cards") {
-        renderCards(filtered);
+    // RENDER based on current view
+    if (currentView === 'board') {
+        if (ticketListEl) ticketListEl.style.display = 'none';
+        if (ticketBoardEl) {
+            ticketBoardEl.style.display = 'flex';
+            renderBoard(filtered);
+        }
     } else {
-        renderTable(filtered);
+        if (ticketBoardEl) ticketBoardEl.style.display = 'none';
+        if (ticketListEl) {
+            ticketListEl.style.display = 'block';
+            
+            if (filtered.length === 0) {
+                ticketListEl.innerHTML = "<p>No tickets found.</p>";
+                return;
+            }
+
+            if (viewMode === "cards") {
+                renderCards(filtered, ticketListEl);
+            } else {
+                renderTable(filtered, ticketListEl);
+            }
+        }
     }
 }
 
 // -------------------------------
 // RENDER CARDS
 // -------------------------------
-function renderCards(ticketsToRender) {
+function renderCards(ticketsToRender, container) {
     ticketsToRender.forEach(t => {
         const card = document.createElement("div");
         card.classList.add("ticket-card");
@@ -2681,14 +4000,14 @@ function renderCards(ticketsToRender) {
         `;
 
         card.addEventListener("click", () => openTicketModal(t));
-        ticketList.appendChild(card);
+        container.appendChild(card);
     });
 }
 
 // -------------------------------
 // RENDER TABLE
 // -------------------------------
-function renderTable(ticketsToRender) {
+function renderTable(ticketsToRender, container) {
     const table = document.createElement("table");
     table.classList.add("ticket-table");
 
@@ -2730,7 +4049,73 @@ function renderTable(ticketsToRender) {
         tbody.appendChild(row);
     });
 
-    ticketList.appendChild(table);
+    container.appendChild(table);
+}
+
+// -------------------------------
+// RENDER BOARD VIEW
+// -------------------------------
+function renderBoard(ticketsToRender) {
+    const ticketBoardEl = document.getElementById('ticket-board');
+    if (!ticketBoardEl) return;
+    
+    ticketBoardEl.innerHTML = '';
+    
+    // Define status columns
+    const statuses = ['Open', 'In Progress', 'Pending', 'Resolved', 'Closed'];
+    
+    statuses.forEach(status => {
+        // Filter tickets for this status (case-insensitive)
+        const statusTickets = ticketsToRender.filter(t => 
+            t.status && t.status.toLowerCase() === status.toLowerCase()
+        );
+        
+        // Create column
+        const column = document.createElement('div');
+        column.className = 'board-column';
+        column.setAttribute('data-status', status);
+        
+        // Column header
+        const header = document.createElement('div');
+        header.className = 'board-column-header';
+        header.innerHTML = `
+            <div class="board-column-title">${status}</div>
+            <div class="board-column-count">${statusTickets.length}</div>
+        `;
+        
+        // Column cards container
+        const cardsContainer = document.createElement('div');
+        cardsContainer.className = 'board-column-cards';
+        
+        // Add cards
+        statusTickets.forEach(t => {
+            const card = document.createElement('div');
+            card.className = 'board-card';
+            card.setAttribute('data-status', status);
+            
+            const priorityClass = `priority-${t.priority.toLowerCase()}`;
+            
+            card.innerHTML = `
+                <div class="board-card-title">${t.title}</div>
+                <div class="board-card-meta">
+                    <div class="board-card-id">#${t.id}</div>
+                    <div>${formatQueueTitle(t.queue)}</div>
+                    <div class="board-card-assigned">
+                        👤 ${t.assignedTo || 'Unassigned'}
+                    </div>
+                    <div>⏱ ${formatMinutes(getTotalMinutes(t))}</div>
+                </div>
+                <div class="board-card-priority ${priorityClass}">${t.priority}</div>
+            `;
+            
+            card.addEventListener('click', () => openTicketModal(t));
+            cardsContainer.appendChild(card);
+        });
+        
+        column.appendChild(header);
+        column.appendChild(cardsContainer);
+        ticketBoardEl.appendChild(column);
+    });
 }
 
 // -------------------------------
@@ -2743,6 +4128,137 @@ function showModal(el) {
 function hideModal(el) {
     if (!el) return;
     el.style.display = "none";
+    
+    // Stop time tracking when closing ticket modal
+    if (el === modal) {
+        stopTimeTracking(true); // true = save time
+    }
+    
+    // Stop new ticket time tracking when closing new ticket modal
+    if (el === newTicketModal) {
+        stopNewTicketTimeTracking();
+    }
+}
+
+// -------------------------------
+// TIME TRACKING FUNCTIONS
+// -------------------------------
+function startTimeTracking(ticketId) {
+    // Stop any existing tracking
+    stopTimeTracking(false);
+    
+    currentTrackingTicketId = ticketId;
+    sessionStartTime = Date.now();
+    sessionElapsedSeconds = 0;
+    
+    if (modalSessionTime) {
+        updateSessionTimeDisplay();
+        timeTrackingInterval = setInterval(updateSessionTimeDisplay, 1000);
+    }
+}
+
+function stopTimeTracking(shouldSave) {
+    if (timeTrackingInterval) {
+        clearInterval(timeTrackingInterval);
+        timeTrackingInterval = null;
+    }
+    
+    if (shouldSave && currentTrackingTicketId && sessionElapsedSeconds > 0) {
+        saveTrackedTime();
+    }
+    
+    sessionStartTime = null;
+    sessionElapsedSeconds = 0;
+    currentTrackingTicketId = null;
+}
+
+function updateSessionTimeDisplay() {
+    if (!sessionStartTime) return;
+    
+    sessionElapsedSeconds = Math.floor((Date.now() - sessionStartTime) / 1000);
+    
+    if (modalSessionTime) {
+        const hours = Math.floor(sessionElapsedSeconds / 3600);
+        const minutes = Math.floor((sessionElapsedSeconds % 3600) / 60);
+        const seconds = sessionElapsedSeconds % 60;
+        modalSessionTime.textContent = 
+            `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    }
+}
+
+function saveTrackedTime() {
+    if (!currentTrackingTicketId) return;
+    
+    const ticket = tickets.find(t => t.id === currentTrackingTicketId);
+    if (!ticket) return;
+    
+    // Always use auto-tracked time
+    const minutesToLog = Math.floor(sessionElapsedSeconds / 60);
+    
+    if (minutesToLog > 0) {
+        const timestamp = new Date().toISOString();
+        
+        // Initialize timeEntries if needed
+        if (!Array.isArray(ticket.timeEntries)) {
+            ticket.timeEntries = [];
+        }
+        
+        // Add time entry
+        ticket.timeEntries.push({
+            minutes: minutesToLog,
+            by: currentUser,
+            timestamp: timestamp,
+            source: 'auto-tracking'
+        });
+        
+        // Log activity
+        ticket.activity.push({
+            timestamp: timestamp,
+            user: currentUser,
+            action: `Auto-tracked ${formatMinutes(minutesToLog)}`
+        });
+        
+        // Save to localStorage
+        localStorage.setItem('seco_tickets', JSON.stringify(tickets));
+        
+        showToast(`Time logged: ${formatMinutes(minutesToLog)}`);
+    }
+}
+
+function displayTimeByTechnician(ticket) {
+    if (!modalTimeByTech) return;
+    
+    const entries = Array.isArray(ticket.timeEntries) ? ticket.timeEntries : [];
+    
+    // Group by technician
+    const timeByTech = {};
+    entries.forEach(entry => {
+        const tech = entry.by || 'Unknown';
+        if (!timeByTech[tech]) {
+            timeByTech[tech] = 0;
+        }
+        timeByTech[tech] += entry.minutes || 0;
+    });
+    
+    // Display
+    if (Object.keys(timeByTech).length === 0) {
+        modalTimeByTech.innerHTML = '<p style=\"margin:0; color:#666; font-size:0.9rem;\">No time logged yet</p>';
+    } else {
+        let html = '<div style=\"font-weight:600; margin-bottom:8px;\">Time by Technician:</div>';
+        html += '<div style=\"display:grid; grid-template-columns:repeat(auto-fill, minmax(200px, 1fr)); gap:8px;\">';
+        
+        Object.entries(timeByTech).forEach(([tech, minutes]) => {
+            html += `
+                <div style=\"padding:8px; background:white; border-radius:6px; border:1px solid #e5e7eb;\">
+                    <div style=\"font-weight:500; color:#003366;\">${tech}</div>
+                    <div style=\"color:#0078ff; font-size:1.1rem;\">${formatMinutes(minutes)}</div>
+                </div>
+            `;
+        });
+        
+        html += '</div>';
+        modalTimeByTech.innerHTML = html;
+    }
 }
 
 function showToast(message) {
@@ -2845,38 +4361,4 @@ function getTotalMinutes(ticket) {
     return entries.reduce((sum, e) => sum + (e.minutes || 0), 0);
 }
 
-if (modalTimerStart) {
-    modalTimerStart.addEventListener("click", () => {
-        const id = parseInt(modal.dataset.ticketId);
-        if (!id) return;
-        if (activeTimers[id]) return; // already running
-        activeTimers[id] = { start: Date.now() };
-        modalTimerStart.disabled = true;
-        if (modalTimerStop) modalTimerStop.disabled = false;
-        showToast("Timer started");
-    });
-}
-
-if (modalTimerStop) {
-    modalTimerStop.addEventListener("click", () => {
-        const id = parseInt(modal.dataset.ticketId);
-        const t = tickets.find(t => t.id === id);
-        if (!t || !activeTimers[id]) return;
-        const started = activeTimers[id].start;
-        delete activeTimers[id];
-        const elapsedMs = Date.now() - started;
-        const minutes = Math.max(1, Math.round(elapsedMs / 60000));
-        const timestamp = new Date().toISOString();
-        t.timeEntries = Array.isArray(t.timeEntries) ? t.timeEntries : [];
-        t.timeEntries.push({ minutes, by: currentUser, timestamp, source: "timer" });
-        t.activity.push({ timestamp, user: currentUser, action: `Time logged (${formatMinutes(minutes)}) via timer` });
-        if (modalTimerStart) modalTimerStart.disabled = false;
-        if (modalTimerStop) modalTimerStop.disabled = true;
-        if (modalTime) {
-            const total = getTotalMinutes(t);
-            modalTime.textContent = `Total Time: ${formatMinutes(total)}`;
-        }
-        renderActivity(t);
-        showToast("Timer stopped & time logged");
-    });
-}
+// Old timer buttons removed - using auto-tracking now

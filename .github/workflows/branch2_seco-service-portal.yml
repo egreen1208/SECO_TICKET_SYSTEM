@@ -1,5 +1,5 @@
 
-# Docs for Azure Web Apps Deploy: https://github.com/Azure/webapps-deploy
+# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
 name: Build and deploy Node.js app to Azure Web App - seco-service-portal
@@ -21,20 +21,22 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '22.x'
+          node-version: '22.x'   # Align with your App Service Node version
           cache: 'npm'
 
-      - name: Install, build, test
+      - name: Install, build, and test
         run: |
           set -euxo pipefail
-          npm ci || npm install
+          # Prefer npm ci if package-lock.json is present
+          if [ -f package-lock.json ]; then npm ci; else npm install; fi
           npm run build --if-present
           npm run test --if-present
 
-      - name: Create deployment package (zip)
+      - name: Create deployment package (ZIP)
         run: |
+          set -euxo pipefail
           rm -f site.zip
-          # Zip everything except version control and large caches
+          # Zip all app files but exclude vcs/workflow folders and heavy caches
           zip -r site.zip . -x ".git/*" ".github/*" "node_modules/*"
 
       - name: Upload artifact
@@ -53,9 +55,10 @@ jobs:
         with:
           name: node-app
 
+      # No azure/login needed when using publish-profile XML
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
         with:
-          app-name: 'seco-service-portal'                           # must match msdeploySite exactly
+          app-name: 'seco-service-portal'                         # must match msdeploySite exactly
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
           package: site.zip

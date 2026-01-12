@@ -22,10 +22,9 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: ${{ env.NODE_VERSION }}
-        cache: 'npm'
     
     - name: Install dependencies
-      run: npm ci
+      run: npm install --production
     
     - name: Upload artifact for deployment
       uses: actions/upload-artifact@v3

@@ -1,4 +1,3 @@
-
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
@@ -15,18 +14,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
+      - name: Set up Node.js version
+        uses: actions/setup-node@v3
         with:
           node-version: '22.x'
 
-      - name: Install, build, and test
-        # Use npm ci for reproducible installs; requires package-lock.json to be committed.
+      - name: npm install, build, and test
         run: |
-          npm ci
+          npm install
           npm run build --if-present
           npm run test --if-present
 
@@ -34,36 +31,34 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: node-app
-          path: .  # Upload the repo contents as the artifact (your current approach)
-
-      # Robust validation of the publish profile secret (secrets may contain special chars/newlines)
+          path: .
+      
       - name: Validate publish profile secret
-        shell: bash
         run: |
-          if [[ -z "${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}" ]]; then
+          if [ -z "${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}" ]; then
             echo "Publish profile secret is missing!"
             exit 1
+          else
+            echo "Publish profile secret is set."
           fi
-          if [[ "${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}" != *"<publishData>"* ]]; then
-            echo "Publish profile secret does not appear to be a valid XML publish profile."
-            exit 1
-          fi
-          echo "Publish profile secret is set and looks valid."
+
+
+  
 
   deploy:
     runs-on: ubuntu-latest
     needs: build
-
+  
     steps:
       - name: Download artifact from build job
         uses: actions/download-artifact@v4
         with:
           name: node-app
-          path: ./artifact  # ensure a known path for the downloaded content
-
+          path: ./artifact           # <-- ensure a known path
+  
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
         with:
-          app-name: 'seco-service-portal'  # must be the App Service resource name (not the hostname)
+          app-name: 'seco-service-portal'    # <-- resource name
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-          package: ./artifact               # deploy the downloaded folder
+          package: ./artifact                 # <-- deploy the downloaded folder

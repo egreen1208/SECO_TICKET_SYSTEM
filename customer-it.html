@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submit an IT Ticket</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="customer-page">
+
+    <header class="topbar">
+        <div class="topbar-left">
+            <img src="seco-logo.png" alt="SECO Energy Logo" class="logo">
+            <h1>Service Portal</h1>
+        </div>
+        <div class="topbar-right">
+            <a href="landing.html" class="pill-btn">Back to Portal</a>
+            <div class="dark-mode-toggle">
+                <label class="switch">
+                    <input type="checkbox" id="dark-mode-toggle">
+                    <span class="slider"></span>
+                </label>
+                <span class="dark-mode-label">Dark mode</span>
+            </div>
+        </div>
+    </header>
+
+    <div class="layout">
+        <main class="container customer-container">
+            <section class="panel customer-panel">
+                <h2>Submit an IT Support Ticket</h2>
+                <form id="customer-ticket-form" class="customer-form">
+                    <fieldset class="form-section">
+                        <legend>Your Information</legend>
+                        <label>Full Name <span class="required">*</span>
+                            <input type="text" id="customer-name" required placeholder="John Doe">
+                        </label>
+                        <label>Email <span class="required">*</span>
+                            <input type="email" id="customer-email" required placeholder="john@example.com">
+                        </label>
+                        <label>Phone (Optional)
+                            <input type="tel" id="customer-phone" placeholder="(555) 123-4567">
+                        </label>
+                        <label>Location/Building <span class="required">*</span>
+                            <input type="text" id="customer-location" required placeholder="Building A, Room 201">
+                        </label>
+                    </fieldset>
+
+                    <fieldset class="form-section">
+                        <legend>Issue Details</legend>
+                        <label>Department
+                            <select id="customer-queue" disabled>
+                                <option value="it" selected>Information Technology (IT)</option>
+                            </select>
+                        </label>
+                        <label>Category <span class="required">*</span>
+                            <select id="customer-category" required>
+                                <option value="">Select category...</option>
+                            </select>
+                        </label>
+                        <label>Subcategory
+                            <select id="customer-subcategory">
+                                <option value="">Select subcategory...</option>
+                            </select>
+                        </label>
+                        <label>Priority <span class="required">*</span>
+                            <select id="customer-priority" required>
+                                <option value="Low">Low</option>
+                                <option value="Medium" selected>Medium</option>
+                                <option value="High">High</option>
+                                <option value="Critical">Critical</option>
+                            </select>
+                        </label>
+                        <label>Subject <span class="required">*</span>
+                            <input type="text" id="customer-title" required placeholder="Brief description of your issue">
+                        </label>
+                        <label for="customer-description" class="field-label">Description <span class="required">*</span></label>
+                        <textarea id="customer-description" rows="6" required placeholder="Describe your issue. Include any steps you've tried."></textarea>
+                    </fieldset>
+
+                    <div class="form-actions">
+                        <span id="customer-error" class="form-error"></span>
+                        <span id="customer-success" class="form-success"></span>
+                        <button type="submit" class="btn-primary">Submit Ticket</button>
+                    </div>
+                </form>
+            </section>
+        </main>
+    </div>
+
+    <div id="toast" class="toast"></div>
+
+    <script src="app.js"></script>
+    <script>
+    // Auto-populate customer info from login
+    const customerInfo = localStorage.getItem('customerInfo');
+    if (customerInfo) {
+        const info = JSON.parse(customerInfo);
+        const nameField = document.getElementById('customer-name');
+        const emailField = document.getElementById('customer-email');
+        const phoneField = document.getElementById('customer-phone');
+        
+        if (nameField) nameField.value = info.name || '';
+        if (emailField) emailField.value = info.email || '';
+        if (phoneField) phoneField.value = info.phone || '';
+    } else {
+        // Redirect to login if not logged in
+        window.location.href = 'index.html';
+    }
+
+    const forcedQueue = "it";
+    const customerQueue = document.getElementById('customer-queue');
+    const customerCategory = document.getElementById('customer-category');
+    const customerSubcategory = document.getElementById('customer-subcategory');
+
+    // Ensure queue is set to IT and locked
+    if (customerQueue) {
+        customerQueue.value = forcedQueue;
+    }
+
+    function refreshCustomerCategories(presetCategory = "", presetSubcategory = "") {
+        populateCategorySelect(forcedQueue, customerCategory, customerSubcategory, presetCategory, presetSubcategory);
+    }
+
+    if (customerCategory) {
+        customerCategory.addEventListener('change', () => {
+            populateSubcategorySelect(forcedQueue, customerCategory.value, customerSubcategory);
+        });
+    }
+
+    // Initialize options
+    refreshCustomerCategories();
+
+    document.getElementById('customer-ticket-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const newTicket = {
+            id: 'TKT-' + Math.random().toString(36).slice(2, 9).toUpperCase(),
+            title: document.getElementById('customer-title').value,
+            description: document.getElementById('customer-description').value,
+            requesterName: document.getElementById('customer-name').value,
+            requesterEmail: document.getElementById('customer-email').value,
+            phone: document.getElementById('customer-phone').value || 'N/A',
+            location: document.getElementById('customer-location').value,
+            category: document.getElementById('customer-category').value,
+            subcategory: document.getElementById('customer-subcategory').value,
+            queue: forcedQueue,
+            priority: document.getElementById('customer-priority').value,
+            status: 'open',
+            assigned: false,
+            assignedTo: '',
+            createdDate: new Date().toISOString().split('T')[0],
+            updatedDate: new Date().toISOString().split('T')[0],
+            dueDate: '',
+            tags: [],
+            images: [],
+            comments: [],
+            activity: [{ timestamp: new Date().toISOString(), user: 'Customer Portal', action: 'Ticket created' }]
+        };
+        if (!window.tickets) window.tickets = [];
+        window.tickets.push(newTicket);
+        localStorage.setItem('seco_tickets', JSON.stringify(window.tickets));
+        showToast('Ticket submitted successfully! Redirecting...');
+        setTimeout(() => { window.location.href = 'index.html'; }, 1800);
+    });
+    </script>
+</body>
+</html>

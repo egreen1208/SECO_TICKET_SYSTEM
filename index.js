@@ -1,18 +1,93 @@
 // -------------------------------
 // MOCK ACCOUNTS WITH ROLES
 // -------------------------------
+const DEFAULT_VERSION = "1.2"; // Increment this when you update defaultAccounts or tickets
 const defaultAccounts = [
-    { username: "admin", password: "admin", name: "Administrator", role: "admin", active: true },
-    { username: "puhl", password: "admin123", name: "Peter Uhl", role: "tech", active: true },
-    { username: "kclemmer", password: "support1", name: "Kim Clemmer", role: "tech", active: true },
-    { username: "adayala", password: "network!", name: "Andrew Ayala", role: "tech", active: true }
+    { 
+        username: "admin", 
+        password: "admin", 
+        name: "Administrator", 
+        role: "admin", 
+        active: true,
+        permissions: {
+            queues: ["*"], // All queues
+            canCreateTickets: true,
+            canEditTickets: true,
+            canDeleteTickets: true,
+            canViewReports: true,
+            canExportData: true,
+            canManageUsers: true,
+            canManageQueues: true
+        }
+    },
+    { 
+        username: "puhl", 
+        password: "admin123", 
+        name: "Peter Uhl", 
+        role: "tech", 
+        active: true,
+        permissions: {
+            queues: ["it", "it-support", "it-systems"], // IT queues only
+            canCreateTickets: true,
+            canEditTickets: true,
+            canDeleteTickets: false,
+            canViewReports: true,
+            canExportData: false,
+            canManageUsers: false,
+            canManageQueues: false
+        }
+    },
+    { 
+        username: "kclemmer", 
+        password: "support1", 
+        name: "Kim Clemmer", 
+        role: "tech", 
+        active: true,
+        permissions: {
+            queues: ["buildings-grounds", "electrical"], // Facilities queues
+            canCreateTickets: true,
+            canEditTickets: true,
+            canDeleteTickets: false,
+            canViewReports: true,
+            canExportData: false,
+            canManageUsers: false,
+            canManageQueues: false
+        }
+    },
+    { 
+        username: "adayala", 
+        password: "network!", 
+        name: "Andrew Ayala", 
+        role: "tech", 
+        active: true,
+        permissions: {
+            queues: ["it", "it-networking", "it-security"], // Network/Security only
+            canCreateTickets: true,
+            canEditTickets: true,
+            canDeleteTickets: false,
+            canViewReports: false,
+            canExportData: false,
+            canManageUsers: false,
+            canManageQueues: false
+        }
+    }
 ];
 
-// Seed users into localStorage if not present
+// Seed users into localStorage if not present or version changed
 function seedUsers() {
-    const existing = localStorage.getItem("users");
-    if (!existing) {
+    const currentVersion = localStorage.getItem("defaultVersion");
+    if (currentVersion !== DEFAULT_VERSION) {
+        // Clear localStorage to reset everything
+        localStorage.clear();
+        // Set new defaults
         localStorage.setItem("users", JSON.stringify(defaultAccounts));
+        localStorage.setItem("defaultVersion", DEFAULT_VERSION);
+    } else {
+        // Ensure users exist (in case localStorage was cleared manually)
+        const existing = localStorage.getItem("users");
+        if (!existing) {
+            localStorage.setItem("users", JSON.stringify(defaultAccounts));
+        }
     }
 }
 
@@ -66,10 +141,11 @@ if (loginBtn) {
             return;
         }
 
-        // Save logged-in user + role
+        // Save logged-in user + role + permissions
         localStorage.setItem("currentUser", account.name);
         localStorage.setItem("currentUserRole", account.role);
         localStorage.setItem("currentUsername", account.username);
+        localStorage.setItem("currentUserPermissions", JSON.stringify(account.permissions || {}));
 
         // Optional: log login event
         const logs = JSON.parse(localStorage.getItem("systemLogs") || "[]");
@@ -80,8 +156,8 @@ if (loginBtn) {
         });
         localStorage.setItem("systemLogs", JSON.stringify(logs));
 
-        // Redirect to main app
-        window.location.href = "home.html";
+        // Redirect to landing selector
+        window.location.href = "landing.html";
     });
 }
 
@@ -95,8 +171,15 @@ usernameInput.addEventListener("keyup", e => {
     if (e.key === "Enter") {
         passwordInput.focus();
     }
-
 });
+
+// Auto-redirect to public landing on direct access
+if (window.location.pathname.endsWith('index.html') || window.location.pathname === '/') {
+    const params = new URLSearchParams(window.location.search);
+    if (!params.has('login')) {
+        window.location.href = 'landing.html';
+    }
+}
 
 
 

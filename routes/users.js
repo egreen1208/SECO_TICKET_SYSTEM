@@ -86,6 +86,15 @@ router.put('/:id', authenticateToken, requireAdmin, async (req, res) => {
         const { fullName, email, role, isActive } = req.body;
         const userId = req.params.id;
 
+        // Validate role if provided
+        let normalizedRole = null;
+        if (role) {
+            normalizedRole = role.toLowerCase();
+            if (!VALID_ROLES.includes(normalizedRole)) {
+                return res.status(400).json({ error: `Invalid role. Must be one of: ${VALID_ROLES.join(', ')}` });
+            }
+        }
+
         const result = await db.query(
             `UPDATE users 
              SET full_name = COALESCE($1, full_name),
@@ -94,7 +103,7 @@ router.put('/:id', authenticateToken, requireAdmin, async (req, res) => {
                  is_active = COALESCE($4, is_active)
              WHERE id = $5
              RETURNING id, username, email, full_name, role, is_active`,
-            [fullName, email, role, isActive, userId]
+            [fullName, email, normalizedRole, isActive, userId]
         );
 
         if (result.rows.length === 0) {

@@ -130,9 +130,9 @@
             return account && account.role && account.role.toLowerCase() === 'customer';
         }
 
-        // Helper function to handle customer block
-        function blockCustomerAccess() {
-            techLoginError.textContent = "Customer accounts cannot access the staff portal.";
+        // Helper function to handle customer block with appropriate error message
+        function handleCustomerBlock() {
+            techLoginError.textContent = "Customer accounts cannot access the staff portal. Please use the customer login at index.html";
             techLoginBtn.disabled = false;
             techLoginBtn.textContent = "Log In";
         }
@@ -214,9 +214,7 @@
 
                     // Check if this is a customer account - customers cannot access tech portal
                     if (isCustomerAccount(data.user)) {
-                        techLoginError.textContent = "Customer accounts cannot access the staff portal. Please use the customer portal.";
-                        techLoginBtn.disabled = false;
-                        techLoginBtn.textContent = "Log In";
+                        handleCustomerBlock();
                         return;
                     }
 
@@ -239,7 +237,7 @@
                     if (account) {
                         // Check if account is customer - customers cannot access tech portal
                         if (isCustomerAccount(account)) {
-                            blockCustomerAccess();
+                            handleCustomerBlock();
                             return;
                         }
                         

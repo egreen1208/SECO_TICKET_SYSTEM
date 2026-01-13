@@ -3,8 +3,17 @@
 // -------------------------------
 // Redirect to login if not authenticated
 const authToken = localStorage.getItem('authToken');
+const currentUserRole = localStorage.getItem('currentUserRole');
+
 if (!authToken) {
     window.location.href = 'tech-login.html';
+}
+
+// Block customer role from accessing technician portal
+if (currentUserRole && currentUserRole.toLowerCase() === 'customer') {
+    alert('Customer accounts cannot access the technician portal.');
+    localStorage.clear(); // Clear all storage
+    window.location.href = 'index.html'; // Redirect to customer portal
 }
 
 // -------------------------------

@@ -20,13 +20,33 @@ function authenticateToken(req, res, next) {
 
 // Verify admin role
 function requireAdmin(req, res, next) {
-    if (req.user.role !== 'Admin') {
+    if (req.user.role !== 'admin' && req.user.role !== 'Admin') {
         return res.status(403).json({ error: 'Access denied. Admin privileges required.' });
+    }
+    next();
+}
+
+// Verify tech or admin role (technician portal access)
+function requireTechOrAdmin(req, res, next) {
+    const role = req.user.role.toLowerCase();
+    if (role !== 'admin' && role !== 'tech') {
+        return res.status(403).json({ error: 'Access denied. This portal is for technicians and administrators only.' });
+    }
+    next();
+}
+
+// Block customer role from accessing technician portal
+function blockCustomer(req, res, next) {
+    const role = req.user.role.toLowerCase();
+    if (role === 'customer') {
+        return res.status(403).json({ error: 'Access denied. Customers cannot access the technician portal.' });
     }
     next();
 }
 
 module.exports = {
     authenticateToken,
-    requireAdmin
+    requireAdmin,
+    requireTechOrAdmin,
+    blockCustomer
 };

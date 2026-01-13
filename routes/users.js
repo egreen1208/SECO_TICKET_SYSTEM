@@ -2,10 +2,10 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
 const db = require('../config/database');
-const { authenticateToken, requireAdmin } = require('../middleware/auth');
+const { authenticateToken, requireAdmin, blockCustomer } = require('../middleware/auth');
 
-// Get all users (protected route)
-router.get('/', authenticateToken, async (req, res) => {
+// Get all users (protected route - block customers)
+router.get('/', authenticateToken, blockCustomer, async (req, res) => {
     try {
         const result = await db.query(
             'SELECT id, username, email, full_name, role, is_active, created_at FROM users WHERE is_active = true ORDER BY full_name'
@@ -17,8 +17,8 @@ router.get('/', authenticateToken, async (req, res) => {
     }
 });
 
-// Get single user (protected route)
-router.get('/:id', authenticateToken, async (req, res) => {
+// Get single user (protected route - block customers)
+router.get('/:id', authenticateToken, blockCustomer, async (req, res) => {
     try {
         const result = await db.query(
             'SELECT id, username, email, full_name, role, is_active, created_at FROM users WHERE id = $1',
@@ -46,6 +46,13 @@ router.post('/create', authenticateToken, requireAdmin, async (req, res) => {
             return res.status(400).json({ error: 'All fields are required' });
         }
 
+        // Validate role - must be one of: admin, tech, customer
+        const validRoles = ['admin', 'tech', 'customer'];
+        const userRole = role ? role.toLowerCase() : 'tech';
+        if (!validRoles.includes(userRole)) {
+            return res.status(400).json({ error: 'Invalid role. Must be admin, tech, or customer' });
+        }
+
         // Hash password
         const passwordHash = await bcrypt.hash(password, 10);
 
@@ -54,7 +61,7 @@ router.post('/create', authenticateToken, requireAdmin, async (req, res) => {
             `INSERT INTO users (username, email, password_hash, full_name, role) 
              VALUES ($1, $2, $3, $4, $5) 
              RETURNING id, username, email, full_name, role, created_at`,
-            [username, email, passwordHash, fullName, role || 'User']
+            [username, email, passwordHash, fullName, userRole]
         );
 
         res.status(201).json({

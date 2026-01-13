@@ -141,8 +141,9 @@
                 }
 
                 // Verify this is a customer account (not staff)
-                if (data.user.role !== 'Customer') {
-                    loginError.textContent = "This account is not authorized for customer portal. Please use the staff portal.";
+                const userRole = (data.user.role || '').toLowerCase();
+                if (userRole !== 'customer') {
+                    loginError.textContent = "This portal is for customers only. Staff should use the staff portal.";
                     submitBtn.disabled = false;
                     submitBtn.textContent = "Sign In";
                     return;

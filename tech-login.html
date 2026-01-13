@@ -155,6 +155,14 @@
                     const account = defaultAccounts.find(acc => acc.username === user && acc.password === pass);
                     
                     if (account) {
+                        // Check if account is customer - customers cannot access tech portal
+                        if (account.role && account.role.toLowerCase() === 'customer') {
+                            techLoginError.textContent = "Customer accounts cannot access the staff portal.";
+                            techLoginBtn.disabled = false;
+                            techLoginBtn.textContent = "Log In";
+                            return;
+                        }
+                        
                         localStorage.setItem("authToken", "local-dev-token-" + Date.now());
                         localStorage.setItem("currentUser", account.fullName);
                         localStorage.setItem("currentUserRole", account.role);
@@ -193,6 +201,15 @@
                         return;
                     }
 
+                    // Check if this is a customer account - customers cannot access tech portal
+                    const userRole = (data.user.role || '').toLowerCase();
+                    if (userRole === 'customer') {
+                        techLoginError.textContent = "Customer accounts cannot access the staff portal. Please use the customer portal.";
+                        techLoginBtn.disabled = false;
+                        techLoginBtn.textContent = "Log In";
+                        return;
+                    }
+
                     // Store authentication token and user info
                     localStorage.setItem("authToken", data.token);
                     localStorage.setItem("currentUser", data.user.fullName);
@@ -210,6 +227,14 @@
                     const account = defaultAccounts.find(acc => acc.username === user && acc.password === pass);
                     
                     if (account) {
+                        // Check if account is customer - customers cannot access tech portal
+                        if (account.role && account.role.toLowerCase() === 'customer') {
+                            techLoginError.textContent = "Customer accounts cannot access the staff portal.";
+                            techLoginBtn.disabled = false;
+                            techLoginBtn.textContent = "Log In";
+                            return;
+                        }
+                        
                         localStorage.setItem("authToken", "local-dev-token-" + Date.now());
                         localStorage.setItem("currentUser", account.fullName);
                         localStorage.setItem("currentUserRole", account.role);

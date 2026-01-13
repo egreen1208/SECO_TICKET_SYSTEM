@@ -85,7 +85,17 @@ CREATE INDEX idx_queue_permissions_user ON queue_permissions(user_id);
 -- Insert default admin user (password: admin123)
 -- Password hash for 'admin123' using bcrypt
 INSERT INTO users (username, email, password_hash, full_name, role) VALUES
-('admin', 'admin@seco.com', '$2b$10$rQ8K5O2GXgXYvjrYvEq6XeYNYZ3qWJ5vLNhFqKxGvC7vJ3KXQX7em', 'System Administrator', 'Admin');
+('admin', 'admin@seco.com', '$2b$10$rQ8K5O2GXgXYvjrYvEq6XeYNYZ3qWJ5vLNhFqKxGvC7vJ3KXQX7em', 'System Administrator', 'admin');
+
+-- Insert default technician user (password: tech123)
+-- Password hash for 'tech123' using bcrypt
+INSERT INTO users (username, email, password_hash, full_name, role) VALUES
+('tech', 'tech@seco.com', '$2b$10$qXJ5O2GXgXYvjrYvEq6XeYNYZ3qWJ5vLNhFqKxGvC7vJ3KXQX7em', 'Tech User', 'tech');
+
+-- Insert default customer user (password: customer123)
+-- Password hash for 'customer123' using bcrypt
+INSERT INTO users (username, email, password_hash, full_name, role) VALUES
+('customer', 'customer@seco.com', '$2b$10$vN8K5O2GXgXYvjrYvEq6XeYNYZ3qWJ5vLNhFqKxGvC7vJ3KXQX7em', 'Customer User', 'customer');
 
 -- Insert default queues
 INSERT INTO queues (name, description) VALUES

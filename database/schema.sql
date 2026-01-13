@@ -83,7 +83,8 @@ CREATE INDEX idx_queue_permissions_queue ON queue_permissions(queue_id);
 CREATE INDEX idx_queue_permissions_user ON queue_permissions(user_id);
 
 -- Insert default admin user (password: admin123)
--- Password hash for 'admin123' using bcrypt
+-- Password hash for 'admin123' using bcrypt with cost factor 10
+-- Note: Cost factor 10 provides good security while maintaining reasonable login speed
 INSERT INTO users (username, email, password_hash, full_name, role) VALUES
 ('admin', 'admin@seco.com', '$2b$10$s/ruVk.yq6.GdfjM44TaNOL8tURU2dHhZNMmambFrDu/bV/7kYhj2', 'System Administrator', 'admin');
 

@@ -170,7 +170,7 @@
                     if (account) {
                         // Check if account is customer - customers cannot access tech portal
                         if (isCustomerAccount(account)) {
-                            blockCustomerAccess();
+                            handleCustomerBlock();
                             return;
                         }
                         

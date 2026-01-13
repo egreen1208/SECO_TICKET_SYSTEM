@@ -70,6 +70,60 @@ const defaultAccounts = [
             canManageUsers: false,
             canManageQueues: false
         }
+    },
+    { 
+        username: "test1@example.com", 
+        password: "password", 
+        name: "Test User 1", 
+        email: "test1@example.com",
+        role: "customer", 
+        active: true,
+        permissions: {
+            queues: [],
+            canCreateTickets: true,
+            canEditTickets: false,
+            canDeleteTickets: false,
+            canViewReports: false,
+            canExportData: false,
+            canManageUsers: false,
+            canManageQueues: false
+        }
+    },
+    { 
+        username: "test2@example.com", 
+        password: "password", 
+        name: "Test User 2", 
+        email: "test2@example.com",
+        role: "customer", 
+        active: true,
+        permissions: {
+            queues: [],
+            canCreateTickets: true,
+            canEditTickets: false,
+            canDeleteTickets: false,
+            canViewReports: false,
+            canExportData: false,
+            canManageUsers: false,
+            canManageQueues: false
+        }
+    },
+    { 
+        username: "test3@example.com", 
+        password: "password", 
+        name: "Test User 3", 
+        email: "test3@example.com",
+        role: "customer", 
+        active: true,
+        permissions: {
+            queues: [],
+            canCreateTickets: true,
+            canEditTickets: false,
+            canDeleteTickets: false,
+            canViewReports: false,
+            canExportData: false,
+            canManageUsers: false,
+            canManageQueues: false
+        }
     }
 ];
 

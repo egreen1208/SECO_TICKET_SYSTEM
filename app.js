@@ -1803,11 +1803,13 @@ function renderAdmin(){
     }
     const rows = users.map((u, idx) => {
         const queues = u.permissions && u.permissions.queues ? u.permissions.queues.join(', ') : 'None';
+        const emailDisplay = u.email ? ` • ${u.email}` : '';
+        const roleIcon = u.role === 'customer' ? '👤' : (u.role === 'admin' ? '👨‍💼' : '🔧');
         return `
         <div class="admin-user-row" data-idx="${idx}" style="display:flex;align-items:center;gap:12px;padding:8px;border-bottom:1px solid #eee;">
             <div style="flex:1;">
-                <strong>${u.name}</strong> 
-                <div style="font-size:0.85rem;color:#666">${u.username} • ${u.role}</div>
+                <strong>${roleIcon} ${u.name}</strong> 
+                <div style="font-size:0.85rem;color:#666">${u.username} • ${u.role}${emailDisplay}</div>
                 <div style="font-size:0.8rem;color:#888;margin-top:4px;">Queues: ${queues}</div>
             </div>
             <div>
@@ -1836,19 +1838,23 @@ function renderAdmin(){
             const u = document.getElementById('admin-new-username');
             const p = document.getElementById('admin-new-password');
             const n = document.getElementById('admin-new-name');
+            const e = document.getElementById('admin-new-email');
             const r = document.getElementById('admin-new-role');
             if (!u || !p || !n || !r) return;
             u.value = user.username || '';
             p.value = '';
             n.value = user.name || '';
+            if (e) e.value = user.email || '';
             r.value = user.role || 'tech';
 
             // set queues
             const queueCheckboxes = document.querySelectorAll('.admin-new-queue-checkbox');
             const userQueues = user.permissions?.queues || [];
             const isAdmin = userQueues.includes('*') || user.role === 'admin';
+            const isCustomer = user.role === 'customer';
             queueCheckboxes.forEach(cb => {
                 cb.checked = isAdmin ? true : userQueues.includes(cb.value);
+                cb.disabled = isCustomer;
             });
 
             // permissions
@@ -1935,9 +1941,11 @@ let editingUserIndex = null;
 const adminRoleSelect = document.getElementById('admin-new-role');
 if (adminRoleSelect) {
     adminRoleSelect.addEventListener('change', () => {
-        const isAdmin = adminRoleSelect.value === 'admin';
+        const role = adminRoleSelect.value;
+        const isAdmin = role === 'admin';
+        const isCustomer = role === 'customer';
         
-        // Auto-check all permissions
+        // Auto-check all permissions for admin, minimal for customer
         const permissionCheckboxes = [
             'admin-new-can-create',
             'admin-new-can-edit',
@@ -1946,15 +1954,26 @@ if (adminRoleSelect) {
             'admin-new-can-export'
         ];
         
-        permissionCheckboxes.forEach(id => {
-            const checkbox = document.getElementById(id);
-            if (checkbox) checkbox.checked = isAdmin;
-        });
+        if (isCustomer) {
+            // Customer: only canCreateTickets
+            document.getElementById('admin-new-can-create').checked = true;
+            document.getElementById('admin-new-can-edit').checked = false;
+            document.getElementById('admin-new-can-delete').checked = false;
+            document.getElementById('admin-new-can-reports').checked = false;
+            document.getElementById('admin-new-can-export').checked = false;
+        } else {
+            // Admin or tech
+            permissionCheckboxes.forEach(id => {
+                const checkbox = document.getElementById(id);
+                if (checkbox) checkbox.checked = isAdmin;
+            });
+        }
         
-        // Auto-check all queues
+        // Auto-check all queues for admin, none for customer
         const queueCheckboxes = document.querySelectorAll('.admin-new-queue-checkbox');
         queueCheckboxes.forEach(cb => {
             cb.checked = isAdmin;
+            cb.disabled = isCustomer; // Disable queue checkboxes for customers
         });
     });
 }
@@ -1964,6 +1983,7 @@ if(adminAddBtn){
         const u = document.getElementById('admin-new-username');
         const p = document.getElementById('admin-new-password');
         const n = document.getElementById('admin-new-name');
+        const e = document.getElementById('admin-new-email');
         const r = document.getElementById('admin-new-role');
         if(!u || !p || !n || !r) return;
         const users = JSON.parse(localStorage.getItem('users') || '[]');
@@ -1971,15 +1991,24 @@ if(adminAddBtn){
         if(!u.value.trim()) { alert('Username required'); return; }
         if(!isEdit && !p.value.trim()) { alert('Username and password required'); return; }
         
+        const role = r.value.trim() || 'tech';
+        const isCustomer = role === 'customer';
+        
+        // Validate email for customers
+        if (isCustomer && e && !e.value.trim()) {
+            alert('Email is required for customer accounts');
+            return;
+        }
+        
         // Collect queue assignments
         const queueCheckboxes = document.querySelectorAll('.admin-new-queue-checkbox');
         const assignedQueues = Array.from(queueCheckboxes)
             .filter(cb => cb.checked)
             .map(cb => cb.value);
         
-        // If admin role, grant all queues
-        const isAdmin = r.value.trim() === 'admin';
-        const queues = isAdmin ? ['*'] : assignedQueues;
+        // If admin role, grant all queues. If customer, no queues
+        const isAdmin = role === 'admin';
+        const queues = isAdmin ? ['*'] : (isCustomer ? [] : assignedQueues);
         
         // Collect permissions
         const permissions = {
@@ -1997,30 +2026,43 @@ if(adminAddBtn){
             const existing = users[editingUserIndex];
             existing.username = u.value.trim();
             existing.name = n.value.trim() || u.value.trim();
-            existing.role = r.value.trim() || 'tech';
+            existing.role = role;
             existing.permissions = permissions;
+            // Update email if provided
+            if (e && e.value.trim()) {
+                existing.email = e.value.trim();
+            }
             // Only update password if provided
             if (p.value.trim()) {
                 existing.password = p.value.trim();
             }
         } else {
-            users.push({ 
+            const newUser = { 
                 username: u.value.trim(), 
                 password: p.value.trim(), 
                 name: n.value.trim() || u.value.trim(), 
-                role: r.value.trim() || 'tech', 
+                role: role, 
                 active: true,
                 permissions: permissions
-            });
+            };
+            // Add email if provided
+            if (e && e.value.trim()) {
+                newUser.email = e.value.trim();
+            }
+            users.push(newUser);
         }
         
         localStorage.setItem('users', JSON.stringify(users));
         u.value = p.value = n.value = '';
+        if (e) e.value = '';
         editingUserIndex = null;
         adminAddBtn.textContent = 'Add User';
         
         // Reset checkboxes
-        queueCheckboxes.forEach(cb => cb.checked = false);
+        queueCheckboxes.forEach(cb => {
+            cb.checked = false;
+            cb.disabled = false;
+        });
         document.getElementById('admin-new-can-create').checked = true;
         document.getElementById('admin-new-can-edit').checked = true;
         document.getElementById('admin-new-can-delete').checked = false;

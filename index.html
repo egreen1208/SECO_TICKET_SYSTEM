@@ -52,45 +52,6 @@
     </div>
 
     <script>
-        // Test customer accounts
-        const customerAccounts = [
-            {
-                email: 'test1@example.com',
-                password: 'password',
-                name: 'Test User 1',
-                phone: '(555) 111-1111',
-                department: 'Engineering'
-            },
-            {
-                email: 'test2@example.com',
-                password: 'password',
-                name: 'Test User 2',
-                phone: '(555) 222-2222',
-                department: 'Marketing'
-            },
-            {
-                email: 'test3@example.com',
-                password: 'password',
-                name: 'Test User 3',
-                phone: '(555) 333-3333',
-                department: 'Operations'
-            },
-            {
-                email: 'test4@example.com',
-                password: 'password',
-                name: 'Test User 4',
-                phone: '(555) 444-4444',
-                department: 'Finance'
-            },
-            {
-                email: 'test5@example.com',
-                password: 'password',
-                name: 'Test User 5',
-                phone: '(555) 555-5555',
-                department: 'HR'
-            }
-        ];
-
         // Customer login handler
         const loginForm = document.getElementById('customer-login-form');
         const loginError = document.getElementById('customer-login-error');
@@ -115,9 +76,16 @@
                 return;
             }
 
-            // Find matching account
-            const account = customerAccounts.find(
-                acc => acc.email.toLowerCase() === email && acc.password === password
+            // Get users from localStorage
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            
+            // Find matching customer account (filter by role === 'customer')
+            const account = users.find(
+                acc => acc.role === 'customer' && 
+                       acc.email && 
+                       acc.email.toLowerCase() === email && 
+                       acc.password === password &&
+                       acc.active !== false
             );
 
             if (!account) {
@@ -129,8 +97,7 @@
             const customerInfo = {
                 name: account.name,
                 email: account.email,
-                phone: account.phone,
-                department: account.department,
+                username: account.username,
                 loginTime: new Date().toISOString()
             };
 

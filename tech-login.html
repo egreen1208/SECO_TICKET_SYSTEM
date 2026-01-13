@@ -145,6 +145,11 @@
                 }
 
                 // Check if user has tech or admin role
+                if (account.role === "customer") {
+                    techLoginError.textContent = "Customers cannot access the staff portal. Please use the customer portal.";
+                    return;
+                }
+                
                 if (account.role !== "tech" && account.role !== "admin") {
                     techLoginError.textContent = "Access restricted to staff only.";
                     return;

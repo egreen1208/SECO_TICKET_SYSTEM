@@ -150,6 +150,9 @@ body.landing-page {
     color: white;
     padding: 10px 20px;
     height: 60px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    position: relative;
+    z-index: 100;
 }
 
 .topbar-left,
@@ -161,6 +164,7 @@ body.landing-page {
 
 .logo {
     height: 40px;
+
 }
 
 .icon-btn {
@@ -463,10 +467,12 @@ input:checked + .slider:before {
 --------------------------------------------------- */
 .sidebar {
     width: 220px;
-    background: #003366;
+    background: #002244;
     color: white;
     padding: 20px 0;
     min-height: 100%;
+    border-right: 3px solid #F58220;
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.15);
 }
 
 .sidebar ul {
@@ -594,7 +600,7 @@ input:checked + .slider:before {
     z-index: 50;
 }
 
-/* Blue gradient header INSIDE panel */
+/* Panel header styling */
 .panel h2 {
     margin: 0 -20px 20px -20px;
     padding: 12px 16px;
@@ -607,6 +613,11 @@ input:checked + .slider:before {
     z-index: 1;
 }
 
+body.dark-mode .panel h2 {
+    background: linear-gradient(to right, #2a2a2a, #1f1f1f);
+    color: #e0e0e0;
+}
+
 .ticket-panel-header {
     display: flex;
     justify-content: space-between;
@@ -616,6 +627,7 @@ input:checked + .slider:before {
     background: linear-gradient(to right, #003366, #00509e);
     color: white;
     border-radius: 8px 8px 0 0;
+    position: relative;
 }
 
 .ticket-panel-header h2 {
@@ -628,22 +640,19 @@ input:checked + .slider:before {
 
 /* View Dropdown in Header */
 .view-dropdown {
-    position: relative;
+    position: static;
     display: inline-block;
 }
 
 .view-dropdown-menu {
     display: none;
-    position: absolute;
-    top: 100%;
-    right: 0;
-    margin-top: 8px;
+    position: fixed;
     background: white;
     border: 2px solid rgba(255, 255, 255, 0.3);
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     min-width: 160px;
-    z-index: 9999;
+    z-index: 10001;
     overflow: hidden;
 }
 
@@ -671,6 +680,7 @@ input:checked + .slider:before {
 body.dark-mode .view-dropdown-menu {
     background: #2a2a2a;
     border-color: #444;
+    z-index: 10001 !important;
 }
 
 body.dark-mode .view-option {
@@ -683,6 +693,99 @@ body.dark-mode .view-option:hover {
 
 body.dark-mode .view-option:active {
     background: #3a3a3a;
+}
+
+/* Zoom Controls */
+.zoom-controls {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.zoom-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.15);
+    color: white;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.zoom-btn:hover {
+    background: rgba(255, 255, 255, 0.25);
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+.zoom-btn:active {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(0.95);
+}
+
+.zoom-level {
+    color: white;
+    font-size: 12px;
+    font-weight: 500;
+    min-width: 40px;
+    text-align: center;
+}
+
+body.dark-mode .zoom-btn {
+    background: #3a3a3a;
+    border-color: #555;
+    color: #e0e0e0;
+}
+
+body.dark-mode .zoom-btn:hover {
+    background: #4a4a4a;
+    border-color: #666;
+}
+
+/* Ticket display zoom levels */
+#ticket-list.zoom-75 {
+    font-size: 0.75em;
+}
+
+#ticket-list.zoom-90 {
+    font-size: 0.9em;
+}
+
+#ticket-list.zoom-100 {
+    font-size: 1em;
+}
+
+#ticket-list.zoom-110 {
+    font-size: 1.1em;
+}
+
+#ticket-list.zoom-125 {
+    font-size: 1.25em;
+}
+
+#ticket-board.zoom-75 {
+    font-size: 0.75em;
+}
+
+#ticket-board.zoom-90 {
+    font-size: 0.9em;
+}
+
+#ticket-board.zoom-100 {
+    font-size: 1em;
+}
+
+#ticket-board.zoom-110 {
+    font-size: 1.1em;
+}
+
+#ticket-board.zoom-125 {
+    font-size: 1.25em;
 }
 
 /* Toggle Switch for List/Board View */
@@ -767,11 +870,11 @@ body.dark-mode .toggle-switch input:checked + .toggle-slider {
 
 .queue-group {
     margin-bottom: 20px;
-    background: #f8fafc;
-    padding: 12px;
-    border-radius: 10px;
-    border: 1px solid #e6eef7;
-    box-shadow: 0 2px 6px rgba(3, 10, 35, 0.04);
+    background: transparent;
+    padding: 0;
+    border-radius: 0;
+    border: none;
+    box-shadow: none;
 }
 
 .queue-group h3 {
@@ -787,23 +890,25 @@ body.dark-mode .toggle-switch input:checked + .toggle-slider {
     justify-content: space-between;
     width: 100%;
     text-align: left;
-    padding: 10px 14px;
-    margin-bottom: 10px;
-    background: linear-gradient(180deg, #ffffff, #eef7ff);
-    border: 1px solid #cfe4ff;
-    border-radius: 8px;
+    padding: 14px 16px;
+    margin-bottom: 12px;
+    background: linear-gradient(135deg, #003366, #115599);
+    border: 2px solid #34495e;
+    border-radius: 10px;
     font-size: 15px;
     cursor: pointer;
     font-weight: 600;
-    color: #0b3564;
+    color: #ffffff;
     animation: fadeIn 0.32s ease both;
     transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 .queue-btn:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 24px rgba(3, 10, 35, 0.12);
-    background: linear-gradient(180deg, #f5fbff, #e8f4ff);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    background: linear-gradient(135deg, #34495e, #2c3e50);
+    border-color: #4a5f7f;
 }
 
 .queue-btn:focus {
@@ -826,22 +931,23 @@ body.dark-mode .toggle-switch input:checked + .toggle-slider {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 6px 10px;
+    padding: 8px 14px;
     margin-bottom: 0;
-    border-radius: 16px;
+    border-radius: 18px;
     font-size: 13px;
     font-weight: 500;
-    background: #ffffff;
-    border: 1px solid #dbe7f5;
-    color: #355a86;
-    box-shadow: 0 1px 3px rgba(3, 10, 35, 0.06);
-    transition: background 0.15s ease, box-shadow 0.15s ease;
+    background: linear-gradient(135deg, #003366, #115599);
+    border: 2px solid #4a5568;
+    color: #ffffff;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    transition: all 0.2s ease;
 }
 
 .queue-subgroup .queue-btn:hover {
-    transform: none;
-    box-shadow: 0 2px 8px rgba(3, 10, 35, 0.12);
-    background: #f7fbff;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    background: linear-gradient(135deg, #5a6c7d, #6b7d8f);
+    border-color: #6b7d8f;
 }
 
 .queue-subgroup .queue-btn:focus {
@@ -1028,9 +1134,9 @@ body.dark-mode #modal-manual-time-inputs input:focus {
     border-radius: 6px;
     margin-bottom: 12px;
     cursor: pointer;
-
+    border: .5px solid #f7efef;
     box-shadow: 0 2px 6px rgba(0,0,0,0.12);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
 
     /* Fade-in animation */
     opacity: 0;
@@ -1040,6 +1146,7 @@ body.dark-mode #modal-manual-time-inputs input:focus {
 .ticket-card:hover {
     transform: translateY(-4px);
     box-shadow: 0 6px 16px rgba(0,0,0,0.18);
+    border-color: #a0a0a0;
 }
 
 .ticket-title {
@@ -1456,17 +1563,18 @@ body.dark-mode .status-closed {
 }
 
 body.dark-mode {
-    background: #1e1e1e;
-    color: #eee;
+    background: #0a0a0a;
+    color: #e0e0e0;
 }
 
 body.dark-mode .panel {
-    background: #2a2a2a;
+    background: #1a1a1a;
+    border-color: #333;
 }
 
 body.dark-mode .sidebar,
 body.dark-mode .topbar {
-    background: #001a33;
+    background: #1a1a1a;
 }
 
 body.dark-mode .ticket-card {
@@ -1478,9 +1586,10 @@ body.dark-mode .queue-group h3 {
 }
 
 body.dark-mode .queue-btn {
-    background: #1f2f45;
-    border-color: #3a4f6b;
-    color: white;
+    background: linear-gradient(135deg, #2a2a2a, #1f1f1f);
+    border-color: #3a3a3a;
+    color: #e0e0e0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
 }
 
 body.dark-mode .queue-subgroup {
@@ -1488,15 +1597,16 @@ body.dark-mode .queue-subgroup {
 }
 
 body.dark-mode .queue-subgroup .queue-btn {
-    background: #162437;
-    border-color: #3a4f6b;
-    color: #cfe4ff;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.25);
+    background: linear-gradient(135deg, #3a3a3a, #2f2f2f);
+    border-color: #4a4a4a;
+    color: #b0b0b0;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
 }
 
 body.dark-mode .queue-subgroup .queue-btn:hover {
-    background: #1b2d45;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.35);
+    background: linear-gradient(135deg, #4a4a4a, #3a3a3a);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    border-color: #5a5a5a;
 }
 
 body.dark-mode .modal-content {
@@ -1595,11 +1705,46 @@ body.dark-mode .image-gallery-item {
 
 .ticket-controls input,
 .ticket-controls select {
-    padding: 8px 10px;
-    border-radius: 6px;
-    border: 1px solid #ccc;
+    padding: 10px 12px;
+    border: 2px solid #cfe4ff;
+    border-radius: 8px;
     background: white;
     font-size: 14px;
+    font-weight: 500;
+    color: #0b3564;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-width: 180px;
+    box-shadow: 0 2px 4px rgba(0, 84, 166, 0.1);
+}
+
+.ticket-controls input:hover,
+.ticket-controls select:hover {
+    border-color: #0078ff;
+    background-color: #f8fbff;
+    box-shadow: 0 3px 8px rgba(0, 84, 166, 0.15);
+}
+
+.ticket-controls input:focus,
+.ticket-controls select:focus {
+    outline: none;
+    border-color: #0078ff;
+    background-color: #ffffff;
+    box-shadow: 0 0 0 4px rgba(0, 120, 255, 0.15);
+}
+
+body.dark-mode .ticket-controls input,
+body.dark-mode .ticket-controls select {
+    background: #2a2a2a;
+    border-color: #444;
+    color: #e0e0e0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-mode .ticket-controls input:hover,
+body.dark-mode .ticket-controls select:hover {
+    border-color: #666;
+    background-color: #333;
 }
 
 /* Priority filter buttons */
@@ -1636,49 +1781,59 @@ body.dark-mode .image-gallery-item {
     white-space: nowrap;
 }
 
+/* All dropdown selects styling */
 #priority-select,
-#technician-select {
-    padding: 8px 32px 8px 12px;
-    border: 2px solid #e0e0e0;
+#technician-select,
+#ticket-sort,
+#status-filter {
+    padding: 10px 12px;
+    border: 2px solid #cfe4ff;
     border-radius: 8px;
     background: white;
     font-size: 14px;
     font-weight: 500;
-    color: #333;
+    color: #0b3564;
     cursor: pointer;
     transition: all 0.2s ease;
-    appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L6 6L11 1' stroke='%23666' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 12px center;
-    min-width: 160px;
+    min-width: 180px;
+    box-shadow: 0 2px 4px rgba(0, 84, 166, 0.1);
 }
 
 #priority-select:hover,
-#technician-select:hover {
+#technician-select:hover,
+#ticket-sort:hover,
+#status-filter:hover {
     border-color: #0078ff;
-    background-color: #f8f9fa;
+    background-color: #f8fbff;
+    box-shadow: 0 3px 8px rgba(0, 84, 166, 0.15);
 }
 
 #priority-select:focus,
-#technician-select:focus {
+#technician-select:focus,
+#ticket-sort:focus,
+#status-filter:focus {
     outline: none;
     border-color: #0078ff;
-    box-shadow: 0 0 0 3px rgba(0, 120, 255, 0.1);
+    background-color: #ffffff;
+    box-shadow: 0 0 0 4px rgba(0, 120, 255, 0.15);
 }
 
 /* Dark mode support for dropdowns */
 body.dark-mode #priority-select,
-body.dark-mode #technician-select {
+body.dark-mode #technician-select,
+body.dark-mode #ticket-sort,
+body.dark-mode #status-filter {
     background: #2a2a2a;
     border-color: #444;
     color: #e0e0e0;
-    background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L6 6L11 1' stroke='%23e0e0e0' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 body.dark-mode #priority-select:hover,
-body.dark-mode #technician-select:hover {
-    border-color: #0078ff;
+body.dark-mode #technician-select:hover,
+body.dark-mode #ticket-sort:hover,
+body.dark-mode #status-filter:hover {
+    border-color: #666;
     background-color: #333;
 }
 
@@ -1754,7 +1909,7 @@ body.dark-mode .priority-filters label {
     z-index: 0;
 }
 
-.ticket-panel > * {
+.ticket-panel > *:not(.ticket-panel-header) {
     position: relative;
     z-index: 1;
 }
@@ -1786,7 +1941,7 @@ body.dark-mode .priority-filters label {
     animation: fadeInUp 0.35s ease forwards;
     display: flex;
     flex-direction: column;
-    overflow: hidden;
+    overflow-y: auto;
 }
 
 /* Sticky modal header */
@@ -2879,13 +3034,471 @@ body.dark-mode .customer-form .form-section {
 
 body.dark-mode .customer-form .form-section legend,
 body.dark-mode .customer-form label {
-    color: #cfe4ff;
+    color: #b0b0b0;
 }
 
 body.dark-mode .customer-form input,
 body.dark-mode .customer-form select,
 body.dark-mode .customer-form textarea {
-    background: #162437;
-    border-color: #3a4f6b;
-    color: #cfe4ff;
+    background: #2a2a2a;
+    border-color: #444;
+    color: #e0e0e0;
+}
+
+/* ====================================================
+   DARK MODE COMPREHENSIVE OVERRIDE - BLACK/GRAY ONLY
+   ==================================================== */
+
+/* Remove orange panel borders */
+body.dark-mode .panel::before {
+    background: #333 !important;
+}
+
+/* Base dark mode colors */
+body.dark-mode {
+    background: #0a0a0a !important;
+    color: #e0e0e0 !important;
+}
+
+/* Scrollbars - dark theme */
+body.dark-mode ::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+}
+
+body.dark-mode ::-webkit-scrollbar-track {
+    background: #1a1a1a;
+    border: 1px solid #2a2a2a;
+}
+
+body.dark-mode ::-webkit-scrollbar-thumb {
+    background: #3a3a3a;
+    border: 1px solid #4a4a4a;
+    border-radius: 6px;
+}
+
+body.dark-mode ::-webkit-scrollbar-thumb:hover {
+    background: #4a4a4a;
+}
+
+/* Sidebar navigation */
+body.dark-mode .sidebar {
+    background: #0a0a0a !important;
+    border-right: 3px solid #F58220 !important;
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.5) !important;
+}
+
+body.dark-mode .sidebar li {
+    background: transparent !important;
+}
+
+body.dark-mode .sidebar li.active {
+    background: #2a2a2a !important;
+    border-left: 2px solid #666 !important;
+}
+
+body.dark-mode .sidebar li:hover {
+    background: #2a2a2a !important;
+}
+
+body.dark-mode .sidebar a {
+    color: #b0b0b0 !important;
+}
+
+body.dark-mode .sidebar a:hover {
+    color: #e0e0e0 !important;
+}
+
+body.dark-mode .sidebar-toggle-btn {
+    background: #2a2a2a !important;
+    color: #b0b0b0 !important;
+    border: 1px solid #3a3a3a !important;
+}
+
+body.dark-mode .submenu {
+    background: #1a1a1a !important;
+}
+
+/* Top bar */
+body.dark-mode .topbar {
+    background: #1a1a1a !important;
+    border-bottom: 1px solid #333 !important;
+}
+
+body.dark-mode .topbar h1 {
+    color: #e0e0e0 !important;
+}
+
+/* All buttons */
+body.dark-mode .pill-btn,
+body.dark-mode .pill-primary,
+body.dark-mode .pill-secondary,
+body.dark-mode button {
+    background: #2a2a2a !important;
+    color: #e0e0e0 !important;
+    border: 1px solid #3a3a3a !important;
+}
+
+body.dark-mode .pill-btn:hover,
+body.dark-mode .pill-primary:hover,
+body.dark-mode .pill-secondary:hover,
+body.dark-mode button:hover {
+    background: #333 !important;
+    border-color: #4a4a4a !important;
+}
+
+/* Remove all blue tints */
+body.dark-mode .queue-group h3 {
+    color: #e0e0e0 !important;
+}
+
+body.dark-mode .queue-btn {
+    background: #2a2a2a !important;
+    border: 1px solid #3a3a3a !important;
+    box-shadow: none !important;
+}
+
+body.dark-mode .queue-btn:hover {
+    background: #333 !important;
+    border-color: #4a4a4a !important;
+}
+
+body.dark-mode .queue-subgroup {
+    border-left-color: #3a3a3a !important;
+}
+
+body.dark-mode .queue-subgroup .queue-btn {
+    background: #222 !important;
+    border: 1px solid #3a3a3a !important;
+    box-shadow: none !important;
+}
+
+body.dark-mode .queue-subgroup .queue-btn:hover {
+    background: #2a2a2a !important;
+    border-color: #4a4a4a !important;
+}
+
+body.dark-mode .panel {
+    background: #1a1a1a !important;
+    border: 1px solid #333 !important;
+}
+
+body.dark-mode .panel h2 {
+    background: #2a2a2a !important;
+    color: #e0e0e0 !important;
+    border-bottom: 1px solid #3a3a3a !important;
+}
+
+body.dark-mode .ticket-panel-header {
+    background: #2a2a2a !important;
+    border-bottom: 1px solid #3a3a3a !important;
+}
+
+/* Board columns - remove all colors */
+body.dark-mode .board-column {
+    background: #1a1a1a !important;
+    border: 1px solid #333 !important;
+}
+
+body.dark-mode .board-column-header {
+    background: #2a2a2a !important;
+    border: 1px solid #3a3a3a !important;
+    border-left: 2px solid #666 !important;
+}
+
+body.dark-mode .board-column-title {
+    color: #e0e0e0 !important;
+}
+
+body.dark-mode .board-column-count {
+    background: #3a3a3a !important;
+    color: #b0b0b0 !important;
+}
+
+body.dark-mode .board-card {
+    background: #2a2a2a !important;
+    border: 1px solid #3a3a3a !important;
+    border-left: 2px solid #555 !important;
+}
+
+body.dark-mode .board-card:hover {
+    background: #333 !important;
+}
+
+body.dark-mode .board-card-title {
+    color: #e0e0e0 !important;
+}
+
+body.dark-mode .board-card-meta {
+    color: #999 !important;
+}
+
+body.dark-mode .board-card-id {
+    color: #b0b0b0 !important;
+}
+
+/* Remove status colors - make all gray */
+body.dark-mode .board-column[data-status="Open"] .board-column-header,
+body.dark-mode .board-column[data-status="In Progress"] .board-column-header,
+body.dark-mode .board-column[data-status="Pending"] .board-column-header,
+body.dark-mode .board-column[data-status="Resolved"] .board-column-header,
+body.dark-mode .board-column[data-status="Closed"] .board-column-header {
+    border-left: 2px solid #666 !important;
+}
+
+body.dark-mode .board-card[data-status="Open"],
+body.dark-mode .board-card[data-status="In Progress"],
+body.dark-mode .board-card[data-status="Pending"],
+body.dark-mode .board-card[data-status="Resolved"],
+body.dark-mode .board-card[data-status="Closed"] {
+    border-left-color: #555 !important;
+}
+
+/* Status badges */
+body.dark-mode .status-open,
+body.dark-mode .status-in-progress,
+body.dark-mode .status-pending,
+body.dark-mode .status-resolved,
+body.dark-mode .status-closed {
+    background: #3a3a3a !important;
+    color: #e0e0e0 !important;
+    border: 1px solid #555 !important;
+}
+
+/* Ticket cards */
+body.dark-mode .ticket-card {
+    background: #2a2a2a !important;
+    border: 1px solid #3a3a3a !important;
+}
+
+body.dark-mode .ticket-card:hover {
+    border-color: #777 !important;
+    border: 1px solid #3a3a3a !important;
+}
+
+/* All buttons */
+body.dark-mode .btn-primary {
+    background: #3a3a3a !important;
+    color: #e0e0e0 !important;
+    border: 1px solid #4a4a4a !important;
+}
+
+body.dark-mode .btn-primary:hover {
+    background: #4a4a4a !important;
+}
+
+body.dark-mode .btn-secondary {
+    background: #2a2a2a !important;
+    color: #b0b0b0 !important;
+    border: 1px solid #3a3a3a !important;
+}
+
+body.dark-mode .btn-secondary:hover {
+    background: #333 !important;
+}
+
+body.dark-mode .pill-btn {
+    background: #2a2a2a !important;
+    color: #e0e0e0 !important;
+    border: 1px solid #3a3a3a !important;
+}
+
+body.dark-mode .pill-secondary {
+    background: #222 !important;
+    border-color: #3a3a3a !important;
+}
+
+/* Admin sections */
+body.dark-mode .admin-section {
+    background: #1a1a1a !important;
+    border: 1px solid #333 !important;
+}
+
+body.dark-mode .admin-section h2,
+body.dark-mode .admin-section h3,
+body.dark-mode .admin-section h4 {
+    color: #e0e0e0 !important;
+    background: transparent !important;
+}
+
+body.dark-mode .admin-user-row {
+    background: #2a2a2a !important;
+    border: 1px solid #3a3a3a !important;
+}
+
+body.dark-mode .admin-section input,
+body.dark-mode .admin-section select,
+body.dark-mode .admin-section textarea {
+    background: #2a2a2a !important;
+    border: 1px solid #444 !important;
+    color: #e0e0e0 !important;
+}
+
+body.dark-mode .admin-section input:focus,
+body.dark-mode .admin-section select:focus,
+body.dark-mode .admin-section textarea:focus {
+    border-color: #666 !important;
+}
+
+body.dark-mode .admin-section button {
+    background: #3a3a3a !important;
+    color: #e0e0e0 !important;
+    border: 1px solid #4a4a4a !important;
+}
+
+body.dark-mode .admin-section button:hover {
+    background: #4a4a4a !important;
+}
+
+body.dark-mode .permission-box {
+    background: #2a2a2a !important;
+    border: 1px solid #3a3a3a !important;
+}
+
+body.dark-mode .permission-heading {
+    color: #e0e0e0 !important;
+    background: transparent !important;
+}
+
+body.dark-mode .checkbox-label {
+    color: #b0b0b0 !important;
+    background: transparent !important;
+}
+
+body.dark-mode .checkbox-label:hover {
+    background: #2a2a2a !important;
+}
+
+/* Forms */
+body.dark-mode .form-section {
+    background: #1a1a1a !important;
+    border: 1px solid #333 !important;
+}
+
+body.dark-mode .form-section legend,
+body.dark-mode .form-section h3 {
+    color: #e0e0e0 !important;
+    background: transparent !important;
+}
+
+body.dark-mode .form-section input,
+body.dark-mode .form-section select,
+body.dark-mode .form-section textarea {
+    background: #2a2a2a !important;
+    border: 1px solid #444 !important;
+    color: #e0e0e0 !important;
+}
+
+body.dark-mode .form-section input:focus,
+body.dark-mode .form-section select:focus,
+body.dark-mode .form-section textarea:focus {
+    border-color: #666 !important;
+    box-shadow: none !important;
+}
+
+/* Modals */
+body.dark-mode .modal-content {
+    background: #1a1a1a !important;
+    border: 1px solid #333 !important;
+}
+
+body.dark-mode .modal-header {
+    background: #2a2a2a !important;
+    border-bottom: 1px solid #3a3a3a !important;
+}
+
+body.dark-mode .modal-detail {
+    background: #1a1a1a !important;
+}
+
+body.dark-mode .modal-section-header {
+    background: #2a2a2a !important;
+    color: #e0e0e0 !important;
+    border-bottom: 1px solid #3a3a3a !important;
+}
+
+body.dark-mode .modal-tab {
+    background: #2a2a2a !important;
+    color: #b0b0b0 !important;
+    border: 1px solid #3a3a3a !important;
+}
+
+body.dark-mode .modal-tab.active {
+    background: #3a3a3a !important;
+    color: #e0e0e0 !important;
+    border-color: #4a4a4a !important;
+}
+
+/* All headers and titles */
+body.dark-mode h1,
+body.dark-mode h2,
+body.dark-mode h3,
+body.dark-mode h4,
+body.dark-mode h5,
+body.dark-mode h6 {
+    color: #e0e0e0 !important;
+}
+
+/* Links */
+body.dark-mode a {
+    color: #b0b0b0 !important;
+}
+
+body.dark-mode a:hover {
+    color: #e0e0e0 !important;
+}
+
+/* Reports */
+body.dark-mode .report-item {
+    background: #2a2a2a !important;
+    border: 1px solid #3a3a3a !important;
+}
+
+/* Remove all focus blue rings */
+body.dark-mode *:focus {
+    outline-color: #666 !important;
+    box-shadow: 0 0 0 2px #444 !important;
+}
+
+/* Checkboxes and inputs */
+body.dark-mode input[type="checkbox"] {
+    accent-color: #666 !important;
+}
+
+/* Tables */
+body.dark-mode table,
+body.dark-mode .ticket-table {
+    background: #1a1a1a !important;
+    border: 1px solid #333 !important;
+}
+
+body.dark-mode thead {
+    background: #2a2a2a !important;
+}
+
+body.dark-mode tbody tr {
+    background: #1a1a1a !important;
+    border-bottom: 1px solid #2a2a2a !important;
+}
+
+body.dark-mode tbody tr:hover {
+    background: #2a2a2a !important;
+}
+
+/* Remove all orange borders and elements */
+body.dark-mode .modal-header::after,
+body.dark-mode .modal-section-header::after,
+body.dark-mode *::before,
+body.dark-mode *::after {
+    border-color: #333 !important;
+    background: transparent !important;
+}
+
+body.dark-mode .modal-header {
+    border-bottom-color: #3a3a3a !important;
+}
+
+body.dark-mode .ticket-panel-header::before,
+body.dark-mode .ticket-panel-header::after {
+    display: none !important;
 }

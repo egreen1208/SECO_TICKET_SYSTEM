@@ -1,4 +1,13 @@
 // -------------------------------
+// AUTHENTICATION CHECK
+// -------------------------------
+// Redirect to login if not authenticated
+const authToken = localStorage.getItem('authToken');
+if (!authToken) {
+    window.location.href = 'tech-login.html';
+}
+
+// -------------------------------
 // SAMPLE TICKET DATA
 // -------------------------------
 
@@ -1805,8 +1814,8 @@ let selectedPriorityFilter = "all";
 let selectedTechnician = "all";
 let viewMode = "cards";
 let editingTicketId = null;
-let currentUser = localStorage.getItem("currentUser") || "System";
-let currentUserRole = localStorage.getItem("currentUserRole") || "tech";
+let currentUser = localStorage.getItem("currentUser") || "Unknown User";
+let currentUserRole = localStorage.getItem("currentUserRole") || "Technician";
 let currentUserPermissions = JSON.parse(localStorage.getItem("currentUserPermissions") || "{}");
 
 // Permission helper functions
@@ -1864,8 +1873,14 @@ const currentUserSelect = document.getElementById("current-user-select");
 const logoutBtn = document.getElementById("logout-btn");
 if (logoutBtn) {
     logoutBtn.addEventListener("click", () => {
+        // Clear all authentication data
+        localStorage.removeItem("authToken");
         localStorage.removeItem("currentUser");
-        window.location.href = "index.html";
+        localStorage.removeItem("currentUserRole");
+        localStorage.removeItem("currentUsername");
+        localStorage.removeItem("currentUserId");
+        localStorage.removeItem("currentUserPermissions");
+        window.location.href = "tech-login.html";
     });
 }
 
@@ -2309,17 +2324,33 @@ function renderQueueButtons() {
         const queueGroup = document.createElement("div");
         queueGroup.className = "queue-group";
         
-        // Create main queue button if user has access
+        // Create main queue button
         if (hasAccess) {
             const mainBtn = document.createElement("button");
             mainBtn.className = "queue-btn";
             mainBtn.dataset.queue = queue.id;
             mainBtn.textContent = `${queue.icon || '📋'} ${queue.name}`;
             mainBtn.style.borderLeftColor = queue.color;
-            mainBtn.addEventListener("click", () => {
-                selectedQueue = queue.id;
-                updateTickets();
-            });
+            
+            // Special handling for Information Technology queue with sub-queues
+            if (queue.id === 'it' && subQueues.length > 0) {
+                mainBtn.innerHTML = `${queue.icon || '📋'} ${queue.name} <span style="float:right">▾</span>`;
+                mainBtn.addEventListener("click", (e) => {
+                    e.stopPropagation();
+                    const subGroup = queueGroup.querySelector('.queue-subgroup');
+                    if (subGroup) {
+                        const isOpen = subGroup.style.display !== 'none';
+                        subGroup.style.display = isOpen ? 'none' : 'flex';
+                        const arrow = mainBtn.querySelector('span');
+                        if (arrow) arrow.textContent = isOpen ? '▸' : '▾';
+                    }
+                });
+            } else {
+                mainBtn.addEventListener("click", () => {
+                    selectedQueue = queue.id;
+                    updateTickets();
+                });
+            }
             queueGroup.appendChild(mainBtn);
         }
         
@@ -2328,7 +2359,7 @@ function renderQueueButtons() {
             const subGroup = document.createElement("div");
             subGroup.className = "queue-subgroup";
             subGroup.style.marginTop = "8px";
-            subGroup.style.display = "flex";
+            subGroup.style.display = queue.id === 'it' ? 'none' : 'flex'; // IT starts collapsed
             subGroup.style.flexWrap = "wrap";
             subGroup.style.gap = "8px";
             
@@ -2482,6 +2513,12 @@ if (viewDropdownBtn && viewDropdownMenu) {
     // Toggle dropdown on button click
     viewDropdownBtn.addEventListener('click', (e) => {
         e.stopPropagation();
+        
+        // Position the dropdown menu below the button
+        const rect = viewDropdownBtn.getBoundingClientRect();
+        viewDropdownMenu.style.top = `${rect.bottom + 4}px`;
+        viewDropdownMenu.style.right = `${window.innerWidth - rect.right}px`;
+        
         viewDropdownMenu.classList.toggle('show');
     });
 
@@ -2515,6 +2552,72 @@ if (viewDropdownBtn && viewDropdownMenu) {
 }
 
 // -------------------------------
+// ZOOM CONTROLS
+// -------------------------------
+const zoomInBtn = document.getElementById('zoom-in-btn');
+const zoomOutBtn = document.getElementById('zoom-out-btn');
+const zoomLevelDisplay = document.getElementById('zoom-level');
+
+let currentZoom = 100;
+const zoomLevels = [75, 90, 100, 110, 125];
+
+function updateZoom(newZoom) {
+    currentZoom = newZoom;
+    if (zoomLevelDisplay) {
+        zoomLevelDisplay.textContent = currentZoom + '%';
+    }
+    
+    const ticketList = document.getElementById('ticket-list');
+    const ticketBoard = document.getElementById('ticket-board');
+    
+    // Remove all zoom classes
+    zoomLevels.forEach(level => {
+        if (ticketList) {
+            ticketList.classList.remove('zoom-' + level);
+        }
+        if (ticketBoard) {
+            ticketBoard.classList.remove('zoom-' + level);
+        }
+    });
+    
+    // Add current zoom class
+    if (ticketList) {
+        ticketList.classList.add('zoom-' + currentZoom);
+    }
+    if (ticketBoard) {
+        ticketBoard.classList.add('zoom-' + currentZoom);
+    }
+    
+    console.log('Zoom updated to:', currentZoom + '%');
+}
+
+if (zoomInBtn && zoomOutBtn) {
+    console.log('Zoom controls initialized');
+    zoomInBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        console.log('Zoom in clicked');
+        const currentIndex = zoomLevels.indexOf(currentZoom);
+        if (currentIndex < zoomLevels.length - 1) {
+            updateZoom(zoomLevels[currentIndex + 1]);
+        }
+    });
+    
+    zoomOutBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        console.log('Zoom out clicked');
+        const currentIndex = zoomLevels.indexOf(currentZoom);
+        if (currentIndex > 0) {
+            updateZoom(zoomLevels[currentIndex - 1]);
+        }
+    });
+    
+    // Initialize zoom
+    updateZoom(100);
+} else {
+    console.error('Zoom buttons not found:', { zoomInBtn, zoomOutBtn, zoomLevelDisplay });
+}
+
+// -------------------------------
 // SIDEBAR TOGGLE
 // -------------------------------
 if (sidebarToggle) {
@@ -2526,12 +2629,23 @@ if (sidebarToggle) {
 // -------------------------------
 // DARK MODE TOGGLE
 // -------------------------------
+// Load saved dark mode preference
+const savedDarkMode = localStorage.getItem('darkMode') === 'true';
+if (savedDarkMode) {
+    document.body.classList.add('dark-mode');
+    if (darkModeToggle) {
+        darkModeToggle.checked = true;
+    }
+}
+
 if (darkModeToggle) {
     darkModeToggle.addEventListener("change", () => {
         if (darkModeToggle.checked) {
             document.body.classList.add("dark-mode");
+            localStorage.setItem('darkMode', 'true');
         } else {
             document.body.classList.remove("dark-mode");
+            localStorage.setItem('darkMode', 'false');
         }
     });
 }
@@ -3976,6 +4090,7 @@ function updateTickets() {
 // RENDER CARDS
 // -------------------------------
 function renderCards(ticketsToRender, container) {
+    container.innerHTML = ""; // Clear existing content
     ticketsToRender.forEach(t => {
         const card = document.createElement("div");
         card.classList.add("ticket-card");
@@ -4008,6 +4123,7 @@ function renderCards(ticketsToRender, container) {
 // RENDER TABLE
 // -------------------------------
 function renderTable(ticketsToRender, container) {
+    container.innerHTML = ""; // Clear existing content
     const table = document.createElement("table");
     table.classList.add("ticket-table");
 

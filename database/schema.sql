@@ -83,18 +83,15 @@ CREATE INDEX idx_queue_permissions_queue ON queue_permissions(queue_id);
 CREATE INDEX idx_queue_permissions_user ON queue_permissions(user_id);
 
 -- Insert default admin user (password: admin123)
--- Password hash for 'admin123' using bcrypt with cost factor 10
--- Note: Cost factor 10 provides good security while maintaining reasonable login speed
+-- Password hash using bcrypt with cost factor 10 (provides good security while maintaining reasonable login speed)
 INSERT INTO users (username, email, password_hash, full_name, role) VALUES
 ('admin', 'admin@seco.com', '$2b$10$s/ruVk.yq6.GdfjM44TaNOL8tURU2dHhZNMmambFrDu/bV/7kYhj2', 'System Administrator', 'admin');
 
 -- Insert default technician user (password: tech123)
--- Password hash for 'tech123' using bcrypt
 INSERT INTO users (username, email, password_hash, full_name, role) VALUES
 ('tech', 'tech@seco.com', '$2b$10$8O04oW9UcXdRjwy7N392MO9av7eDJHqzG2lY7Dvtt065yBDUi/tvG', 'Tech User', 'tech');
 
 -- Insert default customer user (password: customer123)
--- Password hash for 'customer123' using bcrypt
 INSERT INTO users (username, email, password_hash, full_name, role) VALUES
 ('customer', 'customer@seco.com', '$2b$10$7aXfaKmY6R4JAghOXFhtQO6kYI0N9Skq2V.Z0g1ZXaeDwNJanDpfK', 'Customer User', 'customer');
 

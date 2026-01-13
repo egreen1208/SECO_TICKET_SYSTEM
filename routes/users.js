@@ -4,6 +4,10 @@ const bcrypt = require('bcrypt');
 const db = require('../config/database');
 const { authenticateToken, requireAdmin, blockCustomer } = require('../middleware/auth');
 
+// Constants
+const DEFAULT_USER_ROLE = 'tech'; // Default role when not specified
+const VALID_ROLES = ['admin', 'tech', 'customer'];
+
 // Get all users (protected route - block customers)
 router.get('/', authenticateToken, blockCustomer, async (req, res) => {
     try {
@@ -47,10 +51,9 @@ router.post('/create', authenticateToken, requireAdmin, async (req, res) => {
         }
 
         // Validate role - must be one of: admin, tech, customer
-        const validRoles = ['admin', 'tech', 'customer'];
-        const userRole = role ? role.toLowerCase() : 'tech';
-        if (!validRoles.includes(userRole)) {
-            return res.status(400).json({ error: 'Invalid role. Must be admin, tech, or customer' });
+        const userRole = role ? role.toLowerCase() : DEFAULT_USER_ROLE;
+        if (!VALID_ROLES.includes(userRole)) {
+            return res.status(400).json({ error: `Invalid role. Must be one of: ${VALID_ROLES.join(', ')}` });
         }
 
         // Hash password

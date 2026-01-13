@@ -125,6 +125,18 @@
             window.location.href = "home.html";
         }
 
+        // Helper function to check if account is customer
+        function isCustomerAccount(account) {
+            return account && account.role && account.role.toLowerCase() === 'customer';
+        }
+
+        // Helper function to handle customer block
+        function blockCustomerAccess() {
+            techLoginError.textContent = "Customer accounts cannot access the staff portal.";
+            techLoginBtn.disabled = false;
+            techLoginBtn.textContent = "Log In";
+        }
+
         if (techLoginBtn) {
             techLoginBtn.addEventListener("click", async () => {
                 techLoginError.textContent = "";
@@ -157,10 +169,8 @@
                     
                     if (account) {
                         // Check if account is customer - customers cannot access tech portal
-                        if (account.role && account.role.toLowerCase() === 'customer') {
-                            techLoginError.textContent = "Customer accounts cannot access the staff portal.";
-                            techLoginBtn.disabled = false;
-                            techLoginBtn.textContent = "Log In";
+                        if (isCustomerAccount(account)) {
+                            blockCustomerAccess();
                             return;
                         }
                         
@@ -203,8 +213,7 @@
                     }
 
                     // Check if this is a customer account - customers cannot access tech portal
-                    const userRole = (data.user.role || '').toLowerCase();
-                    if (userRole === 'customer') {
+                    if (isCustomerAccount(data.user)) {
                         techLoginError.textContent = "Customer accounts cannot access the staff portal. Please use the customer portal.";
                         techLoginBtn.disabled = false;
                         techLoginBtn.textContent = "Log In";
@@ -229,10 +238,8 @@
                     
                     if (account) {
                         // Check if account is customer - customers cannot access tech portal
-                        if (account.role && account.role.toLowerCase() === 'customer') {
-                            techLoginError.textContent = "Customer accounts cannot access the staff portal.";
-                            techLoginBtn.disabled = false;
-                            techLoginBtn.textContent = "Log In";
+                        if (isCustomerAccount(account)) {
+                            blockCustomerAccess();
                             return;
                         }
                         

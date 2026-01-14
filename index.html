@@ -56,10 +56,15 @@
         const usernameInput = document.getElementById('customer-username');
         const passwordInput = document.getElementById('customer-password');
 
-        // Check if already logged in
+        // Check if already logged in as customer
         const existingToken = localStorage.getItem('customerAuthToken');
-        if (existingToken) {
+        const existingCustomerInfo = localStorage.getItem('customerInfo');
+        if (existingToken && existingCustomerInfo) {
             window.location.href = 'landing.html';
+        } else {
+            // Clear any stale tokens
+            localStorage.removeItem('customerAuthToken');
+            localStorage.removeItem('customerInfo');
         }
 
         loginForm.addEventListener('submit', async (e) => {
@@ -142,7 +147,7 @@
 
                 // Verify this is a customer account (not staff)
                 if (data.user.role !== 'Customer') {
-                    loginError.textContent = "This account is not authorized for customer portal. Please use the staff portal.";
+                    loginError.textContent = "This account is not authorized for customer portal. Staff members should use the staff portal.";
                     submitBtn.disabled = false;
                     submitBtn.textContent = "Sign In";
                     return;

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Simple Test</title>
+</head>
+<body>
+    <h1>Step by Step Test</h1>
+    <button onclick="step1()">Step 1: Set Auth</button>
+    <button onclick="step2()">Step 2: Check Auth</button>
+    <button onclick="step3()">Step 3: Load app.js</button>
+    <button onclick="step4()">Step 4: Check Functions</button>
+    <button onclick="clearAll()">Clear All</button>
+    <pre id="log" style="background:#f5f5f5; padding:15px; margin-top:20px; font-family:monospace;"></pre>
+
+    <script>
+        const log = document.getElementById('log');
+        
+        function print(msg) {
+            log.textContent += msg + '\n';
+            console.log(msg);
+        }
+        
+        function step1() {
+            log.textContent = '';
+            print('=== STEP 1: Setting Auth ===');
+            localStorage.setItem('authToken', 'test-token-' + Date.now());
+            localStorage.setItem('currentUser', 'Admin User');
+            localStorage.setItem('currentUserRole', 'Admin');
+            localStorage.setItem('currentUserId', '1');
+            localStorage.setItem('currentUsername', 'admin');
+            print('✅ Auth tokens set');
+            print('Run Step 2 to verify...');
+        }
+        
+        function step2() {
+            print('\n=== STEP 2: Checking Auth ===');
+            print('authToken: ' + (localStorage.getItem('authToken') || 'MISSING'));
+            print('currentUser: ' + (localStorage.getItem('currentUser') || 'MISSING'));
+            print('currentUserRole: ' + (localStorage.getItem('currentUserRole') || 'MISSING'));
+            
+            if (localStorage.getItem('authToken')) {
+                print('✅ Auth exists - safe to load app.js');
+            } else {
+                print('❌ Auth missing - DO NOT load app.js yet!');
+            }
+        }
+        
+        function step3() {
+            print('\n=== STEP 3: Loading app.js ===');
+            if (!localStorage.getItem('authToken')) {
+                print('❌ ERROR: Auth not set! Run Step 1 first!');
+                return;
+            }
+            
+            const script = document.createElement('script');
+            script.src = 'app.js';
+            script.onload = () => print('✅ app.js loaded');
+            script.onerror = () => print('❌ app.js failed to load');
+            document.body.appendChild(script);
+        }
+        
+        function step4() {
+            print('\n=== STEP 4: Checking Functions ===');
+            print('getQueueConfig: ' + (typeof getQueueConfig !== 'undefined' ? 'EXISTS ✅' : 'MISSING ❌'));
+            print('renderQueueButtons: ' + (typeof renderQueueButtons !== 'undefined' ? 'EXISTS ✅' : 'MISSING ❌'));
+            print('getActiveQueues: ' + (typeof getActiveQueues !== 'undefined' ? 'EXISTS ✅' : 'MISSING ❌'));
+            
+            if (typeof getQueueConfig !== 'undefined') {
+                try {
+                    const config = getQueueConfig();
+                    print('\nCalled getQueueConfig():');
+                    print('  Queues: ' + config.length);
+                    print('  IDs: ' + config.map(q => q.id).join(', '));
+                } catch(e) {
+                    print('❌ Error calling getQueueConfig: ' + e.message);
+                }
+            }
+        }
+        
+        function clearAll() {
+            localStorage.clear();
+            print('\n🗑️ All localStorage cleared');
+        }
+        
+        // Auto-check on load
+        setTimeout(() => {
+            print('=== INITIAL CHECK ===');
+            const hasAuth = localStorage.getItem('authToken');
+            print('Has authToken: ' + (hasAuth ? 'YES' : 'NO'));
+            if (!hasAuth) {
+                print('\n⚠️ Click "Step 1: Set Auth" to begin');
+            } else {
+                print('\n✅ Auth exists, you can load app.js');
+            }
+        }, 100);
+    </script>
+</body>
+</html>

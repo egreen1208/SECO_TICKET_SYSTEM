@@ -26,7 +26,25 @@ function requireAdmin(req, res, next) {
     next();
 }
 
+// Verify customer role - only allow Customer role access
+function requireCustomer(req, res, next) {
+    if (req.user.role !== 'Customer') {
+        return res.status(403).json({ error: 'Access denied. Customer account required.' });
+    }
+    next();
+}
+
+// Verify staff role - allow Admin, Technician, but NOT Customer
+function requireStaff(req, res, next) {
+    if (req.user.role === 'Customer') {
+        return res.status(403).json({ error: 'Access denied. Staff privileges required.' });
+    }
+    next();
+}
+
 module.exports = {
     authenticateToken,
-    requireAdmin
+    requireAdmin,
+    requireCustomer,
+    requireStaff
 };

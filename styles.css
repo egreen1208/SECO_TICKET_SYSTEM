@@ -1900,7 +1900,7 @@ body.dark-mode .priority-filters label {
     transform: translate(-50%, -50%);
     width: 60%;
     height: 60%;
-    background-image: url('seco-logo.png');
+    background-image: url('seco-logo-no-background.png');
     background-repeat: no-repeat;
     background-position: center;
     background-size: contain;

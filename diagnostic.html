@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Diagnostic</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body { padding: 20px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .diagnostic-box { background: #f8f9fa; padding: 20px; margin: 20px 0; border-radius: 8px; border: 1px solid #dee2e6; }
+        .status { padding: 8px; margin: 5px 0; border-radius: 4px; }
+        .status.pass { background: #d4edda; border-left: 4px solid #28a745; }
+        .status.fail { background: #f8d7da; border-left: 4px solid #dc3545; }
+        .status.warn { background: #fff3cd; border-left: 4px solid #ffc107; }
+        button { background: #0054A6; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; margin: 5px; }
+        button:hover { background: #003d7a; }
+        pre { background: white; padding: 10px; border-radius: 4px; overflow-x: auto; }
+        h2 { color: #0054A6; }
+    </style>
+</head>
+<body>
+    <h1>🔍 SECO Ticket System Diagnostic</h1>
+    
+    <div class="diagnostic-box">
+        <h2>1. Authentication Status</h2>
+        <div id="auth-status"></div>
+    </div>
+
+    <div class="diagnostic-box">
+        <h2>2. Queue Configuration</h2>
+        <div id="queue-status"></div>
+        <button onclick="resetQueues()">Reset Queues to Default</button>
+    </div>
+
+    <div class="diagnostic-box">
+        <h2>3. LocalStorage Contents</h2>
+        <pre id="storage-contents"></pre>
+    </div>
+
+    <div class="diagnostic-box">
+        <h2>4. DOM Elements Test</h2>
+        <div id="dom-status"></div>
+        
+        <h3>Test Elements:</h3>
+        <div id="sidebar" style="display:inline-block; padding:10px; background:#e9ecef; border-radius:4px; margin:10px 0;">
+            Sidebar Element
+        </div>
+        <button id="sidebar-toggle">Toggle Sidebar</button>
+        <br><br>
+        <label>
+            <input type="checkbox" id="dark-mode-toggle">
+            Dark Mode Toggle
+        </label>
+        <div id="queue-buttons-container" style="min-height:50px; background:#f1f3f5; padding:10px; margin:10px 0; border-radius:4px;">
+            Queue buttons will appear here
+        </div>
+    </div>
+
+    <div class="diagnostic-box">
+        <h2>Actions</h2>
+        <button onclick="clearEverything()">Clear All LocalStorage</button>
+        <button onclick="window.location.href='tech-login.html'">Go to Login</button>
+        <button onclick="window.location.href='home.html'">Go to Home</button>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+        // Run diagnostics
+        function runDiagnostics() {
+            // Auth check
+            const authToken = localStorage.getItem('authToken');
+            const currentUser = localStorage.getItem('currentUser');
+            const currentUserRole = localStorage.getItem('currentUserRole');
+            
+            let authHTML = '';
+            if (authToken) {
+                authHTML += '<div class="status pass">✅ Auth Token: Present</div>';
+            } else {
+                authHTML += '<div class="status fail">❌ Auth Token: Missing</div>';
+            }
+            authHTML += `<div class="status ${currentUser ? 'pass' : 'warn'}">User: ${currentUser || 'Not set'}</div>`;
+            authHTML += `<div class="status ${currentUserRole ? 'pass' : 'warn'}">Role: ${currentUserRole || 'Not set'}</div>`;
+            document.getElementById('auth-status').innerHTML = authHTML;
+
+            // Queue check
+            const queueConfig = localStorage.getItem('queueConfiguration');
+            let queueHTML = '';
+            if (queueConfig) {
+                try {
+                    const queues = JSON.parse(queueConfig);
+                    queueHTML += `<div class="status pass">✅ Queue Configuration: ${queues.length} queues found</div>`;
+                    queueHTML += `<pre>${JSON.stringify(queues.map(q => ({ id: q.id, name: q.name, active: q.active })), null, 2)}</pre>`;
+                } catch(e) {
+                    queueHTML += `<div class="status fail">❌ Queue Configuration: Invalid JSON</div>`;
+                }
+            } else {
+                queueHTML += '<div class="status fail">❌ Queue Configuration: Missing</div>';
+            }
+            document.getElementById('queue-status').innerHTML = queueHTML;
+
+            // Storage contents
+            const storage = {};
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                storage[key] = localStorage.getItem(key).substring(0, 100) + '...';
+            }
+            document.getElementById('storage-contents').textContent = JSON.stringify(storage, null, 2);
+
+            // DOM elements
+            const sidebar = document.getElementById('sidebar');
+            const sidebarToggle = document.getElementById('sidebar-toggle');
+            const darkModeToggle = document.getElementById('dark-mode-toggle');
+            const queueContainer = document.getElementById('queue-buttons-container');
+
+            let domHTML = '';
+            domHTML += `<div class="status ${sidebar ? 'pass' : 'fail'}">${sidebar ? '✅' : '❌'} Sidebar element</div>`;
+            domHTML += `<div class="status ${sidebarToggle ? 'pass' : 'fail'}">${sidebarToggle ? '✅' : '❌'} Sidebar toggle button</div>`;
+            domHTML += `<div class="status ${darkModeToggle ? 'pass' : 'fail'}">${darkModeToggle ? '✅' : '❌'} Dark mode toggle</div>`;
+            domHTML += `<div class="status ${queueContainer ? 'pass' : 'fail'}">${queueContainer ? '✅' : '❌'} Queue buttons container</div>`;
+            document.getElementById('dom-status').innerHTML = domHTML;
+        }
+
+        function resetQueues() {
+            localStorage.removeItem('queueConfiguration');
+            
+            // Force call getQueueConfig to initialize defaults
+            if (typeof getQueueConfig === 'function') {
+                const config = getQueueConfig();
+                console.log('Queue config initialized:', config);
+            }
+            
+            alert('Queue configuration reset! Check the status below.');
+            setTimeout(() => {
+                runDiagnostics();
+            }, 100);
+        }
+
+        function clearEverything() {
+            if (confirm('This will clear ALL localStorage. Continue?')) {
+                localStorage.clear();
+                alert('All localStorage cleared. You will need to login again.');
+                location.reload();
+            }
+        }
+
+        // Wait for app.js to fully load and initialize
+        setTimeout(() => {
+            // Force queue initialization if needed
+            if (typeof getQueueConfig === 'function') {
+                getQueueConfig(); // This will set defaults if missing
+            }
+            runDiagnostics();
+        }, 1000);
+    </script>
+</body>
+</html>

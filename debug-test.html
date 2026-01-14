@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Test - SECO</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div style="padding: 20px; font-family: monospace;">
+        <h1>Debug Test Page</h1>
+        <button onclick="testEverything()" style="padding: 10px 20px; font-size: 16px; margin: 10px 0;">Run Full Test</button>
+        <button onclick="window.location.href='home.html'" style="padding: 10px 20px; font-size: 16px; margin: 10px 0;">Go to Home</button>
+        <pre id="output" style="background: #f5f5f5; padding: 15px; border-radius: 5px; margin-top: 20px;"></pre>
+    </div>
+
+    <div id="test-container">
+        <div id="queue-buttons-container" style="border: 2px solid red; min-height: 100px; padding: 10px;">
+            Test Queue Container
+        </div>
+    </div>
+
+    <script>
+        // Set auth token BEFORE loading app.js
+        if (!localStorage.getItem('authToken')) {
+            localStorage.setItem('authToken', 'test-token');
+            localStorage.setItem('currentUser', 'Admin User');
+            localStorage.setItem('currentUserRole', 'Admin');
+            localStorage.setItem('currentUserId', '1');
+        }
+    </script>
+    
+    <script src="app.js"></script>
+    <script>
+        function log(msg) {
+            const output = document.getElementById('output');
+            output.textContent += msg + '\n';
+            console.log(msg);
+        }
+
+        function testEverything() {
+            document.getElementById('output').textContent = '';
+            
+            log('=== STARTING FULL DEBUG TEST ===\n');
+            
+            // Test 1: Check localStorage
+            log('1. LOCALSTORAGE CHECK:');
+            const queueConfig = localStorage.getItem('queueConfiguration');
+            log('   Queue config exists: ' + (queueConfig ? 'YES' : 'NO'));
+            if (queueConfig) {
+                try {
+                    const parsed = JSON.parse(queueConfig);
+                    log('   Number of queues: ' + parsed.length);
+                    log('   Queue IDs: ' + parsed.map(q => q.id).join(', '));
+                    log('   Active queues: ' + parsed.filter(q => q.active).length);
+                } catch(e) {
+                    log('   ERROR parsing: ' + e.message);
+                }
+            }
+            
+            // Test 2: Check functions exist
+            log('\n2. FUNCTION CHECK:');
+            log('   getQueueConfig exists: ' + (typeof getQueueConfig !== 'undefined'));
+            log('   getActiveQueues exists: ' + (typeof getActiveQueues !== 'undefined'));
+            log('   renderQueueButtons exists: ' + (typeof renderQueueButtons !== 'undefined'));
+            log('   getAccessibleQueues exists: ' + (typeof getAccessibleQueues !== 'undefined'));
+            
+            // Test 3: Try calling functions
+            log('\n3. FUNCTION EXECUTION:');
+            try {
+                if (typeof getQueueConfig !== 'undefined') {
+                    const config = getQueueConfig();
+                    log('   getQueueConfig() returned: ' + config.length + ' queues');
+                }
+                
+                if (typeof getActiveQueues !== 'undefined') {
+                    const active = getActiveQueues();
+                    log('   getActiveQueues() returned: ' + active.length + ' queues');
+                }
+                
+                if (typeof getAccessibleQueues !== 'undefined') {
+                    const accessible = getAccessibleQueues();
+                    log('   getAccessibleQueues() returned: ' + JSON.stringify(accessible));
+                }
+            } catch(e) {
+                log('   ERROR calling functions: ' + e.message);
+            }
+            
+            // Test 4: Check DOM elements
+            log('\n4. DOM ELEMENTS:');
+            const container = document.getElementById('queue-buttons-container');
+            log('   Container found: ' + (container ? 'YES' : 'NO'));
+            if (container) {
+                log('   Container innerHTML length: ' + container.innerHTML.length);
+                log('   Container children: ' + container.children.length);
+            }
+            
+            // Test 5: Try rendering
+            log('\n5. RENDER TEST:');
+            try {
+                if (typeof renderQueueButtons !== 'undefined') {
+                    log('   Calling renderQueueButtons()...');
+                    renderQueueButtons();
+                    log('   renderQueueButtons() completed');
+                    
+                    setTimeout(() => {
+                        const containerAfter = document.getElementById('queue-buttons-container');
+                        if (containerAfter) {
+                            log('   After render - children: ' + containerAfter.children.length);
+                            log('   After render - innerHTML: ' + containerAfter.innerHTML.substring(0, 200));
+                        }
+                    }, 100);
+                }
+            } catch(e) {
+                log('   ERROR rendering: ' + e.message);
+                log('   Stack: ' + e.stack);
+            }
+            
+            // Test 6: Check permissions
+            log('\n6. PERMISSIONS:');
+            const perms = localStorage.getItem('currentUserPermissions');
+            log('   Permissions: ' + (perms || 'Not set'));
+            if (typeof currentUserPermissions !== 'undefined') {
+                log('   currentUserPermissions var: ' + JSON.stringify(currentUserPermissions));
+            }
+            
+            log('\n=== TEST COMPLETE ===');
+        }
+        
+        // Auto-run on load
+        setTimeout(testEverything, 1000);
+    </script>
+</body>
+</html>

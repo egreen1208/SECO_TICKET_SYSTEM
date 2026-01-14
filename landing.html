@@ -67,25 +67,39 @@
 
     <script>
         // Check if customer is logged in
+        const customerAuthToken = localStorage.getItem('customerAuthToken');
         const customerInfo = localStorage.getItem('customerInfo');
-        if (!customerInfo) {
+        
+        if (!customerAuthToken || !customerInfo) {
             // Redirect to login if not logged in
+            localStorage.removeItem('customerAuthToken');
+            localStorage.removeItem('customerInfo');
             window.location.href = 'index.html';
         } else {
             // Show user info
-            const info = JSON.parse(customerInfo);
-            const userInfoDiv = document.getElementById('landing-user-info');
-            const userNameSpan = document.getElementById('landing-user-name');
-            if (userInfoDiv && userNameSpan) {
-                userNameSpan.textContent = info.name;
-                userInfoDiv.style.display = 'block';
+            try {
+                const info = JSON.parse(customerInfo);
+                const userInfoDiv = document.getElementById('landing-user-info');
+                const userNameSpan = document.getElementById('landing-user-name');
+                if (userInfoDiv && userNameSpan) {
+                    userNameSpan.textContent = info.name || info.username;
+                    userInfoDiv.style.display = 'block';
+                }
+            } catch (e) {
+                console.error('Error parsing customer info:', e);
+                localStorage.removeItem('customerAuthToken');
+                localStorage.removeItem('customerInfo');
+                window.location.href = 'index.html';
             }
 
             // Handle logout
             const logoutBtn = document.getElementById('landing-logout-btn');
             if (logoutBtn) {
                 logoutBtn.addEventListener('click', () => {
+                    // Clear customer tokens
+                    localStorage.removeItem('customerAuthToken');
                     localStorage.removeItem('customerInfo');
+                    // Redirect to customer login page
                     window.location.href = 'index.html';
                 });
             }

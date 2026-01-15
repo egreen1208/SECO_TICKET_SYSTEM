@@ -3,18 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Submit an IT Ticket</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Submit a Facilities Ticket - SECO Energy Service Portal</title>
+    <link rel="stylesheet" href="../../css/styles.css">
 </head>
 <body class="customer-page">
 
     <header class="topbar">
         <div class="topbar-left">
-            <img src="seco-logo.png" alt="SECO Energy Logo" class="logo">
+            <img src="../../images/seco-logo.png" alt="SECO Energy Logo" class="logo">
             <h1>Service Portal</h1>
         </div>
         <div class="topbar-right">
-            <a href="landing.html" class="pill-btn">Back to Portal</a>
+            <a href="../landing.html" class="pill-btn">Back to Portal</a>
             <div class="dark-mode-toggle">
                 <label class="switch">
                     <input type="checkbox" id="dark-mode-toggle">
@@ -28,7 +28,7 @@
     <div class="layout">
         <main class="container customer-container">
             <section class="panel customer-panel">
-                <h2>Submit an IT Support Ticket</h2>
+                <h2>Submit a Facilities Ticket</h2>
                 <form id="customer-ticket-form" class="customer-form">
                     <fieldset class="form-section">
                         <legend>Your Information</legend>
@@ -50,7 +50,7 @@
                         <legend>Issue Details</legend>
                         <label>Department
                             <select id="customer-queue" disabled>
-                                <option value="it" selected>Information Technology (IT)</option>
+                                <option value="buildings-grounds" selected>Buildings &amp; Grounds</option>
                             </select>
                         </label>
                         <label>Category <span class="required">*</span>
@@ -89,8 +89,6 @@
     </div>
 
     <div id="toast" class="toast"></div>
-
-    <script src="app.js"></script>
     <script>
     // Auto-populate customer info from login
     const customerInfo = localStorage.getItem('customerInfo');
@@ -104,16 +102,14 @@
         if (emailField) emailField.value = info.email || '';
         if (phoneField) phoneField.value = info.phone || '';
     } else {
-        // Redirect to login if not logged in
-        window.location.href = 'index.html';
+        window.location.href = '../landing.html';
     }
 
-    const forcedQueue = "it";
+    const forcedQueue = "buildings-grounds";
     const customerQueue = document.getElementById('customer-queue');
     const customerCategory = document.getElementById('customer-category');
     const customerSubcategory = document.getElementById('customer-subcategory');
 
-    // Ensure queue is set to IT and locked
     if (customerQueue) {
         customerQueue.value = forcedQueue;
     }
@@ -128,7 +124,6 @@
         });
     }
 
-    // Initialize options
     refreshCustomerCategories();
 
     document.getElementById('customer-ticket-form').addEventListener('submit', function(e) {
@@ -160,7 +155,7 @@
         window.tickets.push(newTicket);
         localStorage.setItem('seco_tickets', JSON.stringify(window.tickets));
         showToast('Ticket submitted successfully! Redirecting...');
-        setTimeout(() => { window.location.href = 'index.html'; }, 1800);
+        setTimeout(() => { window.location.href = '../landing.html'; }, 1800);
     });
     </script>
 </body>

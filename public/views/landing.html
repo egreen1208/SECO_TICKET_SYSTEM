@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Choose a Service</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="../css/styles.css">
 </head>
 <body class="landing-page">
     <header class="landing-banner">
         <div class="landing-banner__logo">
-            <img src="seco-logo.png" alt="SECO Energy Logo" class="logo" />
+            <img src="../images/seco-logo.png" alt="SECO Energy Logo" class="logo" />
         </div>
         <div class="landing-banner__content">
             <h1>Service Portal</h1>
@@ -27,37 +27,37 @@
     </div>
 
     <main class="landing-grid">
-        <a class="landing-card" href="customer-it.html">
+        <a class="landing-card" href="./customer/customer-it.html">
             <div class="landing-card__icon">💻</div>
             <h3>Information Technology</h3>
             <p>Accounts, devices, software, network, phones.</p>
             <span class="landing-card__cta">Submit IT ticket →</span>
         </a>
-        <a class="landing-card" href="customer-buildings.html">
+        <a class="landing-card" href="./customer/customer-buildings.html">
             <div class="landing-card__icon">🏢</div>
             <h3>Buildings &amp; Grounds</h3>
             <p>HVAC, plumbing, carpentry, grounds, custodial.</p>
             <span class="landing-card__cta">Submit Facilities ticket →</span>
         </a>
-        <a class="landing-card" href="customer-electrical.html">
+        <a class="landing-card" href="./customer/customer-electrical.html">
             <div class="landing-card__icon">⚡</div>
             <h3>Electrical Services</h3>
             <p>Power, lighting, panels, safety, generators.</p>
             <span class="landing-card__cta">Submit Electrical ticket →</span>
         </a>
-        <a class="landing-card" href="customer-moves.html">
+        <a class="landing-card" href="./customer/customer-moves.html">
             <div class="landing-card__icon">📦</div>
             <h3>Move Request</h3>
             <p>Office moves, furniture, IT equipment relocation.</p>
             <span class="landing-card__cta">Submit Move request →</span>
         </a>
-        <a class="landing-card" href="customer-rma.html">
+        <a class="landing-card" href="./customer/customer-rma.html">
             <div class="landing-card__icon">🔄</div>
             <h3>RMA / Warehouse</h3>
             <p>Returns, exchanges, parts requests, inventory.</p>
             <span class="landing-card__cta">Submit RMA request →</span>
         </a>
-        <a class="landing-card landing-card--tech" href="tech-login.html">
+        <a class="landing-card landing-card--tech" href="./tech-login.html">
             <div class="landing-card__icon">🛠️</div>
             <h3>Staff Portal</h3>
             <p>For technicians and administrators only.</p>
@@ -74,7 +74,7 @@
             // Redirect to login if not logged in
             localStorage.removeItem('customerAuthToken');
             localStorage.removeItem('customerInfo');
-            window.location.href = 'index.html';
+            window.location.href = './index.html';
         } else {
             // Show user info
             try {
@@ -89,7 +89,7 @@
                 console.error('Error parsing customer info:', e);
                 localStorage.removeItem('customerAuthToken');
                 localStorage.removeItem('customerInfo');
-                window.location.href = 'index.html';
+                window.location.href = './index.html';
             }
 
             // Handle logout
@@ -100,7 +100,7 @@
                     localStorage.removeItem('customerAuthToken');
                     localStorage.removeItem('customerInfo');
                     // Redirect to customer login page
-                    window.location.href = 'index.html';
+                    window.location.href = './index.html';
                 });
             }
         }

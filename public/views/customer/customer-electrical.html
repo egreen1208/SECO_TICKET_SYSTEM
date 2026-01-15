@@ -4,17 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Submit an Electrical Ticket - SECO Energy Service Portal</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="../../css/styles.css">
 </head>
 <body class="customer-page">
 
     <header class="topbar">
         <div class="topbar-left">
-            <img src="seco-logo.png" alt="SECO Energy Logo" class="logo">
+            <img src="../../images/seco-logo.png" alt="SECO Energy Logo" class="logo">
             <h1>Service Portal</h1>
         </div>
         <div class="topbar-right">
-            <a href="landing.html" class="pill-btn">Back to Portal</a>
+            <a href="../landing.html" class="pill-btn">Back to Portal</a>
             <div class="dark-mode-toggle">
                 <label class="switch">
                     <input type="checkbox" id="dark-mode-toggle">
@@ -89,8 +89,6 @@
     </div>
 
     <div id="toast" class="toast"></div>
-
-    <script src="app.js"></script>
     <script>
     // Auto-populate customer info from login
     const customerInfo = localStorage.getItem('customerInfo');
@@ -104,7 +102,7 @@
         if (emailField) emailField.value = info.email || '';
         if (phoneField) phoneField.value = info.phone || '';
     } else {
-        window.location.href = 'index.html';
+        window.location.href = '../landing.html';
     }
 
     const forcedQueue = "electrical";
@@ -157,7 +155,7 @@
         window.tickets.push(newTicket);
         localStorage.setItem('seco_tickets', JSON.stringify(window.tickets));
         showToast('Ticket submitted successfully! Redirecting...');
-        setTimeout(() => { window.location.href = 'index.html'; }, 1800);
+        setTimeout(() => { window.location.href = '../landing.html'; }, 1800);
     });
     </script>
 </body>

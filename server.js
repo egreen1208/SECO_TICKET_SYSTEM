@@ -11,8 +11,8 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Serve static files (HTML, CSS, JS)
-app.use(express.static(path.join(__dirname)));
+// Serve static files from public directory
+app.use(express.static(path.join(__dirname, 'public')));
 
 // API Routes
 const authRoutes = require('./routes/auth');
@@ -27,7 +27,7 @@ app.use('/api/users', userRoutes);
 
 // Serve index.html for root route
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'index.html'));
+    res.sendFile(path.join(__dirname, 'public', 'views', 'index.html'));
 });
 
 // Error handling middleware

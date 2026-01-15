@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Staff Portal Login - SECO Energy</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="../css/styles.css">
     <style>
         body {
             background: linear-gradient(135deg, #0054A6, #0f172a);
@@ -99,7 +99,7 @@
 <body>
 
     <div class="login-card">
-        <img src="seco-logo.png" alt="SECO Energy Logo">
+        <img src="../images/seco-logo.png" alt="SECO Energy Logo">
         <h2>Staff Portal</h2>
         <p class="subtitle">For authorized personnel only</p>
 
@@ -108,7 +108,7 @@
 
         <button class="login-btn" id="tech-login-btn">Log In</button>
 
-        <a class="back-link" href="index.html">← Back to main portal</a>
+        <a class="back-link" href="./index.html">← Back to main portal</a>
 
         <div class="login-error" id="tech-login-error"></div>
     </div>
@@ -122,7 +122,7 @@
         // Check if already logged in
         const existingToken = localStorage.getItem('authToken');
         if (existingToken) {
-            window.location.href = "home.html";
+            window.location.href = "./home.html";
         }
 
         if (techLoginBtn) {
@@ -162,7 +162,7 @@
                         localStorage.setItem("currentUserId", account.id);
                         
                         console.warn('🔧 LOCAL MODE - using hardcoded credentials');
-                        window.location.href = "home.html";
+                        window.location.href = "./home.html";
                     } else {
                         techLoginError.textContent = "Invalid credentials. Try: admin/admin123 or tech/tech123";
                         techLoginBtn.disabled = false;
@@ -209,7 +209,7 @@
                     localStorage.setItem("currentUserId", data.user.id);
 
                     // Redirect to staff dashboard
-                    window.location.href = "home.html";
+                    window.location.href = "./home.html";
 
                 } catch (error) {
                     console.error('Login error:', error);
@@ -225,7 +225,7 @@
                         localStorage.setItem("currentUserId", account.id);
                         
                         console.warn('🔧 FALLBACK MODE - API unavailable, using hardcoded credentials');
-                        window.location.href = "home.html";
+                        window.location.href = "./home.html";
                         return;
                     }
 

@@ -1,21 +1,16 @@
 // -------------------------------
 // AUTHENTICATION CHECK
 // -------------------------------
-console.log('[APP.JS] Starting authentication check...');
 // Redirect to login if not authenticated
 const authToken = localStorage.getItem('authToken');
-console.log('[APP.JS] authToken:', authToken ? 'Present' : 'Missing');
 if (!authToken) {
-    console.log('[APP.JS] No auth token, redirecting to tech-login.html');
     window.location.href = 'tech-login.html';
 }
 
 // Prevent Customer role from accessing staff portal
 // Only check if role exists (for backwards compatibility with existing sessions)
 var currentUserRole = localStorage.getItem('currentUserRole');
-console.log('[APP.JS] currentUserRole:', currentUserRole);
 if (currentUserRole && currentUserRole === 'Customer') {
-    console.log('[APP.JS] Customer role detected, redirecting to index.html');
     // Clear staff tokens and redirect to customer portal
     localStorage.removeItem('authToken');
     localStorage.removeItem('currentUser');
@@ -25,8 +20,6 @@ if (currentUserRole && currentUserRole === 'Customer') {
     alert('Customer accounts cannot access the staff portal. Redirecting to customer portal.');
     window.location.href = 'index.html';
 }
-
-console.log('[APP.JS] Auth check passed, continuing...');
 
 // -------------------------------
 // SAMPLE TICKET DATA
@@ -1790,11 +1783,8 @@ const DEFAULT_QUEUE_CONFIG = [
     }
 ];
 
-console.log('[APP.JS] DEFAULT_QUEUE_CONFIG defined with', DEFAULT_QUEUE_CONFIG.length, 'queues');
-
 // Initialize queue configuration from localStorage or defaults
 function getQueueConfig() {
-    console.log('[APP.JS] getQueueConfig() called');
     const stored = localStorage.getItem("queueConfiguration");
     if (stored) {
         return JSON.parse(stored);
@@ -1869,7 +1859,6 @@ function getAccessibleQueues() {
     // If no permissions set or user has admin access, return all active queues
     if (!currentUserPermissions.queues || currentUserPermissions.queues.includes("*")) {
         const allQueues = getActiveQueues();
-        console.log('User has access to all queues:', allQueues.map(q => q.id));
         return allQueues.map(q => q.id);
     }
     
@@ -1878,7 +1867,6 @@ function getAccessibleQueues() {
     if (queues.includes("it")) {
         queues.push("it-support", "it-applications", "it-networking", "it-systems", "it-security");
     }
-    console.log('User accessible queues:', queues);
     return queues;
 }
 
@@ -1897,8 +1885,6 @@ const sidebar = document.getElementById("sidebar");
 const sidebarToggle = document.getElementById("sidebar-toggle");
 const darkModeToggle = document.getElementById("dark-mode-toggle");
 const currentUserSelect = document.getElementById("current-user-select");
-
-console.log('DOM Elements Check:', { sidebar, sidebarToggle, darkModeToggle });
 
 const logoutBtn = document.getElementById("logout-btn");
 if (logoutBtn) {
@@ -2332,7 +2318,6 @@ if (currentUserSelect) {
 function renderQueueButtons() {
     const container = document.getElementById("queue-buttons-container");
     if (!container) {
-        console.error('Queue buttons container not found!');
         return;
     }
     
@@ -2340,8 +2325,6 @@ function renderQueueButtons() {
     
     const queues = getActiveQueues();
     const accessibleQueues = getAccessibleQueues();
-    
-    console.log('Rendering queue buttons:', { totalQueues: queues.length, accessibleQueues: accessibleQueues.length });
     
     // Separate main queues and sub-queues
     const mainQueues = queues.filter(q => !q.parentQueue).sort((a, b) => a.order - b.order);
@@ -2448,16 +2431,13 @@ function initSidebarDropdown(){
 
 // Render queue buttons on load
 document.addEventListener("DOMContentLoaded", () => {
-    console.log("DOM loaded, initializing queues...");
     const queueConfig = getQueueConfig();
-    console.log("Queue config loaded:", queueConfig.length, "queues");
     renderQueueButtons();
     renderAdminQueueCheckboxes();
     renderAdmin(); // ensure existing users render on admin page load
     initSidebarDropdown();
     initTextToolbar();
     initCommentPasteHandler();
-    console.log("Queue buttons rendered");
     
     // Initialize sidebar toggle
     const sidebarElement = document.getElementById("sidebar");
@@ -2465,15 +2445,11 @@ document.addEventListener("DOMContentLoaded", () => {
     if (sidebarToggleBtn && sidebarElement) {
         sidebarToggleBtn.addEventListener("click", () => {
             sidebarElement.classList.toggle("collapsed");
-            console.log('Sidebar toggled:', sidebarElement.classList.contains('collapsed'));
         });
-    } else {
-        console.warn('Sidebar toggle not found:', { sidebarToggleBtn, sidebarElement });
     }
     
     // Initialize dark mode toggle
     const darkModeToggleElement = document.getElementById("dark-mode-toggle");
-    console.log('Dark mode toggle element:', darkModeToggleElement);
     
     // Load saved dark mode preference
     const savedDarkMode = localStorage.getItem('darkMode') === 'true';
@@ -2489,16 +2465,11 @@ document.addEventListener("DOMContentLoaded", () => {
             if (darkModeToggleElement.checked) {
                 document.body.classList.add("dark-mode");
                 localStorage.setItem('darkMode', 'true');
-                console.log('Dark mode enabled');
             } else {
                 document.body.classList.remove("dark-mode");
                 localStorage.setItem('darkMode', 'false');
-                console.log('Dark mode disabled');
             }
         });
-        console.log('Dark mode toggle initialized');
-    } else {
-        console.error('Dark mode toggle element not found!');
     }
 });
 
@@ -2664,15 +2635,11 @@ function updateZoom(newZoom) {
     if (ticketBoard) {
         ticketBoard.classList.add('zoom-' + currentZoom);
     }
-    
-    console.log('Zoom updated to:', currentZoom + '%');
 }
 
 if (zoomInBtn && zoomOutBtn) {
-    console.log('Zoom controls initialized');
     zoomInBtn.addEventListener('click', (e) => {
         e.preventDefault();
-        console.log('Zoom in clicked');
         const currentIndex = zoomLevels.indexOf(currentZoom);
         if (currentIndex < zoomLevels.length - 1) {
             updateZoom(zoomLevels[currentIndex + 1]);
@@ -2681,7 +2648,6 @@ if (zoomInBtn && zoomOutBtn) {
     
     zoomOutBtn.addEventListener('click', (e) => {
         e.preventDefault();
-        console.log('Zoom out clicked');
         const currentIndex = zoomLevels.indexOf(currentZoom);
         if (currentIndex > 0) {
             updateZoom(zoomLevels[currentIndex - 1]);
@@ -2690,8 +2656,6 @@ if (zoomInBtn && zoomOutBtn) {
     
     // Initialize zoom
     updateZoom(100);
-} else {
-    console.error('Zoom buttons not found:', { zoomInBtn, zoomOutBtn, zoomLevelDisplay });
 }
 
 // -------------------------------

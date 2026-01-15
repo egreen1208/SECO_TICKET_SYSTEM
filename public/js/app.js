@@ -3435,16 +3435,21 @@ if (adminRoleSelect) {
 }
 
 if(adminAddBtn){
-    adminAddBtn.addEventListener('click', () => {
+    adminAddBtn.addEventListener('click', async () => {
         const u = document.getElementById('admin-new-username');
         const p = document.getElementById('admin-new-password');
         const n = document.getElementById('admin-new-name');
         const r = document.getElementById('admin-new-role');
         if(!u || !p || !n || !r) return;
-        const users = JSON.parse(localStorage.getItem('users') || '[]');
+        
         const isEdit = editingUserIndex !== null;
         if(!u.value.trim()) { alert('Username required'); return; }
-        if(!isEdit && !p.value.trim()) { alert('Username and password required'); return; }
+        if(!isEdit && !p.value.trim()) { alert('Password required'); return; }
+        
+        const username = u.value.trim();
+        const password = p.value.trim();
+        const fullName = n.value.trim() || username;
+        const role = r.value.trim() || 'tech';
         
         // Collect queue assignments
         const queueCheckboxes = document.querySelectorAll('.admin-new-queue-checkbox');
@@ -3453,7 +3458,7 @@ if(adminAddBtn){
             .map(cb => cb.value);
         
         // If admin role, grant all queues
-        const isAdmin = r.value.trim() === 'admin';
+        const isAdmin = role === 'admin';
         const queues = isAdmin ? ['*'] : assignedQueues;
         
         // Collect permissions
@@ -3468,24 +3473,67 @@ if(adminAddBtn){
             canManageQueues: isAdmin
         };
         
+        // Try to create user via API (production mode)
+        const authToken = localStorage.getItem('authToken');
+        if (authToken && window.location.protocol !== 'file:') {
+            try {
+                const response = await fetch('/api/users/create', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: JSON.stringify({
+                        username,
+                        password,
+                        email: username + '@secoticket.com',
+                        fullName,
+                        role
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (!response.ok) {
+                    alert('Error creating user: ' + (data.error || 'Server error'));
+                    return;
+                }
+                
+                alert('User created successfully!');
+                u.value = p.value = n.value = '';
+                queueCheckboxes.forEach(cb => cb.checked = false);
+                document.getElementById('admin-new-can-create').checked = true;
+                document.getElementById('admin-new-can-edit').checked = true;
+                document.getElementById('admin-new-can-delete').checked = false;
+                document.getElementById('admin-new-can-reports').checked = true;
+                document.getElementById('admin-new-can-export').checked = false;
+                renderAdmin();
+                return;
+            } catch (error) {
+                console.error('API error, falling back to localStorage:', error);
+            }
+        }
+        
+        // FALLBACK: Local mode - use localStorage
+        const users = JSON.parse(localStorage.getItem('users') || '[]');
+        
         if (isEdit && users[editingUserIndex]) {
             const existing = users[editingUserIndex];
-            existing.username = u.value.trim();
-            existing.name = n.value.trim() || u.value.trim();
-            existing.role = r.value.trim() || 'tech';
+            existing.username = username;
+            existing.name = fullName;
+            existing.role = role;
             existing.permissions = permissions;
-            // Only update password if provided
-            if (p.value.trim()) {
-                existing.password = p.value.trim();
+            if (password) {
+                existing.password = password;
             }
         } else {
             users.push({ 
-                username: u.value.trim(), 
-                password: p.value.trim(), 
-                name: n.value.trim() || u.value.trim(), 
-                role: r.value.trim() || 'tech', 
+                username, 
+                password, 
+                name: fullName, 
+                role, 
                 active: true,
-                permissions: permissions
+                permissions
             });
         }
         

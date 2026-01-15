@@ -25,6 +25,28 @@ app.use('/api/tickets', ticketRoutes);
 app.use('/api/queues', queueRoutes);
 app.use('/api/users', userRoutes);
 
+// Helper endpoint to create initial test accounts (remove in production after setup)
+app.post('/api/setup/create-test-accounts', async (req, res) => {
+    try {
+        const bcrypt = require('bcrypt');
+        const db = require('./config/database');
+        
+        // Create test customer account
+        const customerPassword = await bcrypt.hash('customer123', 10);
+        await db.query(
+            `INSERT INTO users (username, email, password_hash, full_name, role) 
+             VALUES ($1, $2, $3, $4, $5) 
+             ON CONFLICT (username) DO NOTHING`,
+            ['customer', 'customer@secoticket.com', customerPassword, 'Test Customer', 'Customer']
+        );
+        
+        res.json({ message: 'Test accounts created successfully' });
+    } catch (error) {
+        console.error('Setup error:', error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
 // Serve HTML pages
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'views', 'index.html'));
@@ -52,6 +74,10 @@ app.get('/reports.html', (req, res) => {
 
 app.get('/queue-manager.html', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'views', 'queue-manager.html'));
+});
+
+app.get('/setup.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'views', 'setup.html'));
 });
 
 // Admin pages

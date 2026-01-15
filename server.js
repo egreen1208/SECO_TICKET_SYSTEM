@@ -25,9 +25,67 @@ app.use('/api/tickets', ticketRoutes);
 app.use('/api/queues', queueRoutes);
 app.use('/api/users', userRoutes);
 
-// Serve index.html for root route
+// Serve HTML pages
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'views', 'index.html'));
+});
+
+app.get('/tech-login.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'views', 'tech-login.html'));
+});
+
+app.get('/landing.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'views', 'landing.html'));
+});
+
+app.get('/home.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'views', 'home.html'));
+});
+
+app.get('/customer.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'views', 'customer.html'));
+});
+
+app.get('/reports.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'views', 'reports.html'));
+});
+
+app.get('/queue-manager.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'views', 'queue-manager.html'));
+});
+
+// Admin pages
+app.get('/admin-users.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'views', 'admin', 'admin-users.html'));
+});
+
+app.get('/admin-system.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'views', 'admin', 'admin-system.html'));
+});
+
+app.get('/admin.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'views', 'admin', 'admin.html'));
+});
+
+// Customer pages
+app.get('/customer-it.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'views', 'customer', 'customer-it.html'));
+});
+
+app.get('/customer-buildings.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'views', 'customer', 'customer-buildings.html'));
+});
+
+app.get('/customer-electrical.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'views', 'customer', 'customer-electrical.html'));
+});
+
+app.get('/customer-moves.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'views', 'customer', 'customer-moves.html'));
+});
+
+app.get('/customer-rma.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'views', 'customer', 'customer-rma.html'));
 });
 
 // Error handling middleware

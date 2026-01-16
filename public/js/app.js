@@ -2056,6 +2056,54 @@ function populateQueueDropdown(currentQueue) {
     });
 }
 
+// Populate queue dropdown with only accessible queues
+function populateAccessibleQueues() {
+    if (!newQueue) return;
+    
+    const allQueues = getActiveQueues();
+    const accessibleQueues = getAccessibleQueues();
+    
+    // Clear existing options
+    newQueue.innerHTML = '<option value="">Select queue...</option>';
+    
+    // Filter to only accessible queues and organize by parent/child
+    const mainQueues = allQueues.filter(q => !q.parentQueue && accessibleQueues.includes(q.id))
+                                .sort((a, b) => a.order - b.order);
+    
+    mainQueues.forEach(queue => {
+        // Add main queue
+        const option = document.createElement("option");
+        option.value = queue.id;
+        option.textContent = queue.name;
+        newQueue.appendChild(option);
+        
+        // Add sub-queues if accessible
+        const subQueues = allQueues.filter(sq => sq.parentQueue === queue.id && accessibleQueues.includes(sq.id))
+                                   .sort((a, b) => a.order - b.order);
+        
+        subQueues.forEach(subQueue => {
+            const subOption = document.createElement("option");
+            subOption.value = subQueue.id;
+            subOption.textContent = `  ${subQueue.name}`;
+            newQueue.appendChild(subOption);
+        });
+    });
+    
+    // Also add any accessible sub-queues whose parent isn't accessible
+    const orphanSubQueues = allQueues.filter(q => 
+        q.parentQueue && 
+        accessibleQueues.includes(q.id) && 
+        !accessibleQueues.includes(q.parentQueue)
+    ).sort((a, b) => a.order - b.order);
+    
+    orphanSubQueues.forEach(queue => {
+        const option = document.createElement("option");
+        option.value = queue.id;
+        option.textContent = queue.name;
+        newQueue.appendChild(option);
+    });
+}
+
 function getQueueCategories(queue) {
     const key = normalizeQueueKey(queue);
     return queueCategoryOptions[key] || null;
@@ -2553,6 +2601,7 @@ document.addEventListener("DOMContentLoaded", () => {
     initTextToolbar();
     initCommentPasteHandler();
     initAdminUserForm(); // Initialize admin user form auto-generation
+    populateAccessibleQueues(); // Populate queue dropdown with only accessible queues
     
     // Initialize sidebar toggle
     const sidebarElement = document.getElementById("sidebar");
@@ -2611,9 +2660,30 @@ if (newQueue) {
     });
 }
 
+// Modal queue select - update assigned to dropdown when queue changes
+if (modalQueueSelect) {
+    modalQueueSelect.addEventListener("change", () => {
+        updateAssignedToOptions(modalQueueSelect.value, modalAssignedSelect);
+    });
+}
+
 // Function to update Assigned To dropdown based on queue
 function updateAssignedToOptions(queueId, selectElement) {
-    if (!selectElement || !queueId) return;
+    if (!selectElement) return;
+    
+    // If no queue selected, show all techs/admins
+    if (!queueId) {
+        const users = JSON.parse(localStorage.getItem('users') || '[]');
+        const activeUsers = users.filter(u => u.active !== false && (u.role === 'tech' || u.role === 'admin' || u.role === 'Technician' || u.role === 'Admin'));
+        selectElement.innerHTML = '<option value="">Unassigned</option>';
+        activeUsers.forEach(user => {
+            const option = document.createElement('option');
+            option.value = user.username;
+            option.textContent = user.fullName || user.name || user.username;
+            selectElement.appendChild(option);
+        });
+        return;
+    }
     
     const assignableUsers = getUsersForQueue(queueId);
     selectElement.innerHTML = '<option value="">Unassigned</option>';
@@ -2637,6 +2707,11 @@ if (newCategory) {
 if (newQueue) {
     populateCategorySelect(newQueue.value || "it", newCategory, newSubcategory);
     renderCustomFields(newQueue.value || "it", "new-custom-fields-container");
+    
+    // Initialize assigned to dropdown based on default queue
+    if (newAssignedTo && newQueue.value) {
+        updateAssignedToOptions(newQueue.value, newAssignedTo);
+    }
 }
 
 // -------------------------------
@@ -4062,28 +4137,33 @@ function openTicketModal(ticket) {
         modalStatusSelect.value = ticket.status || "Open";
     }
     
-    // Populate assignee dropdown
+    // Populate assignee dropdown with users who have access to this queue
     if (modalAssignedSelect) {
-        const users = JSON.parse(localStorage.getItem('users') || '[]');
+        const assignableUsers = getUsersForQueue(ticket.queue);
         modalAssignedSelect.innerHTML = '<option value="">Unassigned</option>';
-        users.forEach(user => {
+        assignableUsers.forEach(user => {
             const option = document.createElement('option');
             option.value = user.username;
-            option.textContent = user.name || user.username;
+            option.textContent = user.fullName || user.name || user.username;
             modalAssignedSelect.appendChild(option);
         });
         modalAssignedSelect.value = ticket.assignedTo || "";
     }
     
-    // Populate queue dropdown
+    // Populate queue dropdown with only accessible queues
     if (modalQueueSelect) {
-        const queues = getActiveQueues();
+        const allQueues = getActiveQueues();
+        const accessibleQueues = getAccessibleQueues();
         modalQueueSelect.innerHTML = '';
-        queues.forEach(q => {
-            const option = document.createElement('option');
-            option.value = q.id;
-            option.textContent = `${q.icon || '📋'} ${q.name}`;
-            modalQueueSelect.appendChild(option);
+        
+        allQueues.forEach(q => {
+            // Only show queues the user has access to
+            if (accessibleQueues.includes(q.id)) {
+                const option = document.createElement('option');
+                option.value = q.id;
+                option.textContent = `${q.icon || '📋'} ${q.name}`;
+                modalQueueSelect.appendChild(option);
+            }
         });
         modalQueueSelect.value = ticket.queue || "it";
     }

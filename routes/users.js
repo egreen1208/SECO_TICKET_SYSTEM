@@ -8,7 +8,7 @@ const { authenticateToken, requireAdmin } = require('../middleware/auth');
 router.get('/', authenticateToken, async (req, res) => {
     try {
         const result = await db.query(
-            'SELECT id, username, email, full_name, role, is_active, created_at FROM users WHERE is_active = true ORDER BY full_name'
+            'SELECT id, username, email, full_name, role, is_active, require_password_change, created_at FROM users WHERE is_active = true ORDER BY full_name'
         );
         res.json(result.rows);
     } catch (error) {
@@ -21,7 +21,7 @@ router.get('/', authenticateToken, async (req, res) => {
 router.get('/:id', authenticateToken, async (req, res) => {
     try {
         const result = await db.query(
-            'SELECT id, username, email, full_name, role, is_active, created_at FROM users WHERE id = $1',
+            'SELECT id, username, email, full_name, role, is_active, require_password_change, created_at FROM users WHERE id = $1',
             [req.params.id]
         );
 
@@ -51,9 +51,9 @@ router.post('/create', authenticateToken, requireAdmin, async (req, res) => {
 
         // Insert user
         const result = await db.query(
-            `INSERT INTO users (username, email, password_hash, full_name, role) 
-             VALUES ($1, $2, $3, $4, $5) 
-             RETURNING id, username, email, full_name, role, created_at`,
+            `INSERT INTO users (username, email, password_hash, full_name, role, require_password_change) 
+             VALUES ($1, $2, $3, $4, $5, true) 
+             RETURNING id, username, email, full_name, role, require_password_change, created_at`,
             [username, email, passwordHash, fullName, role || 'User']
         );
 
@@ -98,11 +98,39 @@ router.put('/:id', authenticateToken, requireAdmin, async (req, res) => {
     }
 });
 
-// Reset password (ADMIN ONLY)
-router.post('/:id/reset-password', authenticateToken, requireAdmin, async (req, res) => {
+// Reset password (ADMIN ONLY) - by username
+router.post('/reset-password', authenticateToken, requireAdmin, async (req, res) => {
+    try {
+        const { username } = req.body;
+
+        if (!username) {
+            return res.status(400).json({ error: 'Username is required' });
+        }
+
+        // Reset to default password 'password123' and require password change
+        const passwordHash = await bcrypt.hash('password123', 10);
+
+        const result = await db.query(
+            'UPDATE users SET password_hash = $1, require_password_change = true WHERE username = $2 RETURNING id',
+            [passwordHash, username]
+        );
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        res.json({ message: 'Password reset successfully' });
+    } catch (error) {
+        console.error('Reset password error:', error);
+        res.status(500).json({ error: 'Server error' });
+    }
+});
+
+// Change password (authenticated user)
+router.post('/change-password', authenticateToken, async (req, res) => {
     try {
         const { newPassword } = req.body;
-        const userId = req.params.id;
+        const userId = req.user.id; // From JWT token
 
         if (!newPassword || newPassword.length < 6) {
             return res.status(400).json({ error: 'Password must be at least 6 characters' });
@@ -111,13 +139,13 @@ router.post('/:id/reset-password', authenticateToken, requireAdmin, async (req, 
         const passwordHash = await bcrypt.hash(newPassword, 10);
 
         await db.query(
-            'UPDATE users SET password_hash = $1 WHERE id = $2',
+            'UPDATE users SET password_hash = $1, require_password_change = false WHERE id = $2',
             [passwordHash, userId]
         );
 
-        res.json({ message: 'Password reset successfully' });
+        res.json({ message: 'Password changed successfully' });
     } catch (error) {
-        console.error('Reset password error:', error);
+        console.error('Change password error:', error);
         res.status(500).json({ error: 'Server error' });
     }
 });

@@ -41,7 +41,8 @@ router.post('/login', async (req, res) => {
                 username: user.username,
                 email: user.email,
                 fullName: user.full_name,
-                role: user.role
+                role: user.role,
+                requirePasswordChange: user.require_password_change || false
             }
         });
     } catch (error) {

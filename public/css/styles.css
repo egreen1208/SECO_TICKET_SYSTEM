@@ -1737,6 +1737,8 @@ body.dark-mode .ticket-controls .control-label {
     cursor: pointer;
     transition: all 0.2s ease;
     min-width: 120px;
+    max-width: 200px;
+    width: 200px;
     box-shadow: 0 2px 4px rgba(0, 84, 166, 0.1);
 }
 

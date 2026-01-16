@@ -3411,7 +3411,11 @@ function renderReports(){
     const byQueue = {};
     const byPriority = {};
     let totalTime = 0;
-    tickets.forEach(t => {
+    
+    // Filter tickets to only include those from accessible queues
+    const accessibleTickets = tickets.filter(t => hasQueueAccess(t.queue));
+    
+    accessibleTickets.forEach(t => {
         byStatus[t.status] = (byStatus[t.status] || 0) + 1;
         byQueue[t.queue] = (byQueue[t.queue] || 0) + 1;
         byPriority[t.priority] = (byPriority[t.priority] || 0) + 1;
@@ -3434,8 +3438,11 @@ function renderReports(){
 }
 
 function exportTicketsCSV(){
+    // Filter tickets to only include those from accessible queues
+    const accessibleTickets = tickets.filter(t => hasQueueAccess(t.queue));
+    
     const headers = ['id','title','createdDate','queue','status','assignedTo','priority','requesterName','location','totalTime'];
-    const rows = tickets.map(t => {
+    const rows = accessibleTickets.map(t => {
         const baseData = headers.slice(0, -1).map(h => `"${(t[h]||'').toString().replace(/"/g,'""')}"`).join(',');
         const timeVal = `"${formatMinutes(getTotalMinutes(t))}"`;
         return baseData + ',' + timeVal;
@@ -3473,7 +3480,16 @@ async function renderAdmin(){
             });
             
             if (response.ok) {
-                users = await response.json();
+                const rawUsers = await response.json();
+                // Map snake_case to camelCase for consistency
+                users = rawUsers.map(u => ({
+                    ...u,
+                    fullName: u.full_name || u.fullName,
+                    isActive: u.is_active !== undefined ? u.is_active : u.active,
+                    active: u.is_active !== undefined ? u.is_active : u.active,
+                    requirePasswordChange: u.require_password_change || u.requirePasswordChange || false,
+                    createdAt: u.created_at || u.createdAt
+                }));
             } else {
                 // Fallback to localStorage
                 users = JSON.parse(localStorage.getItem('users') || '[]');
@@ -4129,6 +4145,12 @@ newTicketForm.addEventListener("submit", e => {
 // OPEN TICKET DETAIL MODAL
 // -------------------------------
 function openTicketModal(ticket) {
+    // Security check: Prevent opening tickets from queues user doesn't have access to
+    if (!hasQueueAccess(ticket.queue)) {
+        alert('You do not have permission to view tickets from this queue.');
+        return;
+    }
+    
     document.getElementById("modal-title").textContent = ticket.title;
     document.getElementById("modal-id").textContent = `Ticket ID: ${ticket.id}`;
     
@@ -4476,8 +4498,16 @@ function updateTickets() {
 
     ticketHeader.textContent = `Tickets — ${formattedQueue}`;
 
+    // Get user's accessible queues
+    const accessibleQueues = getAccessibleQueues();
+
     // FILTERING
     let filtered = tickets.filter(t => {
+        // First check: User must have access to the ticket's queue
+        if (!hasQueueAccess(t.queue)) {
+            return false;
+        }
+
         // Queue matching: if IT parent queue is selected, match all IT sub-queues
         let queueMatch;
         if (selectedQueue === 'it') {

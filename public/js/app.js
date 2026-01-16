@@ -1870,6 +1870,35 @@ function getAccessibleQueues() {
     return queues;
 }
 
+// Get users who have access to a specific queue
+function getUsersForQueue(queueId) {
+    const users = JSON.parse(localStorage.getItem('users') || '[]');
+    const activeUsers = users.filter(u => u.active !== false && (u.role === 'tech' || u.role === 'admin' || u.role === 'Technician' || u.role === 'Admin'));
+    
+    return activeUsers.filter(user => {
+        const permissions = user.permissions || {};
+        const userQueues = permissions.queues || [];
+        
+        // Admins have access to all queues
+        if (userQueues.includes('*') || user.role === 'admin' || user.role === 'Admin') {
+            return true;
+        }
+        
+        // Check if user has access to this specific queue
+        if (userQueues.includes(queueId)) {
+            return true;
+        }
+        
+        // Check if user has access to parent queue
+        const queueObj = getQueueById(queueId);
+        if (queueObj && queueObj.parentQueue && userQueues.includes(queueObj.parentQueue)) {
+            return true;
+        }
+        
+        return false;
+    });
+}
+
 const currentUserDisplay = document.getElementById("current-user-display");
 if (currentUserDisplay) {
     currentUserDisplay.textContent = currentUser;
@@ -2578,6 +2607,23 @@ if (newQueue) {
     newQueue.addEventListener("change", () => {
         populateCategorySelect(newQueue.value, newCategory, newSubcategory);
         renderCustomFields(newQueue.value, "new-custom-fields-container");
+        updateAssignedToOptions(newQueue.value, newAssignedTo);
+    });
+}
+
+// Function to update Assigned To dropdown based on queue
+function updateAssignedToOptions(queueId, selectElement) {
+    if (!selectElement || !queueId) return;
+    
+    const assignableUsers = getUsersForQueue(queueId);
+    selectElement.innerHTML = '<option value="">Unassigned</option>';
+    
+    assignableUsers.forEach(user => {
+        const displayName = user.fullName || user.name || user.username;
+        const option = document.createElement('option');
+        option.value = displayName;
+        option.textContent = displayName;
+        selectElement.appendChild(option);
     });
 }
 
@@ -3371,72 +3417,163 @@ async function renderAdmin(){
         listEl.innerHTML = '<div>No users found.</div>';
         return;
     }
-    const rows = users.map((u, idx) => {
-        const queues = u.permissions && u.permissions.queues ? u.permissions.queues.join(', ') : 'None';
+    
+    // Create scrollable user list
+    const userListContainer = document.createElement('div');
+    userListContainer.style.cssText = 'display: flex; gap: 20px; margin-top: 12px;';
+    
+    // Left side: Scrollable user list
+    const userListDiv = document.createElement('div');
+    userListDiv.style.cssText = 'flex: 0 0 300px; max-height: 500px; overflow-y: auto; border: 1px solid #e0e0e0; border-radius: 8px; background: white;';
+    
+    users.forEach((u, idx) => {
+        const isActive = u.active !== false;
         const displayName = u.fullName || u.name || u.username || 'Unknown';
-        const displayEmail = u.email || 'No email';
-        const displayDepartment = u.department || 'Not specified';
         
-        return `
-        <div class="admin-user-row" data-idx="${idx}" style="display:flex;align-items:center;gap:12px;padding:8px;border-bottom:1px solid #eee;">
-            <div style="flex:1;">
-                <strong>${displayName}</strong> 
-                <div style="font-size:0.85rem;color:#666">${u.username} • ${u.role}</div>
-                <div style="font-size:0.8rem;color:#888;margin-top:4px;">Email: ${displayEmail} | Department: ${displayDepartment}</div>
-                <div style="font-size:0.8rem;color:#888;margin-top:4px;">Queues: ${queues}</div>
-            </div>
-            <div style="display:flex;flex-wrap:wrap;gap:6px;">
-                <button class="btn-secondary admin-edit-user" data-idx="${idx}">Edit</button>
-                <button class="btn-secondary admin-reset-password" data-idx="${idx}" data-username="${u.username}">Reset Password</button>
-                <button class="btn-secondary admin-delete-user" data-idx="${idx}">Delete</button>
-                <button class="btn-secondary admin-toggle-active">${u.active ? 'Deactivate' : 'Activate'}</button>
-            </div>
-        </div>
-    `;
-    }).join('');
-    listEl.innerHTML = rows;
-
-    listEl.querySelectorAll('.admin-toggle-active').forEach((btn,i) => {
-        btn.addEventListener('click', () => {
-            users[i].active = !users[i].active;
-            localStorage.setItem('users', JSON.stringify(users));
-            renderAdmin();
+        const userItem = document.createElement('div');
+        userItem.className = 'user-list-item';
+        userItem.dataset.idx = idx;
+        userItem.style.cssText = 'padding: 12px; border-bottom: 1px solid #f0f0f0; cursor: pointer; transition: background 0.2s;';
+        userItem.innerHTML = `
+            <div style="font-weight: 500; color: ${isActive ? '#333' : '#999'};">${u.username}</div>
+            <div style="font-size: 0.85rem; color: #666; margin-top: 4px;">${displayName} • ${u.role}</div>
+            <div style="font-size: 0.75rem; color: ${isActive ? '#28a745' : '#dc3545'}; margin-top: 4px;">${isActive ? '● Active' : '● Inactive'}</div>
+        `;
+        
+        userItem.addEventListener('mouseenter', () => {
+            userItem.style.background = '#f5f5f5';
         });
+        
+        userItem.addEventListener('mouseleave', () => {
+            if (!userItem.classList.contains('selected')) {
+                userItem.style.background = 'white';
+            }
+        });
+        
+        userItem.addEventListener('click', () => {
+            document.querySelectorAll('.user-list-item').forEach(item => {
+                item.classList.remove('selected');
+                item.style.background = 'white';
+            });
+            userItem.classList.add('selected');
+            userItem.style.background = '#e3f2fd';
+            showUserDetails(u, idx);
+        });
+        
+        userListDiv.appendChild(userItem);
     });
+    
+    // Right side: User details panel
+    const detailsDiv = document.createElement('div');
+    detailsDiv.id = 'user-details-panel';
+    detailsDiv.style.cssText = 'flex: 1; padding: 20px; border: 1px solid #e0e0e0; border-radius: 8px; background: white; min-height: 500px;';
+    detailsDiv.innerHTML = '<div style="color: #999; text-align: center; padding-top: 100px;">Select a user to view details</div>';
+    
+    userListContainer.appendChild(userListDiv);
+    userListContainer.appendChild(detailsDiv);
+    listEl.innerHTML = '';
+    listEl.appendChild(userListContainer);
+    
+    // Function to show user details
+    function showUserDetails(user, idx) {
+        const detailsPanel = document.getElementById('user-details-panel');
+        const queues = user.permissions && user.permissions.queues ? user.permissions.queues.join(', ') : 'None';
+        const isActive = user.active !== false;
+        const displayName = user.fullName || user.name || user.username || 'Unknown';
+        const displayEmail = user.email || 'No email';
+        const displayDepartment = user.department || 'Not specified';
+        const displayPhone = user.phone || 'Not specified';
+        
+        detailsPanel.innerHTML = `
+            <h3 style="margin-top: 0; color: #333;">${displayName}</h3>
+            <div style="background: #f8f9fa; padding: 16px; border-radius: 8px; margin-bottom: 20px;">
+                <div style="margin-bottom: 12px;">
+                    <strong>Username:</strong> ${user.username}
+                </div>
+                <div style="margin-bottom: 12px;">
+                    <strong>Email:</strong> ${displayEmail}
+                </div>
+                <div style="margin-bottom: 12px;">
+                    <strong>Role:</strong> ${user.role}
+                </div>
+                <div style="margin-bottom: 12px;">
+                    <strong>Department:</strong> ${displayDepartment}
+                </div>
+                <div style="margin-bottom: 12px;">
+                    <strong>Phone:</strong> ${displayPhone}
+                </div>
+                <div style="margin-bottom: 12px;">
+                    <strong>Status:</strong> <span style="color: ${isActive ? '#28a745' : '#dc3545'}; font-weight: 500;">${isActive ? 'Active' : 'Inactive'}</span>
+                </div>
+                <div>
+                    <strong>Queue Access:</strong>
+                    <div style="margin-top: 8px; color: #666;">${queues}</div>
+                </div>
+            </div>
+            
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                <button class="btn-primary admin-edit-user" data-idx="${idx}">Edit User</button>
+                <button class="btn-secondary admin-reset-password" data-idx="${idx}" data-username="${user.username}">Reset Password</button>
+                <button class="btn-secondary admin-toggle-active" data-idx="${idx}">${isActive ? 'Deactivate' : 'Activate'}</button>
+                <button class="btn-secondary admin-delete-user" data-idx="${idx}" style="background: #dc3545; color: white;">Delete User</button>
+            </div>
+        `;
+        
+        // Reattach event listeners for buttons in details panel
+        attachUserActionListeners(detailsPanel, users);
+    }
+    
+    // Attach event listeners for user action buttons
+    function attachUserActionListeners(container, users) {
+        container.querySelectorAll('.admin-toggle-active').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const idx = parseInt(btn.dataset.idx, 10);
+                if (!Number.isInteger(idx)) return;
+                
+                // Default to active if field is missing
+                if (users[idx].active === undefined) {
+                    users[idx].active = true;
+                }
+                
+                users[idx].active = !users[idx].active;
+                localStorage.setItem('users', JSON.stringify(users));
+                renderAdmin();
+            });
+        });
 
-    listEl.querySelectorAll('.admin-edit-user').forEach(btn => {
-        btn.addEventListener('click', () => {
-            const idx = parseInt(btn.dataset.idx, 10);
-            const user = users[idx];
-            if (!user) return;
-            
-            const firstName = document.getElementById('admin-new-firstname');
-            const lastName = document.getElementById('admin-new-lastname');
-            const u = document.getElementById('admin-new-username');
-            const p = document.getElementById('admin-new-password');
-            const pc = document.getElementById('admin-new-password-confirm');
-            const e = document.getElementById('admin-new-email');
-            const d = document.getElementById('admin-new-department');
-            const ph = document.getElementById('admin-new-phone');
-            const r = document.getElementById('admin-new-role');
-            
-            if (!u || !p || !r) return;
-            
-            // Split full name into first and last name
-            const fullName = user.fullName || user.name || '';
-            const nameParts = fullName.split(' ');
-            const userFirstName = nameParts[0] || '';
-            const userLastName = nameParts.slice(1).join(' ') || '';
-            
-            if (firstName) firstName.value = userFirstName;
-            if (lastName) lastName.value = userLastName;
-            u.value = user.username || '';
-            p.value = '';
-            if (pc) pc.value = '';
-            if (e) e.value = user.email || '';
-            if (d) d.value = user.department || 'it';
-            if (ph) ph.value = user.phone || '';
-            r.value = user.role || 'tech';
+        container.querySelectorAll('.admin-edit-user').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const idx = parseInt(btn.dataset.idx, 10);
+                const user = users[idx];
+                if (!user) return;
+                
+                const firstName = document.getElementById('admin-new-firstname');
+                const lastName = document.getElementById('admin-new-lastname');
+                const u = document.getElementById('admin-new-username');
+                const p = document.getElementById('admin-new-password');
+                const pc = document.getElementById('admin-new-password-confirm');
+                const e = document.getElementById('admin-new-email');
+                const d = document.getElementById('admin-new-department');
+                const ph = document.getElementById('admin-new-phone');
+                const r = document.getElementById('admin-new-role');
+                
+                if (!u || !p || !r) return;
+                
+                // Split full name into first and last name
+                const fullName = user.fullName || user.name || '';
+                const nameParts = fullName.split(' ');
+                const userFirstName = nameParts[0] || '';
+                const userLastName = nameParts.slice(1).join(' ') || '';
+                
+                if (firstName) firstName.value = userFirstName;
+                if (lastName) lastName.value = userLastName;
+                u.value = user.username || '';
+                p.value = '';
+                if (pc) pc.value = '';
+                if (e) e.value = user.email || '';
+                if (d) d.value = user.department || 'it';
+                if (ph) ph.value = user.phone || '';
+                r.value = user.role || 'tech';
 
             // set queues
             const queueCheckboxes = document.querySelectorAll('.admin-new-queue-checkbox');
@@ -3459,65 +3596,66 @@ async function renderAdmin(){
             editingUserIndex = idx;
             adminAddBtn.textContent = 'Save Changes';
             window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
         });
-    });
 
-    listEl.querySelectorAll('.admin-delete-user').forEach(btn => {
-        btn.addEventListener('click', () => {
-            const idx = parseInt(btn.dataset.idx, 10);
-            if (!Number.isInteger(idx)) return;
-            if (!confirm('Delete this user?')) return;
-            users.splice(idx, 1);
-            localStorage.setItem('users', JSON.stringify(users));
-            renderAdmin();
-        });
-    });
-
-    listEl.querySelectorAll('.admin-reset-password').forEach(btn => {
-        btn.addEventListener('click', async () => {
-            const idx = parseInt(btn.dataset.idx, 10);
-            const username = btn.dataset.username;
-            const user = users[idx];
-            
-            if (!user) return;
-            if (!confirm(`Are you sure you want to reset the password for ${user.fullName || user.username}?\n\nThe password will be reset to "password123" and they will be required to change it on next login.`)) return;
-            
-            // Try to reset password via API (production mode)
-            const authToken = localStorage.getItem('authToken');
-            if (authToken && window.location.protocol !== 'file:') {
-                try {
-                    const response = await fetch('/api/users/reset-password', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': `Bearer ${authToken}`
-                        },
-                        body: JSON.stringify({
-                            username: username
-                        })
-                    });
-                    
-                    if (response.ok) {
-                        alert('Password reset successfully. User will be prompted to change password on next login.');
-                        renderAdmin();
-                    } else {
-                        const error = await response.json();
-                        alert('Failed to reset password: ' + (error.error || 'Unknown error'));
-                    }
-                } catch (error) {
-                    console.error('Password reset error:', error);
-                    alert('Failed to reset password. Please try again.');
-                }
-            } else {
-                // Local mode - update localStorage
-                user.password = 'password123'; // This would need to be hashed in real implementation
-                user.requirePasswordChange = true;
+        container.querySelectorAll('.admin-delete-user').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const idx = parseInt(btn.dataset.idx, 10);
+                if (!Number.isInteger(idx)) return;
+                if (!confirm('Delete this user?')) return;
+                users.splice(idx, 1);
                 localStorage.setItem('users', JSON.stringify(users));
-                alert('Password reset successfully. User will be prompted to change password on next login.');
                 renderAdmin();
-            }
+            });
         });
-    });
+
+        container.querySelectorAll('.admin-reset-password').forEach(btn => {
+            btn.addEventListener('click', async () => {
+                const idx = parseInt(btn.dataset.idx, 10);
+                const username = btn.dataset.username;
+                const user = users[idx];
+                
+                if (!user) return;
+                if (!confirm(`Are you sure you want to reset the password for ${user.fullName || user.username}?\n\nThe password will be reset to "password123" and they will be required to change it on next login.`)) return;
+                
+                // Try to reset password via API (production mode)
+                const authToken = localStorage.getItem('authToken');
+                if (authToken && window.location.protocol !== 'file:') {
+                    try {
+                        const response = await fetch('/api/users/reset-password', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${authToken}`
+                            },
+                            body: JSON.stringify({
+                                username: username
+                            })
+                        });
+                    
+                        if (response.ok) {
+                            alert('Password reset successfully. User will be prompted to change password on next login.');
+                            renderAdmin();
+                        } else {
+                            const error = await response.json();
+                            alert('Failed to reset password: ' + (error.error || 'Unknown error'));
+                        }
+                    } catch (error) {
+                        console.error('Password reset error:', error);
+                        alert('Failed to reset password. Please try again.');
+                    }
+                } else {
+                    // Local mode - update localStorage
+                    user.password = 'password123'; // This would need to be hashed in real implementation
+                    user.requirePasswordChange = true;
+                    localStorage.setItem('users', JSON.stringify(users));
+                    alert('Password reset successfully. User will be prompted to change password on next login.');
+                    renderAdmin();
+                }
+            });
+        });
+    }
 }
 
 function renderAdminQueueCheckboxes() {

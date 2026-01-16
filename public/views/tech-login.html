@@ -208,6 +208,47 @@
                     localStorage.setItem("currentUsername", data.user.username);
                     localStorage.setItem("currentUserId", data.user.id);
 
+                    // Check if password change is required
+                    if (data.user.requirePasswordChange) {
+                        const newPassword = prompt("For security reasons, you must change your password.\n\nEnter new password:");
+                        if (!newPassword || newPassword.length < 6) {
+                            alert("Password must be at least 6 characters. Please try logging in again.");
+                            localStorage.removeItem("authToken");
+                            techLoginBtn.disabled = false;
+                            techLoginBtn.textContent = "Log In";
+                            return;
+                        }
+                        
+                        const confirmPassword = prompt("Confirm new password:");
+                        if (newPassword !== confirmPassword) {
+                            alert("Passwords do not match. Please try logging in again.");
+                            localStorage.removeItem("authToken");
+                            techLoginBtn.disabled = false;
+                            techLoginBtn.textContent = "Log In";
+                            return;
+                        }
+                        
+                        // Update password via API
+                        try {
+                            const updateResponse = await fetch('/api/users/change-password', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'Authorization': `Bearer ${data.token}`
+                                },
+                                body: JSON.stringify({
+                                    newPassword: newPassword
+                                })
+                            });
+                            
+                            if (!updateResponse.ok) {
+                                alert("Failed to update password. Please contact administrator.");
+                            }
+                        } catch (err) {
+                            console.error("Password update error:", err);
+                        }
+                    }
+
                     // Redirect to staff dashboard
                     window.location.href = "./home.html";
 

@@ -63,10 +63,20 @@
                 <div class="admin-section">
                     <h4 style="margin-top:12px;">Add New User</h4>
                     <div class="form-grid">
-                        <label>Username <input type="text" id="admin-new-username"></label>
-                        <label>Password <input type="password" id="admin-new-password"></label>
-                        <label>Name <input type="text" id="admin-new-name"></label>
-                        <label>Email <input type="email" id="admin-new-email"></label>
+                        <label>First Name <input type="text" id="admin-new-firstname" placeholder="John"></label>
+                        <label>Last Name <input type="text" id="admin-new-lastname" placeholder="Doe"></label>
+                        <label>Username (auto-generated) <input type="text" id="admin-new-username" readonly style="background: #f5f5f5;"></label>
+                        <label>Email (auto-generated) <input type="email" id="admin-new-email" readonly style="background: #f5f5f5;"></label>
+                        <label style="position: relative;">
+                            Password 
+                            <input type="password" id="admin-new-password" placeholder="password123">
+                            <button type="button" id="admin-toggle-password" style="position: absolute; right: 10px; bottom: 10px; background: none; border: none; cursor: pointer; font-size: 1.2rem;" title="Toggle password visibility">👁️</button>
+                        </label>
+                        <label style="position: relative;">
+                            Confirm Password 
+                            <input type="password" id="admin-new-password-confirm" placeholder="password123">
+                            <button type="button" id="admin-toggle-password-confirm" style="position: absolute; right: 10px; bottom: 10px; background: none; border: none; cursor: pointer; font-size: 1.2rem;" title="Toggle password visibility">👁️</button>
+                        </label>
                         <label>Department
                             <select id="admin-new-department">
                                 <option value="it">Information Technology</option>

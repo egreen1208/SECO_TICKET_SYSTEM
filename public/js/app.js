@@ -2448,6 +2448,72 @@ function initSidebarDropdown(){
     });
 }
 
+// -------------------------------
+// ADMIN USER FORM HELPERS
+// -------------------------------
+function initAdminUserForm() {
+    const firstNameInput = document.getElementById('admin-new-firstname');
+    const lastNameInput = document.getElementById('admin-new-lastname');
+    const usernameInput = document.getElementById('admin-new-username');
+    const emailInput = document.getElementById('admin-new-email');
+    const passwordInput = document.getElementById('admin-new-password');
+    const passwordConfirmInput = document.getElementById('admin-new-password-confirm');
+    const togglePasswordBtn = document.getElementById('admin-toggle-password');
+    const togglePasswordConfirmBtn = document.getElementById('admin-toggle-password-confirm');
+    
+    // Auto-generate username and email from first and last name
+    function updateUsernameAndEmail() {
+        if (!firstNameInput || !lastNameInput || !usernameInput || !emailInput) return;
+        
+        const firstName = firstNameInput.value.trim().toLowerCase();
+        const lastName = lastNameInput.value.trim().toLowerCase();
+        
+        if (firstName && lastName) {
+            const username = `${firstName}.${lastName}`;
+            const email = `${firstName}.${lastName}@secoenergy.com`;
+            
+            usernameInput.value = username;
+            emailInput.value = email;
+        } else {
+            usernameInput.value = '';
+            emailInput.value = '';
+        }
+    }
+    
+    if (firstNameInput) {
+        firstNameInput.addEventListener('input', updateUsernameAndEmail);
+    }
+    
+    if (lastNameInput) {
+        lastNameInput.addEventListener('input', updateUsernameAndEmail);
+    }
+    
+    // Default password to password123
+    if (passwordInput && !passwordInput.value) {
+        passwordInput.value = 'password123';
+    }
+    if (passwordConfirmInput && !passwordConfirmInput.value) {
+        passwordConfirmInput.value = 'password123';
+    }
+    
+    // Password visibility toggle
+    if (togglePasswordBtn && passwordInput) {
+        togglePasswordBtn.addEventListener('click', () => {
+            const type = passwordInput.type === 'password' ? 'text' : 'password';
+            passwordInput.type = type;
+            togglePasswordBtn.textContent = type === 'password' ? '👁️' : '🙈';
+        });
+    }
+    
+    if (togglePasswordConfirmBtn && passwordConfirmInput) {
+        togglePasswordConfirmBtn.addEventListener('click', () => {
+            const type = passwordConfirmInput.type === 'password' ? 'text' : 'password';
+            passwordConfirmInput.type = type;
+            togglePasswordConfirmBtn.textContent = type === 'password' ? '👁️' : '🙈';
+        });
+    }
+}
+
 // Render queue buttons on load
 document.addEventListener("DOMContentLoaded", () => {
     const queueConfig = getQueueConfig();
@@ -2457,6 +2523,7 @@ document.addEventListener("DOMContentLoaded", () => {
     initSidebarDropdown();
     initTextToolbar();
     initCommentPasteHandler();
+    initAdminUserForm(); // Initialize admin user form auto-generation
     
     // Initialize sidebar toggle
     const sidebarElement = document.getElementById("sidebar");
@@ -3306,16 +3373,24 @@ async function renderAdmin(){
     }
     const rows = users.map((u, idx) => {
         const queues = u.permissions && u.permissions.queues ? u.permissions.queues.join(', ') : 'None';
+        const displayName = u.fullName || u.name || u.username || 'Unknown';
+        const displayEmail = u.email || 'No email';
+        const displayDepartment = u.department || 'Not specified';
+        
         return `
         <div class="admin-user-row" data-idx="${idx}" style="display:flex;align-items:center;gap:12px;padding:8px;border-bottom:1px solid #eee;">
             <div style="flex:1;">
-                <strong>${u.name}</strong> 
+                <strong>${displayName}</strong> 
                 <div style="font-size:0.85rem;color:#666">${u.username} • ${u.role}</div>
+                <div style="font-size:0.8rem;color:#888;margin-top:4px;">Email: ${displayEmail} | Department: ${displayDepartment}</div>
                 <div style="font-size:0.8rem;color:#888;margin-top:4px;">Queues: ${queues}</div>
             </div>
-            <div>
-                <button class="btn-secondary admin-edit-user" data-idx="${idx}" style="margin-right:6px;">Edit</button>
-                <button class="btn-secondary admin-delete-user" data-idx="${idx}" style="margin-right:6px;">Delete</button>
+            <div style="display:flex;flex-wrap:wrap;gap:6px;">
+                <button class="btn-secondary admin-edit-user" data-idx="${idx}">Edit</button>
+                <button class="btn-secondary admin-reset-password" data-idx="${idx}" data-username="${u.username}">Reset Password</button>
+                <button class="btn-secondary admin-delete-user" data-idx="${idx}">Delete</button>
+                <button class="btn-secondary admin-toggle-active">${u.active ? 'Deactivate' : 'Activate'}</button>
+            </div>
                 <button class="btn-secondary admin-toggle-active">${u.active ? 'Deactivate' : 'Activate'}</button>
             </div>
         </div>
@@ -3336,14 +3411,33 @@ async function renderAdmin(){
             const idx = parseInt(btn.dataset.idx, 10);
             const user = users[idx];
             if (!user) return;
+            
+            const firstName = document.getElementById('admin-new-firstname');
+            const lastName = document.getElementById('admin-new-lastname');
             const u = document.getElementById('admin-new-username');
             const p = document.getElementById('admin-new-password');
-            const n = document.getElementById('admin-new-name');
+            const pc = document.getElementById('admin-new-password-confirm');
+            const e = document.getElementById('admin-new-email');
+            const d = document.getElementById('admin-new-department');
+            const ph = document.getElementById('admin-new-phone');
             const r = document.getElementById('admin-new-role');
-            if (!u || !p || !n || !r) return;
+            
+            if (!u || !p || !r) return;
+            
+            // Split full name into first and last name
+            const fullName = user.fullName || user.name || '';
+            const nameParts = fullName.split(' ');
+            const userFirstName = nameParts[0] || '';
+            const userLastName = nameParts.slice(1).join(' ') || '';
+            
+            if (firstName) firstName.value = userFirstName;
+            if (lastName) lastName.value = userLastName;
             u.value = user.username || '';
             p.value = '';
-            n.value = user.name || '';
+            if (pc) pc.value = '';
+            if (e) e.value = user.email || '';
+            if (d) d.value = user.department || 'it';
+            if (ph) ph.value = user.phone || '';
             r.value = user.role || 'tech';
 
             // set queues
@@ -3378,6 +3472,52 @@ async function renderAdmin(){
             users.splice(idx, 1);
             localStorage.setItem('users', JSON.stringify(users));
             renderAdmin();
+        });
+    });
+
+    listEl.querySelectorAll('.admin-reset-password').forEach(btn => {
+        btn.addEventListener('click', async () => {
+            const idx = parseInt(btn.dataset.idx, 10);
+            const username = btn.dataset.username;
+            const user = users[idx];
+            
+            if (!user) return;
+            if (!confirm(`Are you sure you want to reset the password for ${user.fullName || user.username}?\n\nThe password will be reset to "password123" and they will be required to change it on next login.`)) return;
+            
+            // Try to reset password via API (production mode)
+            const authToken = localStorage.getItem('authToken');
+            if (authToken && window.location.protocol !== 'file:') {
+                try {
+                    const response = await fetch('/api/users/reset-password', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${authToken}`
+                        },
+                        body: JSON.stringify({
+                            username: username
+                        })
+                    });
+                    
+                    if (response.ok) {
+                        alert('Password reset successfully. User will be prompted to change password on next login.');
+                        renderAdmin();
+                    } else {
+                        const error = await response.json();
+                        alert('Failed to reset password: ' + (error.error || 'Unknown error'));
+                    }
+                } catch (error) {
+                    console.error('Password reset error:', error);
+                    alert('Failed to reset password. Please try again.');
+                }
+            } else {
+                // Local mode - update localStorage
+                user.password = 'password123'; // This would need to be hashed in real implementation
+                user.requirePasswordChange = true;
+                localStorage.setItem('users', JSON.stringify(users));
+                alert('Password reset successfully. User will be prompted to change password on next login.');
+                renderAdmin();
+            }
         });
     });
 }
@@ -3505,20 +3645,34 @@ if (adminRoleSelect) {
 
 if(adminAddBtn){
     adminAddBtn.addEventListener('click', async () => {
+        const firstName = document.getElementById('admin-new-firstname');
+        const lastName = document.getElementById('admin-new-lastname');
         const u = document.getElementById('admin-new-username');
         const p = document.getElementById('admin-new-password');
-        const n = document.getElementById('admin-new-name');
+        const pc = document.getElementById('admin-new-password-confirm');
         const r = document.getElementById('admin-new-role');
-        if(!u || !p || !n || !r) return;
+        
+        if(!firstName || !lastName || !u || !p || !r) return;
         
         const isEdit = editingUserIndex !== null;
+        
+        // Validation
+        if(!firstName.value.trim()) { alert('First name required'); return; }
+        if(!lastName.value.trim()) { alert('Last name required'); return; }
         if(!u.value.trim()) { alert('Username required'); return; }
         if(!isEdit && !p.value.trim()) { alert('Password required'); return; }
+        if(!isEdit && pc && p.value !== pc.value) { 
+            alert('Passwords do not match'); 
+            return; 
+        }
         
         const username = u.value.trim();
-        const password = p.value.trim();
-        const fullName = n.value.trim() || username;
+        const password = p.value.trim() || 'password123';
+        const fullName = `${firstName.value.trim()} ${lastName.value.trim()}`;
         const role = r.value.trim() || 'tech';
+        const email = document.getElementById('admin-new-email')?.value.trim() || '';
+        const department = document.getElementById('admin-new-department')?.value.trim() || 'it';
+        const phone = document.getElementById('admin-new-phone')?.value.trim() || '';
         
         // Collect queue assignments
         const queueCheckboxes = document.querySelectorAll('.admin-new-queue-checkbox');
@@ -3555,9 +3709,12 @@ if(adminAddBtn){
                     body: JSON.stringify({
                         username,
                         password,
-                        email: username + '@secoticket.com',
+                        email: email || username + '@secoenergy.com',
                         fullName,
-                        role
+                        department,
+                        phone,
+                        role,
+                        requirePasswordChange: true // Force password change on first login
                     })
                 });
                 

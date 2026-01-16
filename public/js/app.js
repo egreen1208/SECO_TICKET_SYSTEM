@@ -3361,6 +3361,8 @@ async function renderAdmin(){
             document.getElementById('admin-new-can-delete').checked = !!perms.canDeleteTickets;
             document.getElementById('admin-new-can-reports').checked = !!perms.canViewReports;
             document.getElementById('admin-new-can-export').checked = !!perms.canExportData;
+            document.getElementById('admin-new-can-manage-users').checked = !!perms.canManageUsers;
+            document.getElementById('admin-new-can-manage-queues').checked = !!perms.canManageQueues;
 
             editingUserIndex = idx;
             adminAddBtn.textContent = 'Save Changes';
@@ -3448,6 +3450,8 @@ if (adminRoleSelect) {
                 canDelete: true,
                 canReports: true,
                 canExport: true,
+                canManageUsers: true,
+                canManageQueues: true,
                 allQueues: true
             },
             tech: {
@@ -3456,6 +3460,8 @@ if (adminRoleSelect) {
                 canDelete: false,
                 canReports: true,
                 canExport: false,
+                canManageUsers: false,
+                canManageQueues: false,
                 allQueues: false
             },
             Customer: {
@@ -3464,6 +3470,8 @@ if (adminRoleSelect) {
                 canDelete: false,
                 canReports: false,
                 canExport: false,
+                canManageUsers: false,
+                canManageQueues: false,
                 allQueues: false
             }
         };
@@ -3476,12 +3484,16 @@ if (adminRoleSelect) {
         const deleteCheckbox = document.getElementById('admin-new-can-delete');
         const reportsCheckbox = document.getElementById('admin-new-can-reports');
         const exportCheckbox = document.getElementById('admin-new-can-export');
+        const manageUsersCheckbox = document.getElementById('admin-new-can-manage-users');
+        const manageQueuesCheckbox = document.getElementById('admin-new-can-manage-queues');
         
         if (createCheckbox) createCheckbox.checked = permissions.canCreate;
         if (editCheckbox) editCheckbox.checked = permissions.canEdit;
         if (deleteCheckbox) deleteCheckbox.checked = permissions.canDelete;
         if (reportsCheckbox) reportsCheckbox.checked = permissions.canReports;
         if (exportCheckbox) exportCheckbox.checked = permissions.canExport;
+        if (manageUsersCheckbox) manageUsersCheckbox.checked = permissions.canManageUsers;
+        if (manageQueuesCheckbox) manageQueuesCheckbox.checked = permissions.canManageQueues;
         
         // Set queue access
         const queueCheckboxes = document.querySelectorAll('.admin-new-queue-checkbox');
@@ -3526,8 +3538,8 @@ if(adminAddBtn){
             canDeleteTickets: document.getElementById('admin-new-can-delete')?.checked || false,
             canViewReports: document.getElementById('admin-new-can-reports')?.checked || false,
             canExportData: document.getElementById('admin-new-can-export')?.checked || false,
-            canManageUsers: isAdmin,
-            canManageQueues: isAdmin
+            canManageUsers: document.getElementById('admin-new-can-manage-users')?.checked || false,
+            canManageQueues: document.getElementById('admin-new-can-manage-queues')?.checked || false
         };
         
         // Try to create user via API (production mode)

@@ -74,7 +74,7 @@
             // Redirect to login if not logged in
             localStorage.removeItem('customerAuthToken');
             localStorage.removeItem('customerInfo');
-            window.location.href = './index.html';
+            window.location.href = '/';
         } else {
             // Show user info
             try {
@@ -89,7 +89,7 @@
                 console.error('Error parsing customer info:', e);
                 localStorage.removeItem('customerAuthToken');
                 localStorage.removeItem('customerInfo');
-                window.location.href = './index.html';
+                window.location.href = '/';
             }
 
             // Handle logout
@@ -100,7 +100,7 @@
                     localStorage.removeItem('customerAuthToken');
                     localStorage.removeItem('customerInfo');
                     // Redirect to customer login page
-                    window.location.href = './index.html';
+                    window.location.href = '/';
                 });
             }
         }

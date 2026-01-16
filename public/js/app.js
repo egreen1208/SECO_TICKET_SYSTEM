@@ -3391,8 +3391,6 @@ async function renderAdmin(){
                 <button class="btn-secondary admin-delete-user" data-idx="${idx}">Delete</button>
                 <button class="btn-secondary admin-toggle-active">${u.active ? 'Deactivate' : 'Activate'}</button>
             </div>
-                <button class="btn-secondary admin-toggle-active">${u.active ? 'Deactivate' : 'Activate'}</button>
-            </div>
         </div>
     `;
     }).join('');

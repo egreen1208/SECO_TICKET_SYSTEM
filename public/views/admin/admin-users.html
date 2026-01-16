@@ -66,8 +66,18 @@
                         <label>Username <input type="text" id="admin-new-username"></label>
                         <label>Password <input type="password" id="admin-new-password"></label>
                         <label>Name <input type="text" id="admin-new-name"></label>
-                        <label>
-                            Role 
+                        <label>Email <input type="email" id="admin-new-email"></label>
+                        <label>Department
+                            <select id="admin-new-department">
+                                <option value="it">Information Technology</option>
+                                <option value="buildings-grounds">Buildings &amp; Grounds</option>
+                                <option value="electrical">Electrical Services</option>
+                                <option value="accounting">Accounting</option>
+                                <option value="warehouse">RMA / Warehouse</option>
+                            </select>
+                        </label>
+                        <label>Phone Number <input type="tel" id="admin-new-phone" placeholder="(555) 123-4567"></label>
+                        <label>Role 
                             <select id="admin-new-role" class="role-select">
                                 <option value="tech">Technician</option>
                                 <option value="admin">Administrator</option>
@@ -82,7 +92,7 @@
                             <!-- Queue checkboxes will be dynamically generated -->
                         </div>
                     </div>
-                    
+                                        
                     <div class="permission-box">
                         <h5 class="permission-heading">Permissions</h5>
                         <div id="admin-permissions-checkboxes" class="checkbox-grid">

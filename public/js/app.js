@@ -3264,14 +3264,42 @@ function exportTicketsCSV(){
     URL.revokeObjectURL(url);
 }
 
-function renderAdmin(){
+async function renderAdmin(){
     const listEl = document.getElementById('admin-users-list');
-    const users = JSON.parse(localStorage.getItem('users') || '[]');
     
     // Render queue checkboxes if on admin page
     renderAdminQueueCheckboxes();
     
     if(!listEl) return;
+    
+    // Try to fetch users from API (production mode)
+    let users = [];
+    const authToken = localStorage.getItem('authToken');
+    
+    if (authToken && window.location.protocol !== 'file:') {
+        try {
+            const response = await fetch('/api/users', {
+                headers: {
+                    'Authorization': `Bearer ${authToken}`
+                }
+            });
+            
+            if (response.ok) {
+                users = await response.json();
+            } else {
+                // Fallback to localStorage
+                users = JSON.parse(localStorage.getItem('users') || '[]');
+            }
+        } catch (error) {
+            console.error('Error fetching users:', error);
+            // Fallback to localStorage
+            users = JSON.parse(localStorage.getItem('users') || '[]');
+        }
+    } else {
+        // Local mode - use localStorage
+        users = JSON.parse(localStorage.getItem('users') || '[]');
+    }
+    
     if(users.length === 0){
         listEl.innerHTML = '<div>No users found.</div>';
         return;
@@ -3406,30 +3434,59 @@ if(exportBtn) exportBtn.addEventListener('click', exportTicketsCSV);
 const adminAddBtn = document.getElementById('admin-add-user');
 let editingUserIndex = null;
 
-// Auto-select all when admin role is selected
+// Auto-select permissions based on role
 const adminRoleSelect = document.getElementById('admin-new-role');
 if (adminRoleSelect) {
     adminRoleSelect.addEventListener('change', () => {
-        const isAdmin = adminRoleSelect.value === 'admin';
+        const role = adminRoleSelect.value;
         
-        // Auto-check all permissions
-        const permissionCheckboxes = [
-            'admin-new-can-create',
-            'admin-new-can-edit',
-            'admin-new-can-delete',
-            'admin-new-can-reports',
-            'admin-new-can-export'
-        ];
+        // Define default permissions for each role
+        const rolePermissions = {
+            admin: {
+                canCreate: true,
+                canEdit: true,
+                canDelete: true,
+                canReports: true,
+                canExport: true,
+                allQueues: true
+            },
+            tech: {
+                canCreate: true,
+                canEdit: true,
+                canDelete: false,
+                canReports: true,
+                canExport: false,
+                allQueues: false
+            },
+            Customer: {
+                canCreate: true,
+                canEdit: false,
+                canDelete: false,
+                canReports: false,
+                canExport: false,
+                allQueues: false
+            }
+        };
         
-        permissionCheckboxes.forEach(id => {
-            const checkbox = document.getElementById(id);
-            if (checkbox) checkbox.checked = isAdmin;
-        });
+        const permissions = rolePermissions[role] || rolePermissions.tech;
         
-        // Auto-check all queues
+        // Set permission checkboxes
+        const createCheckbox = document.getElementById('admin-new-can-create');
+        const editCheckbox = document.getElementById('admin-new-can-edit');
+        const deleteCheckbox = document.getElementById('admin-new-can-delete');
+        const reportsCheckbox = document.getElementById('admin-new-can-reports');
+        const exportCheckbox = document.getElementById('admin-new-can-export');
+        
+        if (createCheckbox) createCheckbox.checked = permissions.canCreate;
+        if (editCheckbox) editCheckbox.checked = permissions.canEdit;
+        if (deleteCheckbox) deleteCheckbox.checked = permissions.canDelete;
+        if (reportsCheckbox) reportsCheckbox.checked = permissions.canReports;
+        if (exportCheckbox) exportCheckbox.checked = permissions.canExport;
+        
+        // Set queue access
         const queueCheckboxes = document.querySelectorAll('.admin-new-queue-checkbox');
         queueCheckboxes.forEach(cb => {
-            cb.checked = isAdmin;
+            cb.checked = permissions.allQueues;
         });
     });
 }

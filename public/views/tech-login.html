@@ -193,9 +193,9 @@
                         return;
                     }
 
-                    // Prevent Customer role from accessing staff portal
-                    if (data.user.role === 'Customer') {
-                        techLoginError.textContent = "Customer accounts cannot access the staff portal. Please use the customer portal.";
+                    // Only allow Technician and Admin roles to access staff portal
+                    if (data.user.role !== 'admin' && data.user.role !== 'tech' && data.user.role !== 'Admin' && data.user.role !== 'Technician') {
+                        techLoginError.textContent = "Only Technician and Administrator accounts can access the staff portal. Please use the customer portal.";
                         techLoginBtn.disabled = false;
                         techLoginBtn.textContent = "Log In";
                         return;

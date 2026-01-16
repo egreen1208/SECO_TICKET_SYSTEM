@@ -145,13 +145,8 @@
                     return;
                 }
 
-                // Verify this is a customer account (not staff)
-                if (data.user.role !== 'Customer') {
-                    loginError.textContent = "This account is not authorized for customer portal. Staff members should use the staff portal.";
-                    submitBtn.disabled = false;
-                    submitBtn.textContent = "Sign In";
-                    return;
-                }
+                // Allow all roles to access customer portal
+                // (Customer, Technician, and Admin can all use this portal)
 
                 // Store authentication token and customer info
                 localStorage.setItem("customerAuthToken", data.token);
@@ -162,6 +157,7 @@
                     department: data.user.department || '',
                     username: data.user.username,
                     id: data.user.id,
+                    role: data.user.role,
                     loginTime: new Date().toISOString()
                 }));
 

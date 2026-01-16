@@ -1834,8 +1834,14 @@ let currentUserPermissions = JSON.parse(localStorage.getItem("currentUserPermiss
 
 // Permission helper functions
 function hasQueueAccess(queueId) {
-    if (!currentUserPermissions.queues) return true; // No restrictions if not set
-    if (currentUserPermissions.queues.includes("*")) return true; // Admin has all access
+    // Check if user is admin by role
+    if (currentUserRole === 'admin' || currentUserRole === 'Admin') return true;
+    
+    // If no queues assigned, deny access (unless they're admin)
+    if (!currentUserPermissions.queues || currentUserPermissions.queues.length === 0) return false;
+    
+    // Admin wildcard access
+    if (currentUserPermissions.queues.includes("*")) return true;
     
     // Normalize queue for comparison
     const normalized = normalizeQueueKey(queueId);
@@ -1856,10 +1862,21 @@ function hasPermission(permission) {
 }
 
 function getAccessibleQueues() {
-    // If no permissions set or user has admin access, return all active queues
-    if (!currentUserPermissions.queues || currentUserPermissions.queues.includes("*")) {
+    // Check if user is admin by role
+    if (currentUserRole === 'admin' || currentUserRole === 'Admin') {
         const allQueues = getActiveQueues();
         return allQueues.map(q => q.id);
+    }
+    
+    // If user has admin wildcard access, return all queues
+    if (currentUserPermissions.queues && currentUserPermissions.queues.includes("*")) {
+        const allQueues = getActiveQueues();
+        return allQueues.map(q => q.id);
+    }
+    
+    // If no queues assigned, return empty array
+    if (!currentUserPermissions.queues || currentUserPermissions.queues.length === 0) {
+        return [];
     }
     
     // Return user's assigned queues plus any sub-queues

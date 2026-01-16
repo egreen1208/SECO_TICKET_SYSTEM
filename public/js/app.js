@@ -3712,7 +3712,9 @@ if(adminAddBtn){
                         department,
                         phone,
                         role,
-                        requirePasswordChange: true // Force password change on first login
+                        active: true, // Auto-enable new users
+                        requirePasswordChange: true, // Force password change on first login
+                        permissions
                     })
                 });
                 

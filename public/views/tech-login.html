@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff Portal Login - SECO Energy</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #0054A6, #0f172a);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            color: white;
+            font-family: "Segoe UI", sans-serif;
+        }
+
+        .login-card {
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(12px);
+            padding: 40px 50px;
+            border-radius: 16px;
+            width: 360px;
+            text-align: center;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.25);
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        .login-card img {
+            width: 110px;
+            margin-bottom: 20px;
+        }
+
+        .login-card h2 {
+            margin-bottom: 8px;
+            font-size: 1.6rem;
+            font-weight: 600;
+        }
+
+        .login-card .subtitle {
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.75);
+        }
+
+        .login-card input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 14px;
+            border-radius: 8px;
+            border: none;
+            font-size: 1rem;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: none;
+            background: #F58220;
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.2s;
+            margin-bottom: 12px;
+        }
+
+        .login-btn:hover {
+            background: #e06f11;
+        }
+
+        .back-link {
+            display: inline-block;
+            color: #8bc4ff;
+            text-decoration: none;
+            font-size: 0.9rem;
+            margin-top: 8px;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        .login-error {
+            color: #ffb3b3;
+            margin-top: 10px;
+            font-size: 0.9rem;
+            min-height: 20px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-card">
+        <img src="../images/seco-logo.png" alt="SECO Energy Logo">
+        <h2>Staff Portal</h2>
+        <p class="subtitle">For authorized personnel only</p>
+
+        <input type="text" id="tech-username" placeholder="Username">
+        <input type="password" id="tech-password" placeholder="Password">
+
+        <button class="login-btn" id="tech-login-btn">Log In</button>
+
+        <a class="back-link" href="/">← Back to main portal</a>
+
+        <div class="login-error" id="tech-login-error"></div>
+    </div>
+
+    <script>
+        const techLoginBtn = document.getElementById("tech-login-btn");
+        const techLoginError = document.getElementById("tech-login-error");
+        const techUsername = document.getElementById("tech-username");
+        const techPassword = document.getElementById("tech-password");
+
+        // Check if already logged in
+        const existingToken = localStorage.getItem('authToken');
+        if (existingToken) {
+            window.location.href = "./home.html";
+        }
+
+        if (techLoginBtn) {
+            techLoginBtn.addEventListener("click", async () => {
+                techLoginError.textContent = "";
+
+                const user = techUsername.value.trim();
+                const pass = techPassword.value.trim();
+
+                if (!user || !pass) {
+                    techLoginError.textContent = "Please enter both username and password.";
+                    return;
+                }
+
+                // Disable button during login
+                techLoginBtn.disabled = true;
+                techLoginBtn.textContent = "Logging in...";
+
+                // Default accounts for local testing
+                const defaultAccounts = [
+                    { username: 'admin', password: 'admin123', fullName: 'Admin User', role: 'Admin', id: 1 },
+                    { username: 'tech', password: 'tech123', fullName: 'Tech User', role: 'Technician', id: 2 }
+                ];
+
+                // Check if running locally (file:// protocol) or if backend is unavailable
+                const isLocalMode = window.location.protocol === 'file:';
+
+                if (isLocalMode) {
+                    // LOCAL MODE: Use hardcoded credentials
+                    const account = defaultAccounts.find(acc => acc.username === user && acc.password === pass);
+                    
+                    if (account) {
+                        localStorage.setItem("authToken", "local-dev-token-" + Date.now());
+                        localStorage.setItem("currentUser", account.fullName);
+                        localStorage.setItem("currentUserRole", account.role);
+                        localStorage.setItem("currentUsername", account.username);
+                        localStorage.setItem("currentUserId", account.id);
+                        
+                        console.warn('🔧 LOCAL MODE - using hardcoded credentials');
+                        window.location.href = "./home.html";
+                    } else {
+                        techLoginError.textContent = "Invalid credentials. Try: admin/admin123 or tech/tech123";
+                        techLoginBtn.disabled = false;
+                        techLoginBtn.textContent = "Log In";
+                    }
+                    return;
+                }
+
+                // PRODUCTION MODE: Call backend API
+                try {
+                    const response = await fetch('/api/auth/login', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            username: user,
+                            password: pass
+                        })
+                    });
+
+                    const data = await response.json();
+
+                    if (!response.ok) {
+                        techLoginError.textContent = data.error || "Invalid credentials";
+                        techLoginBtn.disabled = false;
+                        techLoginBtn.textContent = "Log In";
+                        return;
+                    }
+
+                    // Only allow Technician and Admin roles to access staff portal
+                    if (data.user.role !== 'admin' && data.user.role !== 'tech' && data.user.role !== 'Admin' && data.user.role !== 'Technician') {
+                        techLoginError.textContent = "Only Technician and Administrator accounts can access the staff portal. Please use the customer portal.";
+                        techLoginBtn.disabled = false;
+                        techLoginBtn.textContent = "Log In";
+                        return;
+                    }
+
+                    // Store authentication token and user info
+                    localStorage.setItem("authToken", data.token);
+                    localStorage.setItem("currentUser", data.user.fullName);
+                    localStorage.setItem("currentUserRole", data.user.role);
+                    localStorage.setItem("currentUsername", data.user.username);
+                    localStorage.setItem("currentUserId", data.user.id);
+
+                    // Check if password change is required
+                    if (data.user.requirePasswordChange) {
+                        const newPassword = prompt("For security reasons, you must change your password.\n\nEnter new password:");
+                        if (!newPassword || newPassword.length < 6) {
+                            alert("Password must be at least 6 characters. Please try logging in again.");
+                            localStorage.removeItem("authToken");
+                            techLoginBtn.disabled = false;
+                            techLoginBtn.textContent = "Log In";
+                            return;
+                        }
+                        
+                        const confirmPassword = prompt("Confirm new password:");
+                        if (newPassword !== confirmPassword) {
+                            alert("Passwords do not match. Please try logging in again.");
+                            localStorage.removeItem("authToken");
+                            techLoginBtn.disabled = false;
+                            techLoginBtn.textContent = "Log In";
+                            return;
+                        }
+                        
+                        // Update password via API
+                        try {
+                            const updateResponse = await fetch('/api/users/change-password', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'Authorization': `Bearer ${data.token}`
+                                },
+                                body: JSON.stringify({
+                                    newPassword: newPassword
+                                })
+                            });
+                            
+                            if (!updateResponse.ok) {
+                                alert("Failed to update password. Please contact administrator.");
+                            }
+                        } catch (err) {
+                            console.error("Password update error:", err);
+                        }
+                    }
+
+                    // Redirect to staff dashboard
+                    window.location.href = "./home.html";
+
+                } catch (error) {
+                    console.error('Login error:', error);
+                    
+                    // FALLBACK: Try hardcoded credentials if API fails
+                    const account = defaultAccounts.find(acc => acc.username === user && acc.password === pass);
+                    
+                    if (account) {
+                        localStorage.setItem("authToken", "local-dev-token-" + Date.now());
+                        localStorage.setItem("currentUser", account.fullName);
+                        localStorage.setItem("currentUserRole", account.role);
+                        localStorage.setItem("currentUsername", account.username);
+                        localStorage.setItem("currentUserId", account.id);
+                        
+                        console.warn('🔧 FALLBACK MODE - API unavailable, using hardcoded credentials');
+                        window.location.href = "./home.html";
+                        return;
+                    }
+
+                    techLoginError.textContent = "Connection error. Try: admin/admin123 or tech/tech123";
+                    techLoginBtn.disabled = false;
+                    techLoginBtn.textContent = "Log In";
+                }
+            });
+        }
+
+        // Allow Enter key to submit
+        techPassword.addEventListener("keyup", e => {
+            if (e.key === "Enter") {
+                techLoginBtn.click();
+            }
+        });
+        techUsername.addEventListener("keyup", e => {
+            if (e.key === "Enter") {
+                techPassword.focus();
+            }
+        });
+    </script>
+</body>
+</html>

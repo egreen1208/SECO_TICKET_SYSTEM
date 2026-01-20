@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Management - Technician Service Portal</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="../../css/styles.css">
 </head>
 <body class="admin-page">
 
@@ -12,7 +12,7 @@
     <header class="topbar">
         <div class="topbar-left">
             <button id="sidebar-toggle" class="icon-btn" title="Toggle sidebar">&#9776;</button>
-            <img src="seco-logo.png" alt="SECO Energy Logo" class="logo">
+            <img src="../../images/seco-logo.png" alt="SECO Energy Logo" class="logo">
             <h1>Technician Service Portal</h1>
         </div>
 
@@ -40,8 +40,8 @@
         <!-- Sidebar Navigation -->
         <nav class="sidebar" id="sidebar">
             <ul>
-                <li><a href="home.html">Tickets</a></li>
-                <li><a href="reports.html">Reports</a></li>
+                <li><a href="../home.html">Tickets</a></li>
+                <li><a href="../reports.html">Reports</a></li>
                 <li class="has-children open">
                     <button class="sidebar-toggle-btn" type="button">Admin ▾</button>
                     <ul class="submenu">
@@ -63,16 +63,35 @@
                 <div class="admin-section">
                     <h4 style="margin-top:12px;">Add New User</h4>
                     <div class="form-grid">
-                        <label>Username <input type="text" id="admin-new-username"></label>
-                        <label>Password <input type="password" id="admin-new-password"></label>
-                        <label>Name <input type="text" id="admin-new-name"></label>
-                        <label>Email <input type="email" id="admin-new-email"></label>
-                        <label>
-                            Role 
+                        <label>First Name <input type="text" id="admin-new-firstname" placeholder="John"></label>
+                        <label>Last Name <input type="text" id="admin-new-lastname" placeholder="Doe"></label>
+                        <label>Username (auto-generated) <input type="text" id="admin-new-username" readonly style="background: #f5f5f5;"></label>
+                        <label>Email (auto-generated) <input type="email" id="admin-new-email" readonly style="background: #f5f5f5;"></label>
+                        <label style="position: relative;">
+                            Password 
+                            <input type="password" id="admin-new-password" placeholder="password123">
+                            <button type="button" id="admin-toggle-password" style="position: absolute; right: 10px; bottom: 10px; background: none; border: none; cursor: pointer; font-size: 1.2rem;" title="Toggle password visibility">👁️</button>
+                        </label>
+                        <label style="position: relative;">
+                            Confirm Password 
+                            <input type="password" id="admin-new-password-confirm" placeholder="password123">
+                            <button type="button" id="admin-toggle-password-confirm" style="position: absolute; right: 10px; bottom: 10px; background: none; border: none; cursor: pointer; font-size: 1.2rem;" title="Toggle password visibility">👁️</button>
+                        </label>
+                        <label>Department
+                            <select id="admin-new-department">
+                                <option value="it">Information Technology</option>
+                                <option value="buildings-grounds">Buildings &amp; Grounds</option>
+                                <option value="electrical">Electrical Services</option>
+                                <option value="accounting">Accounting</option>
+                                <option value="warehouse">RMA / Warehouse</option>
+                            </select>
+                        </label>
+                        <label>Phone Number <input type="tel" id="admin-new-phone" placeholder="(555) 123-4567"></label>
+                        <label>Role 
                             <select id="admin-new-role" class="role-select">
                                 <option value="tech">Technician</option>
                                 <option value="admin">Administrator</option>
-                                <option value="customer">Customer</option>
+                                <option value="Customer">Customer</option>
                             </select>
                         </label>
                     </div>
@@ -83,7 +102,7 @@
                             <!-- Queue checkboxes will be dynamically generated -->
                         </div>
                     </div>
-                    
+                                        
                     <div class="permission-box">
                         <h5 class="permission-heading">Permissions</h5>
                         <div id="admin-permissions-checkboxes" class="checkbox-grid">
@@ -106,6 +125,14 @@
                             <label class="checkbox-label">
                                 <input type="checkbox" id="admin-new-can-export">
                                 <span>Export Data</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="admin-new-can-manage-users">
+                                <span>Manage Users</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="admin-new-can-manage-queues">
+                                <span>Manage Queues</span>
                             </label>
                         </div>
                     </div>
@@ -318,6 +345,6 @@
     <!-- Toast -->
     <div id="toast" class="toast"></div>
 
-    <script src="app.js"></script>
+    <script src="../../js/app.js"></script>
 </body>
 </html>

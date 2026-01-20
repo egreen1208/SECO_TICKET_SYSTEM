@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Initial Setup - SECO Ticket System</title>
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body class="landing-page">
+    <header class="landing-banner">
+        <div class="landing-banner__logo">
+            <img src="../images/seco-logo.png" alt="SECO Energy Logo" class="logo" />
+        </div>
+        <div class="landing-banner__content">
+            <h1>System Setup</h1>
+            <p class="lede">Create test accounts for initial system setup</p>
+        </div>
+    </header>
+
+    <div class="customer-login-container">
+        <div class="customer-login-card">
+            <h2>Create Test Accounts</h2>
+            <p class="login-subtitle">This will create a test customer account</p>
+            
+            <div style="padding: 20px; background: #f0f9ff; border-radius: 8px; margin-bottom: 20px;">
+                <p style="margin: 0 0 10px 0; font-weight: 600;">Test Account to be created:</p>
+                <p style="margin: 5px 0;"><strong>Username:</strong> customer</p>
+                <p style="margin: 5px 0;"><strong>Password:</strong> customer123</p>
+                <p style="margin: 5px 0;"><strong>Role:</strong> Customer</p>
+            </div>
+            
+            <button id="create-accounts-btn" class="btn-primary" style="width: 100%;">Create Test Accounts</button>
+            
+            <div id="setup-message" style="margin-top: 15px; padding: 10px; border-radius: 6px; display: none;"></div>
+            
+            <div class="login-footer" style="margin-top: 20px;">
+                <p><a href="/tech-login.html">← Back to Staff Portal</a></p>
+                <p><a href="/">← Back to Customer Portal</a></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('create-accounts-btn').addEventListener('click', async () => {
+            const btn = document.getElementById('create-accounts-btn');
+            const message = document.getElementById('setup-message');
+            
+            btn.disabled = true;
+            btn.textContent = 'Creating accounts...';
+            message.style.display = 'none';
+            
+            try {
+                const response = await fetch('/api/setup/create-test-accounts', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    message.style.display = 'block';
+                    message.style.background = '#dcfce7';
+                    message.style.color = '#166534';
+                    message.style.border = '1px solid #86efac';
+                    message.textContent = '✓ Test accounts created successfully! You can now log in with customer/customer123';
+                    btn.textContent = 'Accounts Created!';
+                } else {
+                    message.style.display = 'block';
+                    message.style.background = '#fee2e2';
+                    message.style.color = '#991b1b';
+                    message.style.border = '1px solid #fca5a5';
+                    message.textContent = '✗ Error: ' + (data.error || 'Failed to create accounts');
+                    btn.disabled = false;
+                    btn.textContent = 'Create Test Accounts';
+                }
+            } catch (error) {
+                message.style.display = 'block';
+                message.style.background = '#fee2e2';
+                message.style.color = '#991b1b';
+                message.style.border = '1px solid #fca5a5';
+                message.textContent = '✗ Connection error: ' + error.message;
+                btn.disabled = false;
+                btn.textContent = 'Create Test Accounts';
+            }
+        });
+    </script>
+</body>
+</html>

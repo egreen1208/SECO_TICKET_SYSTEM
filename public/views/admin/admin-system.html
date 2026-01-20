@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reports - Technician Service Portal</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>System Management - Technician Service Portal</title>
+    <link rel="stylesheet" href="../../css/styles.css">
 </head>
-<body class="reports-page">
+<body class="admin-page">
 
     <!-- Top Bar -->
     <header class="topbar">
         <div class="topbar-left">
             <button id="sidebar-toggle" class="icon-btn" title="Toggle sidebar">&#9776;</button>
-            <img src="seco-logo.png" alt="SECO Energy Logo" class="logo">
+            <img src="../../images/seco-logo.png" alt="SECO Energy Logo" class="logo">
             <h1>Technician Service Portal</h1>
         </div>
 
@@ -40,14 +40,14 @@
         <!-- Sidebar Navigation -->
         <nav class="sidebar" id="sidebar">
             <ul>
-                <li><a href="home.html">Tickets</a></li>
-                <li class="active"><a href="reports.html">Reports</a></li>
-                <li class="has-children">
+                <li><a href="../home.html">Tickets</a></li>
+                <li><a href="../reports.html">Reports</a></li>
+                <li class="has-children open">
                     <button class="sidebar-toggle-btn" type="button">Admin ▾</button>
                     <ul class="submenu">
                         <li><a href="admin.html">Admin Overview</a></li>
                         <li><a href="admin-users.html">User Management</a></li>
-                        <li><a href="admin-system.html">System Management</a></li>
+                        <li class="active"><a href="admin-system.html">System Management</a></li>
                     </ul>
                 </li>
             </ul>
@@ -56,25 +56,25 @@
         <!-- Main Content Area -->
         <main class="container">
 
-            <!-- Reports Panel -->
-            <section class="panel">
-                <h2>Reports</h2>
-                <div id="reports-summary" class="reports-summary">
-                    <div class="report-item">
-                        <h4>By Status</h4>
-                        <div id="report-by-status"></div>
-                    </div>
-                    <div class="report-item">
-                        <h4>By Queue</h4>
-                        <div id="report-by-queue"></div>
-                    </div>
-                    <div class="report-item">
-                        <h4>By Priority</h4>
-                        <div id="report-by-priority"></div>
-                    </div>
+            <!-- System Management Panel -->
+            <section class="panel" id="admin-panel">
+                <h2>System Management</h2>
+                
+                <div class="admin-section" style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                    <h3 style="margin-top: 0;">Queues &amp; Categories</h3>
+                    <button class="pill-btn pill-primary" onclick="window.location.href='../queue-manager.html'" style="margin-right: 10px;">
+                        🎯 Manage Queues &amp; Categories
+                    </button>
+                    <p style="margin: 10px 0 0 0; color: #666; font-size: 14px;">
+                        Create, edit, and configure ticket queues and their categories.
+                    </p>
                 </div>
-                <div style="margin-top:12px;">
-                    <button id="export-reports-csv" class="btn-secondary">Export Tickets CSV</button>
+
+                <div class="admin-section" style="background: #f8f9fa; padding: 15px; border-radius: 8px;">
+                    <h3 style="margin-top: 0;">System Settings</h3>
+                    <p style="margin: 10px 0 0 0; color: #666; font-size: 14px;">
+                        Placeholder for additional system settings (branding, notifications, data export policies).
+                    </p>
                 </div>
             </section>
 
@@ -279,6 +279,6 @@
     <!-- Toast -->
     <div id="toast" class="toast"></div>
 
-    <script src="app.js"></script>
+    <script src="../../js/app.js"></script>
 </body>
 </html>

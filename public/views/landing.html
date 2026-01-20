@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Choose a Service</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="../css/styles.css">
 </head>
 <body class="landing-page">
     <header class="landing-banner">
         <div class="landing-banner__logo">
-            <img src="seco-logo.png" alt="SECO Energy Logo" class="logo" />
+            <img src="../images/seco-logo.png" alt="SECO Energy Logo" class="logo" />
         </div>
         <div class="landing-banner__content">
             <h1>Service Portal</h1>
@@ -27,37 +27,37 @@
     </div>
 
     <main class="landing-grid">
-        <a class="landing-card" href="customer-it.html">
+        <a class="landing-card" href="./customer-it.html">
             <div class="landing-card__icon">💻</div>
             <h3>Information Technology</h3>
             <p>Accounts, devices, software, network, phones.</p>
             <span class="landing-card__cta">Submit IT ticket →</span>
         </a>
-        <a class="landing-card" href="customer-buildings.html">
+        <a class="landing-card" href="./customer-buildings.html">
             <div class="landing-card__icon">🏢</div>
             <h3>Buildings &amp; Grounds</h3>
             <p>HVAC, plumbing, carpentry, grounds, custodial.</p>
             <span class="landing-card__cta">Submit Facilities ticket →</span>
         </a>
-        <a class="landing-card" href="customer-electrical.html">
+        <a class="landing-card" href="./customer-electrical.html">
             <div class="landing-card__icon">⚡</div>
             <h3>Electrical Services</h3>
             <p>Power, lighting, panels, safety, generators.</p>
             <span class="landing-card__cta">Submit Electrical ticket →</span>
         </a>
-        <a class="landing-card" href="customer-moves.html">
+        <a class="landing-card" href="./customer-moves.html">
             <div class="landing-card__icon">📦</div>
             <h3>Move Request</h3>
             <p>Office moves, furniture, IT equipment relocation.</p>
             <span class="landing-card__cta">Submit Move request →</span>
         </a>
-        <a class="landing-card" href="customer-rma.html">
+        <a class="landing-card" href="./customer-rma.html">
             <div class="landing-card__icon">🔄</div>
             <h3>RMA / Warehouse</h3>
             <p>Returns, exchanges, parts requests, inventory.</p>
             <span class="landing-card__cta">Submit RMA request →</span>
         </a>
-        <a class="landing-card landing-card--tech" href="tech-login.html">
+        <a class="landing-card landing-card--tech" href="./tech-login.html">
             <div class="landing-card__icon">🛠️</div>
             <h3>Staff Portal</h3>
             <p>For technicians and administrators only.</p>
@@ -67,26 +67,40 @@
 
     <script>
         // Check if customer is logged in
+        const customerAuthToken = localStorage.getItem('customerAuthToken');
         const customerInfo = localStorage.getItem('customerInfo');
-        if (!customerInfo) {
+        
+        if (!customerAuthToken || !customerInfo) {
             // Redirect to login if not logged in
-            window.location.href = 'index.html';
+            localStorage.removeItem('customerAuthToken');
+            localStorage.removeItem('customerInfo');
+            window.location.href = '/';
         } else {
             // Show user info
-            const info = JSON.parse(customerInfo);
-            const userInfoDiv = document.getElementById('landing-user-info');
-            const userNameSpan = document.getElementById('landing-user-name');
-            if (userInfoDiv && userNameSpan) {
-                userNameSpan.textContent = info.name;
-                userInfoDiv.style.display = 'block';
+            try {
+                const info = JSON.parse(customerInfo);
+                const userInfoDiv = document.getElementById('landing-user-info');
+                const userNameSpan = document.getElementById('landing-user-name');
+                if (userInfoDiv && userNameSpan) {
+                    userNameSpan.textContent = info.name || info.username;
+                    userInfoDiv.style.display = 'block';
+                }
+            } catch (e) {
+                console.error('Error parsing customer info:', e);
+                localStorage.removeItem('customerAuthToken');
+                localStorage.removeItem('customerInfo');
+                window.location.href = '/';
             }
 
             // Handle logout
             const logoutBtn = document.getElementById('landing-logout-btn');
             if (logoutBtn) {
                 logoutBtn.addEventListener('click', () => {
+                    // Clear customer tokens
+                    localStorage.removeItem('customerAuthToken');
                     localStorage.removeItem('customerInfo');
-                    window.location.href = 'index.html';
+                    // Redirect to customer login page
+                    window.location.href = '/';
                 });
             }
         }

@@ -3,18 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Submit a Move Request - SECO Energy Service Portal</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Submit a Facilities Ticket - SECO Energy Service Portal</title>
+    <link rel="stylesheet" href="../../css/styles.css">
 </head>
 <body class="customer-page">
 
     <header class="topbar">
         <div class="topbar-left">
-            <img src="seco-logo.png" alt="SECO Energy Logo" class="logo">
+            <img src="../../images/seco-logo.png" alt="SECO Energy Logo" class="logo">
             <h1>Service Portal</h1>
         </div>
         <div class="topbar-right">
-            <a href="landing.html" class="pill-btn">Back to Portal</a>
+            <a href="/landing.html" class="pill-btn">Back to Portal</a>
             <div class="dark-mode-toggle">
                 <label class="switch">
                     <input type="checkbox" id="dark-mode-toggle">
@@ -28,8 +28,7 @@
     <div class="layout">
         <main class="container customer-container">
             <section class="panel customer-panel">
-                <h2>Submit a Move Request</h2>
-                <p style="margin: -8px 0 16px; color: #666;">Office relocations, furniture moves, IT equipment transfers, and user account updates.</p>
+                <h2>Submit a Facilities Ticket</h2>
                 <form id="customer-ticket-form" class="customer-form">
                     <fieldset class="form-section">
                         <legend>Your Information</legend>
@@ -42,19 +41,16 @@
                         <label>Phone (Optional)
                             <input type="tel" id="customer-phone" placeholder="(555) 123-4567">
                         </label>
-                        <label>Current Location <span class="required">*</span>
+                        <label>Location/Building <span class="required">*</span>
                             <input type="text" id="customer-location" required placeholder="Building A, Room 201">
-                        </label>
-                        <label>New Location <span class="required">*</span>
-                            <input type="text" id="customer-new-location" required placeholder="Building B, Room 305">
                         </label>
                     </fieldset>
 
                     <fieldset class="form-section">
-                        <legend>Move Details</legend>
+                        <legend>Issue Details</legend>
                         <label>Department
                             <select id="customer-queue" disabled>
-                                <option value="moves" selected>Move Request</option>
+                                <option value="buildings-grounds" selected>Buildings &amp; Grounds</option>
                             </select>
                         </label>
                         <label>Category <span class="required">*</span>
@@ -67,9 +63,6 @@
                                 <option value="">Select subcategory...</option>
                             </select>
                         </label>
-                        <label>Move Date <span class="required">*</span>
-                            <input type="date" id="customer-move-date" required>
-                        </label>
                         <label>Priority <span class="required">*</span>
                             <select id="customer-priority" required>
                                 <option value="Low">Low</option>
@@ -79,16 +72,16 @@
                             </select>
                         </label>
                         <label>Subject <span class="required">*</span>
-                            <input type="text" id="customer-title" required placeholder="Brief description of the move">
+                            <input type="text" id="customer-title" required placeholder="Brief description of your issue">
                         </label>
-                        <label for="customer-description" class="field-label">Details <span class="required">*</span></label>
-                        <textarea id="customer-description" rows="6" required placeholder="Describe items to be moved, special requirements, access needs, etc."></textarea>
+                        <label for="customer-description" class="field-label">Description <span class="required">*</span></label>
+                        <textarea id="customer-description" rows="6" required placeholder="Describe your issue. Include any steps you've tried."></textarea>
                     </fieldset>
 
                     <div class="form-actions">
                         <span id="customer-error" class="form-error"></span>
                         <span id="customer-success" class="form-success"></span>
-                        <button type="submit" class="btn-primary">Submit Move Request</button>
+                        <button type="submit" class="btn-primary">Submit Ticket</button>
                     </div>
                 </form>
             </section>
@@ -96,8 +89,6 @@
     </div>
 
     <div id="toast" class="toast"></div>
-
-    <script src="app.js"></script>
     <script>
     // Auto-populate customer info from login
     const customerInfo = localStorage.getItem('customerInfo');
@@ -111,10 +102,10 @@
         if (emailField) emailField.value = info.email || '';
         if (phoneField) phoneField.value = info.phone || '';
     } else {
-        window.location.href = 'index.html';
+        window.location.href = '../landing.html';
     }
 
-    const forcedQueue = "moves";
+    const forcedQueue = "buildings-grounds";
     const customerQueue = document.getElementById('customer-queue');
     const customerCategory = document.getElementById('customer-category');
     const customerSubcategory = document.getElementById('customer-subcategory');
@@ -137,13 +128,10 @@
 
     document.getElementById('customer-ticket-form').addEventListener('submit', function(e) {
         e.preventDefault();
-        const moveDate = document.getElementById('customer-move-date').value;
-        const newLocation = document.getElementById('customer-new-location').value;
-        
         const newTicket = {
             id: 'TKT-' + Math.random().toString(36).slice(2, 9).toUpperCase(),
             title: document.getElementById('customer-title').value,
-            description: document.getElementById('customer-description').value + '\n\n--- Move Details ---\nCurrent Location: ' + document.getElementById('customer-location').value + '\nNew Location: ' + newLocation + '\nRequested Move Date: ' + moveDate,
+            description: document.getElementById('customer-description').value,
             requesterName: document.getElementById('customer-name').value,
             requesterEmail: document.getElementById('customer-email').value,
             phone: document.getElementById('customer-phone').value || 'N/A',
@@ -157,17 +145,17 @@
             assignedTo: '',
             createdDate: new Date().toISOString().split('T')[0],
             updatedDate: new Date().toISOString().split('T')[0],
-            dueDate: moveDate,
-            tags: ['move-request'],
+            dueDate: '',
+            tags: [],
             images: [],
             comments: [],
-            activity: [{ timestamp: new Date().toISOString(), user: 'Customer Portal', action: 'Move request created' }]
+            activity: [{ timestamp: new Date().toISOString(), user: 'Customer Portal', action: 'Ticket created' }]
         };
         if (!window.tickets) window.tickets = [];
         window.tickets.push(newTicket);
         localStorage.setItem('seco_tickets', JSON.stringify(window.tickets));
-        showToast('Move request submitted successfully! Redirecting...');
-        setTimeout(() => { window.location.href = 'index.html'; }, 1800);
+        showToast('Ticket submitted successfully! Redirecting...');
+        setTimeout(() => { window.location.href = '../landing.html'; }, 1800);
     });
     </script>
 </body>

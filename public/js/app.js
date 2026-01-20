@@ -2418,7 +2418,6 @@ function renderQueueButtons() {
     container.innerHTML = "";
     
     const queues = getActiveQueues();
-    const accessibleQueues = getAccessibleQueues();
     
     // Separate main queues and sub-queues
     const mainQueues = queues.filter(q => !q.parentQueue).sort((a, b) => a.order - b.order);
@@ -2610,7 +2609,6 @@ function initAdminUserForm() {
 
 // Render queue buttons on load
 document.addEventListener("DOMContentLoaded", () => {
-    const queueConfig = getQueueConfig();
     renderQueueButtons();
     renderAdminQueueCheckboxes();
     renderAdmin(); // ensure existing users render on admin page load
@@ -4514,9 +4512,6 @@ function updateTickets() {
     let formattedQueue = formatQueueTitle(selectedQueue);
 
     ticketHeader.textContent = `Tickets — ${formattedQueue}`;
-
-    // Get user's accessible queues
-    const accessibleQueues = getAccessibleQueues();
 
     // FILTERING
     let filtered = tickets.filter(t => {

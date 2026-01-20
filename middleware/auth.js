@@ -9,8 +9,14 @@ function authenticateToken(req, res, next) {
         return res.status(401).json({ error: 'Access denied. No token provided.' });
     }
 
+    // Validate JWT secret is configured
+    if (!process.env.JWT_SECRET) {
+        console.error('JWT_SECRET is not configured');
+        return res.status(500).json({ error: 'Server configuration error' });
+    }
+
     try {
-        const verified = jwt.verify(token, process.env.JWT_SECRET || 'your-secret-key');
+        const verified = jwt.verify(token, process.env.JWT_SECRET);
         req.user = verified;
         next();
     } catch (error) {

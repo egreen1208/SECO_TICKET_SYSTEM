@@ -16,10 +16,8 @@ async function initDatabase() {
         await db.query(schema);
         
         console.log('✓ Database initialized successfully!');
-        console.log('✓ Default admin user created:');
-        console.log('  Username: admin');
-        console.log('  Password: admin123');
-        console.log('  Email: admin@seco.com');
+        console.log('✓ Default admin user created');
+        console.log('  Please check the schema.sql file for initial credentials');
         
         process.exit(0);
     } catch (error) {

@@ -9,6 +9,12 @@ router.post('/login', async (req, res) => {
     try {
         const { username, password } = req.body;
 
+        // Validate JWT secret is configured
+        if (!process.env.JWT_SECRET) {
+            console.error('JWT_SECRET is not configured');
+            return res.status(500).json({ error: 'Server configuration error' });
+        }
+
         // Find user
         const result = await db.query(
             'SELECT * FROM users WHERE username = $1 AND is_active = true',
@@ -30,7 +36,7 @@ router.post('/login', async (req, res) => {
         // Create JWT token
         const token = jwt.sign(
             { id: user.id, username: user.username, role: user.role },
-            process.env.JWT_SECRET || 'your-secret-key',
+            process.env.JWT_SECRET,
             { expiresIn: '24h' }
         );
 

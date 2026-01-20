@@ -84,56 +84,23 @@
             submitBtn.disabled = true;
             submitBtn.textContent = 'Signing in...';
 
-            // Default customer account for local testing
-            const defaultCustomerAccount = {
-                username: 'customer',
-                password: 'customer123',
-                fullName: 'Customer User',
-                email: 'customer@example.com',
-                phone: '(555) 123-4567',
-                department: 'General',
-                role: 'Customer',
-                id: 100
-            };
-
             // Check if running locally (file:// protocol) or if backend is unavailable
             const isLocalMode = window.location.protocol === 'file:';
 
             if (isLocalMode) {
-                // LOCAL MODE: Use hardcoded credentials
-                if (username === defaultCustomerAccount.username && password === defaultCustomerAccount.password) {
-                    localStorage.setItem("customerAuthToken", "local-customer-token-" + Date.now());
-                    localStorage.setItem("customerInfo", JSON.stringify({
-                        name: defaultCustomerAccount.fullName,
-                        email: defaultCustomerAccount.email,
-                        phone: defaultCustomerAccount.phone,
-                        department: defaultCustomerAccount.department,
-                        username: defaultCustomerAccount.username,
-                        id: defaultCustomerAccount.id,
-                        loginTime: new Date().toISOString()
-                    }));
-                    
-                    console.warn('🔧 LOCAL MODE - using hardcoded customer credentials');
-                    window.location.href = "./landing.html";
-                } else {
-                    loginError.textContent = "Invalid credentials. Try: customer/customer123";
-                    submitBtn.disabled = false;
-                    submitBtn.textContent = "Sign In";
-                }
+                // LOCAL MODE: Not supported in production
+                loginError.textContent = "Local mode is not supported. Please use the server-hosted version.";
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Sign In';
                 return;
             }
 
-            // PRODUCTION MODE: Call backend API
+            // SERVER MODE: Authenticate with backend
             try {
                 const response = await fetch('/api/auth/login', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        username: username,
-                        password: password
-                    })
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
                 });
 
                 const data = await response.json();
@@ -207,26 +174,7 @@
 
             } catch (error) {
                 console.error('Login error:', error);
-                
-                // FALLBACK: Try hardcoded credentials if API fails
-                if (username === defaultCustomerAccount.username && password === defaultCustomerAccount.password) {
-                    localStorage.setItem("customerAuthToken", "local-customer-token-" + Date.now());
-                    localStorage.setItem("customerInfo", JSON.stringify({
-                        name: defaultCustomerAccount.fullName,
-                        email: defaultCustomerAccount.email,
-                        phone: defaultCustomerAccount.phone,
-                        department: defaultCustomerAccount.department,
-                        username: defaultCustomerAccount.username,
-                        id: defaultCustomerAccount.id,
-                        loginTime: new Date().toISOString()
-                    }));
-                    
-                    console.warn('🔧 FALLBACK MODE - API unavailable, using hardcoded customer credentials');
-                    window.location.href = "./landing.html";
-                    return;
-                }
-
-                loginError.textContent = "Connection error. Try: customer/customer123";
+                loginError.textContent = "Unable to connect to server. Please try again later.";
                 submitBtn.disabled = false;
                 submitBtn.textContent = "Sign In";
             }

@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
+const crypto = require('crypto');
 const db = require('../config/database');
 const { authenticateToken, requireAdmin } = require('../middleware/auth');
 
@@ -107,8 +108,9 @@ router.post('/reset-password', authenticateToken, requireAdmin, async (req, res)
             return res.status(400).json({ error: 'Username is required' });
         }
 
-        // Reset to default password 'password123' and require password change
-        const passwordHash = await bcrypt.hash('password123', 10);
+        // Generate a random temporary password (12 characters)
+        const tempPassword = crypto.randomBytes(6).toString('hex'); // Generates 12 hex characters
+        const passwordHash = await bcrypt.hash(tempPassword, 10);
 
         const result = await db.query(
             'UPDATE users SET password_hash = $1, require_password_change = true WHERE username = $2 RETURNING id',
@@ -119,7 +121,13 @@ router.post('/reset-password', authenticateToken, requireAdmin, async (req, res)
             return res.status(404).json({ error: 'User not found' });
         }
 
-        res.json({ message: 'Password reset successfully' });
+        // NOTE: In production, the temporary password should be sent via secure channel
+        // (email/SMS) instead of being returned in the response. This approach is used
+        // here as a simple solution for admins to communicate the password to users.
+        res.json({ 
+            message: 'Password reset successfully', 
+            temporaryPassword: tempPassword 
+        });
     } catch (error) {
         console.error('Reset password error:', error);
         res.status(500).json({ error: 'Server error' });

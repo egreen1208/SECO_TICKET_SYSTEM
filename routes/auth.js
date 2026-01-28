@@ -51,7 +51,4 @@ router.post('/login', async (req, res) => {
     }
 });
 
-// Public registration is DISABLED for security
-// Only admins can create user accounts via /api/users/create endpoint
-
 module.exports = router;

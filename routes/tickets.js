@@ -126,7 +126,6 @@ router.put('/:id', async (req, res) => {
                  status = COALESCE($3, status),
                  priority = COALESCE($4, priority),
                  assigned_to = COALESCE($5, assigned_to),
-                 resolved_at = CASE WHEN $3 = 'Resolved' THEN CURRENT_TIMESTAMP ELSE resolved_at END,
                  closed_at = CASE WHEN $3 = 'Closed' THEN CURRENT_TIMESTAMP ELSE closed_at END
              WHERE id = $6
              RETURNING *`,

@@ -117,7 +117,7 @@ const tickets = [
     title: "Firewall rule update",
     description: "Allow outbound traffic to new vendor IP range for data sync.",
     queue: "it-security",
-    status: "resolved",
+    status: "closed",
     assigned: true,
     assignedTo: "Kim Clemmer",
     priority: "Critical",
@@ -171,7 +171,7 @@ const tickets = [
     title: "VPN access request for remote employee",
     description: "Enable VPN access for remote employee working from home office.",
     queue: "it-networking",
-    status: "resolved",
+    status: "closed",
     assigned: true,
     assignedTo: "Andrew Ayala",
     priority: "Medium",
@@ -337,7 +337,7 @@ const tickets = [
     title: "Shared drive permissions for Projects2026",
     description: "Team cannot access new 'Projects2026' folder. Needs read/write for Marketing.",
     queue: "it-support",
-    status: "resolved",
+    status: "closed",
     assigned: false,
     assignedTo: "",
     priority: "Low",
@@ -476,7 +476,7 @@ const tickets = [
     title: "2FA enrollment issue with QR code",
     description: "User unable to enroll in MFA—QR code scan fails on authenticator app.",
     queue: "it-security",
-    status: "resolved",
+    status: "closed",
     assigned: true,
     assignedTo: "Kim Clemmer",
     priority: "Medium",
@@ -563,7 +563,7 @@ const tickets = [
     title: "Database backup verification",
     description: "Verify that all database backups completed successfully. Last backup showed 95% completion.",
     queue: "it-systems",
-    status: "resolved",
+    status: "closed",
     assigned: true,
     assignedTo: "Peter Uhl",
     priority: "High",
@@ -722,7 +722,7 @@ const tickets = [
     title: "Windows update deployment to workstations",
     description: "Deploy latest Windows security patches to all workstations in phases.",
     queue: "it-systems",
-    status: "Pending",
+    status: "pending",
     assigned: true,
     assignedTo: "Les Duffy",
     priority: "High",
@@ -749,7 +749,7 @@ const tickets = [
     title: "New employee laptop setup",
     description: "Configure laptop for new sales representative starting Monday. Include VPN, CRM, and Office suite.",
     queue: "it-support",
-    status: "In Progress",
+    status: "in-progress",
     assigned: true,
     assignedTo: "Ercell Green",
     priority: "Medium",
@@ -776,7 +776,7 @@ const tickets = [
     title: "Data retention policy implementation",
     description: "Implement new 7-year data retention policy for financial records in document management system.",
     queue: "it-applications",
-    status: "Open",
+    status: "open",
     assigned: true,
     assignedTo: "Alex Richards",
     priority: "Medium",
@@ -802,7 +802,7 @@ const tickets = [
     title: "Parking lot lighting repair",
     description: "Several lights not working in north parking lot. Safety concern for evening staff.",
     queue: "buildings-grounds",
-    status: "In Progress",
+    status: "in-progress",
     assigned: true,
     assignedTo: "Les Duffy",
     priority: "High",
@@ -829,7 +829,7 @@ const tickets = [
     title: "SSL certificate renewal for intranet",
     description: "Intranet SSL certificate expires in 14 days. Renew and install before expiration.",
     queue: "it-security",
-    status: "Open",
+    status: "open",
     assigned: true,
     assignedTo: "Alex Richards",
     priority: "Critical",
@@ -855,7 +855,7 @@ const tickets = [
     title: "Video surveillance camera offline",
     description: "Camera #12 in warehouse offline. Cannot view feed from monitoring station.",
     queue: "it-security",
-    status: "Resolved",
+    status: "closed",
     assigned: true,
     assignedTo: "Ercell Green",
     priority: "Medium",
@@ -882,7 +882,7 @@ const tickets = [
     title: "Network switch upgrade in server room",
     description: "Replace aging 1Gb switch with new 10Gb model to improve data center throughput.",
     queue: "it-networking",
-    status: "Pending",
+    status: "pending",
     assigned: true,
     assignedTo: "Peter Uhl",
     priority: "Medium",
@@ -909,7 +909,7 @@ const tickets = [
     title: "Cloud storage quota increase request",
     description: "Marketing team exceeded cloud storage quota. Requesting 500GB increase for campaign assets.",
     queue: "it-applications",
-    status: "Resolved",
+    status: "closed",
     assigned: true,
     assignedTo: "Andrew Ayala",
     priority: "Low",
@@ -964,7 +964,7 @@ const tickets = [
     title: "Office furniture move for reorg",
     description: "Rearrange desks and furniture on 2nd floor for departmental reorganization.",
     queue: "moves",
-    status: "Open",
+    status: "open",
     assigned: true,
     assignedTo: "Les Duffy",
     priority: "Low",
@@ -990,7 +990,7 @@ const tickets = [
     title: "RMA process for defective monitors",
     description: "Three monitors displaying color artifacts. Need RMA and replacement under warranty.",
     queue: "rma",
-    status: "In Progress",
+    status: "in-progress",
     assigned: true,
     assignedTo: "Ercell Green",
     priority: "Medium",
@@ -1017,7 +1017,7 @@ const tickets = [
     title: "Active Directory password reset automation",
     description: "Implement self-service password reset portal for Active Directory users to reduce helpdesk calls.",
     queue: "it-support",
-    status: "Open",
+    status: "open",
     assigned: true,
     assignedTo: "Ercell Green",
     priority: "Medium",
@@ -1043,7 +1043,7 @@ const tickets = [
     title: "Laptop won't connect to corporate WiFi",
     description: "User laptop can see the WiFi network but fails to authenticate. Other devices work fine.",
     queue: "it-support",
-    status: "In Progress",
+    status: "in-progress",
     assigned: true,
     assignedTo: "Ercell Green",
     priority: "High",
@@ -1070,7 +1070,7 @@ const tickets = [
     title: "Microsoft Office activation issue",
     description: "Office 365 showing 'Product Unlicensed' message despite valid subscription.",
     queue: "it-applications",
-    status: "Resolved",
+    status: "closed",
     assigned: true,
     assignedTo: "Ercell Green",
     priority: "Medium",
@@ -1097,7 +1097,7 @@ const tickets = [
     title: "Server monitoring alert - High CPU usage",
     description: "Application server CPU at 95% for last 30 minutes. Investigate and optimize if needed.",
     queue: "it-systems",
-    status: "In Progress",
+    status: "in-progress",
     assigned: true,
     assignedTo: "Ercell Green",
     priority: "Critical",
@@ -1124,7 +1124,7 @@ const tickets = [
     title: "Desktop computer blue screen error",
     description: "Workstation experiencing BSOD with DRIVER_IRQL_NOT_LESS_OR_EQUAL error code.",
     queue: "it-support",
-    status: "Open",
+    status: "open",
     assigned: true,
     assignedTo: "Ercell Green",
     priority: "High",
@@ -1150,7 +1150,7 @@ const tickets = [
     title: "Antivirus software update deployment",
     description: "Deploy latest antivirus definition updates to all endpoints across organization.",
     queue: "it-security",
-    status: "Pending",
+    status: "pending",
     assigned: true,
     assignedTo: "Ercell Green",
     priority: "High",
@@ -1177,7 +1177,7 @@ const tickets = [
     title: "Email signature template update",
     description: "Create and deploy new company-wide email signature template with updated branding.",
     queue: "it-applications",
-    status: "Open",
+    status: "open",
     assigned: true,
     assignedTo: "Ercell Green",
     priority: "Low",
@@ -1203,7 +1203,7 @@ const tickets = [
     title: "Zoom meeting room equipment setup",
     description: "Configure new Zoom Room in Conference Room D with camera, microphone, and display.",
     queue: "it-support",
-    status: "In Progress",
+    status: "in-progress",
     assigned: true,
     assignedTo: "Ercell Green",
     priority: "Medium",
@@ -1230,7 +1230,7 @@ const tickets = [
     title: "Network printer queue stuck",
     description: "Print jobs queued but not printing. Printer shows online but won't process jobs.",
     queue: "it-support",
-    status: "Resolved",
+    status: "closed",
     assigned: true,
     assignedTo: "Ercell Green",
     priority: "Medium",
@@ -1257,7 +1257,7 @@ const tickets = [
     title: "Outlook calendar sync issues with mobile",
     description: "Calendar events not syncing between Outlook desktop and mobile app.",
     queue: "it-applications",
-    status: "Open",
+    status: "open",
     assigned: true,
     assignedTo: "Ercell Green",
     priority: "Medium",
@@ -1283,7 +1283,7 @@ const tickets = [
     title: "Software license compliance audit",
     description: "Conduct quarterly software license compliance audit for all IT applications.",
     queue: "it-applications",
-    status: "In Progress",
+    status: "in-progress",
     assigned: true,
     assignedTo: "Ercell Green",
     priority: "Medium",
@@ -1310,7 +1310,7 @@ const tickets = [
     title: "USB ports not working on laptop",
     description: "All USB ports on laptop stopped functioning. Tried different devices with same result.",
     queue: "it-support",
-    status: "Open",
+    status: "open",
     assigned: true,
     assignedTo: "Ercell Green",
     priority: "High",
@@ -1362,7 +1362,7 @@ const tickets = [
     title: "Remote desktop connection timeout",
     description: "Remote users unable to connect via RDP. Connection times out during authentication.",
     queue: "it-networking",
-    status: "In Progress",
+    status: "in-progress",
     assigned: true,
     assignedTo: "Ercell Green",
     priority: "High",
@@ -1389,7 +1389,7 @@ const tickets = [
     title: "Group policy not applying to workstations",
     description: "New GPO settings not applying to domain-joined computers despite force update attempts.",
     queue: "it-systems",
-    status: "Open",
+    status: "open",
     assigned: true,
     assignedTo: "Ercell Green",
     priority: "Medium",
@@ -1415,7 +1415,7 @@ const tickets = [
     title: "Web browser crashing repeatedly",
     description: "Chrome browser crashes every 10-15 minutes on multiple user computers.",
     queue: "it-support",
-    status: "Resolved",
+    status: "closed",
     assigned: true,
     assignedTo: "Ercell Green",
     priority: "Medium",
@@ -1442,7 +1442,7 @@ const tickets = [
     title: "Shared mailbox permissions request",
     description: "Add three users to support@example.com shared mailbox with full access permissions.",
     queue: "it-applications",
-    status: "Resolved",
+    status: "closed",
     assigned: true,
     assignedTo: "Ercell Green",
     priority: "Low",
@@ -1469,7 +1469,7 @@ const tickets = [
     title: "File server disk space warning",
     description: "File server at 85% capacity. Need to clean up old files or expand storage.",
     queue: "it-systems",
-    status: "In Progress",
+    status: "in-progress",
     assigned: true,
     assignedTo: "Ercell Green",
     priority: "Medium",
@@ -1524,7 +1524,7 @@ const tickets = [
     title: "Application performance optimization",
     description: "Internal CRM application loading slowly. Users experiencing 30+ second page load times.",
     queue: "it-applications",
-    status: "In Progress",
+    status: "in-progress",
     assigned: true,
     assignedTo: "Ercell Green",
     priority: "High",
@@ -1989,6 +1989,7 @@ const modalTime = document.getElementById("modal-time");
 
 // Comments & Activity DOM
 const modalCommentsList = document.getElementById("modal-comments-list");
+const modalActivityList = document.getElementById("modal-activity-list");
 const modalCommentText = document.getElementById("modal-comment-text");
 const modalSaveBtn = document.getElementById("modal-save-btn");
 
@@ -3325,24 +3326,10 @@ if (modalSaveCloseBtn) {
                     source: 'auto'
                 });
             }
-            
-            t.activity.push({
-                timestamp,
-                user: currentUser,
-                action: commentText ? "Comment added" : "Time logged"
-            });
         }
         
-        // Log changes in comments
+        // Log changes in activity only
         if (changes.length > 0) {
-            t.comments.push({
-                author: currentUser,
-                timestamp,
-                text: `<em>${changes.join('<br>')}</em>`,
-                images: [],
-                loggedMinutes: 0
-            });
-            
             changes.forEach(change => {
                 t.activity.push({
                     timestamp,
@@ -4269,6 +4256,7 @@ function openTicketModal(ticket) {
     startTimeTracking(ticket.id);
 
     renderComments(ticket);
+    renderActivity(ticket);
 
     showModal(modal);
 }
@@ -4279,54 +4267,34 @@ function openTicketModal(ticket) {
 function renderComments(ticket) {
     modalCommentsList.innerHTML = "";
 
-    // Get all comments and activity entries
-    const items = [];
+    // Get only comments (not activity)
+    const comments = ticket.comments && ticket.comments.length > 0 ? ticket.comments : [];
     
-    // Add comments
-    if (ticket.comments && ticket.comments.length > 0) {
-        ticket.comments.forEach(c => {
-            items.push({
-                type: 'comment',
-                data: c,
-                timestamp: c.timestamp
-            });
-        });
-    }
-    
-    // Add activity log entries
-    if (ticket.activity && ticket.activity.length > 0) {
-        ticket.activity.forEach(a => {
-            items.push({
-                type: 'activity',
-                data: a,
-                timestamp: a.timestamp
-            });
-        });
-    }
-    
-    if (items.length === 0) {
-        modalCommentsList.innerHTML = "<p>No comments or activity yet.</p>";
+    if (comments.length === 0) {
+        modalCommentsList.innerHTML = "<p>No comments yet.</p>";
         return;
     }
 
     // Sort by timestamp, newest first
-    const sorted = items.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+    const sorted = comments.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
 
-    sorted.forEach(item => {
+    sorted.forEach(c => {
         const div = document.createElement("div");
-        
-        if (item.type === 'comment') {
-            const c = item.data;
-            div.classList.add("comment-item");
-            const dateStr = new Date(c.timestamp).toLocaleString();
-            div.innerHTML = `
-                <div class="comment-header">
-                    <strong>${c.author}</strong> <span>${dateStr}</span>
-                </div>
-                <div class="comment-body">
-                    ${c.text}
-                </div>
-            `;
+        div.classList.add("comment-item");
+        div.classList.add("user-comment");
+        div.style.float = "left";
+        div.style.maxWidth = "85%";
+        div.style.marginRight = "auto";
+        div.style.marginLeft = "0";
+        const dateStr = new Date(c.timestamp).toLocaleString();
+        div.innerHTML = `
+            <div class="comment-header">
+                <strong>${c.author}</strong> <span>${dateStr}</span>
+            </div>
+            <div class="comment-body">
+                ${c.text}
+            </div>
+        `;
 
             if (c.loggedMinutes && c.loggedMinutes > 0) {
                 const timeP = document.createElement("div");
@@ -4365,22 +4333,19 @@ function renderComments(ticket) {
                 });
                 div.appendChild(gallery);
             }
-        } else if (item.type === 'activity') {
-            const a = item.data;
-            div.classList.add("comment-item");
-            div.style.background = "#f9f9f9";
-            div.style.borderLeft = "3px solid #999";
-            div.style.padding = "8px 12px";
-            const dateStr = new Date(a.timestamp).toLocaleString();
-            div.innerHTML = `
-                <div style="font-size:0.9rem; color:#666;">
-                    <strong>${a.user}</strong> - ${a.action} <span style="font-size:0.85rem; color:#999; margin-left:8px;">${dateStr}</span>
-                </div>
-            `;
-        }
 
-        modalCommentsList.appendChild(div);
-    });
+            if (c.loggedMinutes && c.loggedMinutes > 0) {
+                const timeP = document.createElement("div");
+                timeP.style.fontSize = "13px";
+                timeP.style.color = "#0078ff";
+                timeP.style.marginTop = "8px";
+                timeP.style.fontWeight = "600";
+                timeP.innerHTML = `⏱ Time Worked: ${formatMinutes(c.loggedMinutes)}`;
+                div.appendChild(timeP);
+            }
+
+            modalCommentsList.appendChild(div);
+        });
 }
 
 // -------------------------------

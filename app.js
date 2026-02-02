@@ -94,7 +94,7 @@ const tickets = [
     title: "Firewall rule update",
     description: "Allow outbound traffic to new vendor IP range for data sync.",
     queue: "it-security",
-    status: "resolved",
+    status: "closed",
     assigned: true,
     assignedTo: "Kim Clemmer",
     priority: "Critical",
@@ -113,7 +113,7 @@ const tickets = [
     comments: [],
     activity: [
       { timestamp: "2026-01-02T09:00:00", user: "System", action: "Ticket created" },
-      { timestamp: "2026-01-06T11:00:00", user: "System", action: "Status changed to resolved" }
+      { timestamp: "2026-01-06T11:00:00", user: "System", action: "Status changed to closed" }
     ]
   },
   {
@@ -148,7 +148,7 @@ const tickets = [
     title: "VPN access request for remote employee",
     description: "Enable VPN access for remote employee working from home office.",
     queue: "it-networking",
-    status: "resolved",
+    status: "closed",
     assigned: true,
     assignedTo: "Andrew Ayala",
     priority: "Medium",
@@ -167,7 +167,7 @@ const tickets = [
     comments: [],
     activity: [
       { timestamp: "2026-01-06T09:00:00", user: "System", action: "Ticket created" },
-      { timestamp: "2026-01-07T10:00:00", user: "System", action: "Status changed to resolved" }
+      { timestamp: "2026-01-07T10:00:00", user: "System", action: "Status changed to closed" }
     ]
   },
   {
@@ -314,7 +314,7 @@ const tickets = [
     title: "Shared drive permissions for Projects2026",
     description: "Team cannot access new 'Projects2026' folder. Needs read/write for Marketing.",
     queue: "it-support",
-    status: "resolved",
+    status: "closed",
     assigned: false,
     assignedTo: "",
     priority: "Low",
@@ -333,7 +333,7 @@ const tickets = [
     comments: [],
     activity: [
       { timestamp: "2026-01-07T09:40:00", user: "System", action: "Ticket created" },
-      { timestamp: "2026-01-07T10:15:00", user: "System", action: "Status changed to resolved" }
+      { timestamp: "2026-01-07T10:15:00", user: "System", action: "Status changed to closed" }
     ]
   },
   {
@@ -453,7 +453,7 @@ const tickets = [
     title: "2FA enrollment issue with QR code",
     description: "User unable to enroll in MFA—QR code scan fails on authenticator app.",
     queue: "it-security",
-    status: "resolved",
+    status: "closed",
     assigned: true,
     assignedTo: "Kim Clemmer",
     priority: "Medium",
@@ -472,7 +472,7 @@ const tickets = [
     comments: [],
     activity: [
       { timestamp: "2026-01-07T11:20:00", user: "System", action: "Ticket created" },
-      { timestamp: "2026-01-07T11:50:00", user: "System", action: "Status changed to resolved" }
+      { timestamp: "2026-01-07T11:50:00", user: "System", action: "Status changed to closed" }
     ]
   },
   {
@@ -540,7 +540,7 @@ const tickets = [
     title: "Database backup verification",
     description: "Verify that all database backups completed successfully. Last backup showed 95% completion.",
     queue: "it-systems",
-    status: "resolved",
+    status: "closed",
     assigned: true,
     assignedTo: "Peter Uhl",
     priority: "High",
@@ -559,7 +559,7 @@ const tickets = [
     comments: [],
     activity: [
       { timestamp: "2026-01-05T09:00:00", user: "System", action: "Ticket created" },
-      { timestamp: "2026-01-07T14:30:00", user: "System", action: "Status changed to resolved" }
+      { timestamp: "2026-01-07T14:30:00", user: "System", action: "Status changed to closed" }
     ]
   },
   {

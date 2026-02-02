@@ -1162,6 +1162,16 @@ body.dark-mode #modal-manual-time-inputs input:focus {
     margin-top: 4px;
 }
 
+.ticket-meta span[class^="status-"],
+.ticket-meta span[class*="status-"] {
+    display: inline-block !important;
+    padding: 4px 10px !important;
+    border-radius: 4px !important;
+    font-weight: 500 !important;
+    font-size: 0.85rem !important;
+    margin: 0 4px !important;
+}
+
 .priority-label {
     display: inline-block;
     padding: 3px 8px;
@@ -1322,10 +1332,6 @@ body.dark-mode #modal-manual-time-inputs input:focus {
     border-left: 4px solid #e74c3c;
 }
 
-.board-column[data-status="Resolved"] .board-column-header {
-    border-left: 4px solid #2ecc71;
-}
-
 .board-column[data-status="Closed"] .board-column-header {
     border-left: 4px solid #95a5a6;
 }
@@ -1341,10 +1347,6 @@ body.dark-mode #modal-manual-time-inputs input:focus {
 
 .board-card[data-status="Pending"] {
     border-left-color: #e74c3c;
-}
-
-.board-card[data-status="Resolved"] {
-    border-left-color: #2ecc71;
 }
 
 .board-card[data-status="Closed"] {
@@ -1410,79 +1412,43 @@ body.dark-mode #modal-manual-time-inputs input:focus {
 
 /* Status styles for cards and table */
 .status-open {
-    background: #dbeafe;
-    color: #0369a1;
-    padding: 4px 10px;
-    border-radius: 4px;
-    font-weight: 500;
-    font-size: 0.9rem;
-    display: inline-block;
+    background: #dbeafe !important;
+    color: #0369a1 !important;
+    padding: 4px 10px !important;
+    border-radius: 4px !important;
+    font-weight: 500 !important;
+    font-size: 0.9rem !important;
+    display: inline-block !important;
 }
 
 .status-in-progress {
-    background: #fef3c7;
-    color: #b45309;
-    padding: 4px 10px;
-    border-radius: 4px;
-    font-weight: 500;
-    font-size: 0.9rem;
-    display: inline-block;
+    background: #fef3c7 !important;
+    color: #b45309 !important;
+    padding: 4px 10px !important;
+    border-radius: 4px !important;
+    font-weight: 500 !important;
+    font-size: 0.9rem !important;
+    display: inline-block !important;
 }
 
-.status-resolved {
-    background: #dcfce7;
-    color: #166534;
-    padding: 4px 10px;
-    border-radius: 4px;
-    font-weight: 500;
-    font-size: 0.9rem;
-    display: inline-block;
+.status-pending {
+    background: #fed7aa !important;
+    color: #d97706 !important;
+    padding: 4px 10px !important;
+    border-radius: 4px !important;
+    font-weight: 500 !important;
+    font-size: 0.9rem !important;
+    display: inline-block !important;
 }
 
 .status-closed {
-    background: #f3f4f6;
-    color: #4b5563;
-    padding: 4px 10px;
-    border-radius: 4px;
-    font-weight: 500;
-    font-size: 0.9rem;
-    display: inline-block;
-}
-
-.ticket-table .status-open {
-    background: #dbeafe;
-    color: #0369a1;
-    padding: 4px 10px;
-    border-radius: 4px;
-    font-weight: 500;
-    font-size: 0.9rem;
-}
-
-.ticket-table .status-in-progress {
-    background: #fef3c7;
-    color: #b45309;
-    padding: 4px 10px;
-    border-radius: 4px;
-    font-weight: 500;
-    font-size: 0.9rem;
-}
-
-.ticket-table .status-resolved {
-    background: #dcfce7;
-    color: #166534;
-    padding: 4px 10px;
-    border-radius: 4px;
-    font-weight: 500;
-    font-size: 0.9rem;
-}
-
-.ticket-table .status-closed {
-    background: #f3f4f6;
-    color: #4b5563;
-    padding: 4px 10px;
-    border-radius: 4px;
-    font-weight: 500;
-    font-size: 0.9rem;
+    background: #f3f4f6 !important;
+    color: #4b5563 !important;
+    padding: 4px 10px !important;
+    border-radius: 4px !important;
+    font-weight: 500 !important;
+    font-size: 0.9rem !important;
+    display: inline-block !important;
 }
 
 /* Dark mode table styles */
@@ -1507,45 +1473,59 @@ body.dark-mode .ticket-table td {
     color: #e5e7eb;
 }
 
-body.dark-mode .ticket-table .status-open {
-    background: rgba(3, 105, 161, 0.2);
-    color: #7dd3fc;
+/* Table status badge styling - specific to td spans */
+.ticket-table td span[class^="status-"],
+.ticket-table td span[class*="status-"] {
+    display: inline-block !important;
+    padding: 4px 10px !important;
+    border-radius: 4px !important;
+    font-weight: 500 !important;
+    font-size: 0.9rem !important;
 }
 
-body.dark-mode .ticket-table .status-in-progress {
-    background: rgba(180, 83, 9, 0.2);
-    color: #fcd34d;
+.ticket-table td span.status-open,
+.ticket-table td span[class*="status-open"] {
+    background: #dbeafe !important;
+    color: #0369a1 !important;
 }
 
-body.dark-mode .ticket-table .status-resolved {
-    background: rgba(22, 101, 52, 0.2);
-    color: #86efac;
+.ticket-table td span.status-in-progress,
+.ticket-table td span[class*="status-in-progress"] {
+    background: #fef3c7 !important;
+    color: #b45309 !important;
 }
 
-body.dark-mode .ticket-table .status-closed {
-    background: rgba(75, 85, 99, 0.2);
-    color: #d1d5db;
+.ticket-table td span.status-closed,
+.ticket-table td span[class*="status-closed"] {
+    background: #f3f4f6 !important;
+    color: #4b5563 !important;
+}
+
+.ticket-table td span.status-pending,
+.ticket-table td span[class*="status-pending"] {
+    background: #fed7aa !important;
+    color: #d97706 !important;
 }
 
 /* Dark mode status colors for cards */
 body.dark-mode .status-open {
-    background: rgba(3, 105, 161, 0.2);
-    color: #7dd3fc;
+    background: rgba(3, 105, 161, 0.2) !important;
+    color: #7dd3fc !important;
 }
 
 body.dark-mode .status-in-progress {
-    background: rgba(180, 83, 9, 0.2);
-    color: #fcd34d;
-}
-
-body.dark-mode .status-resolved {
-    background: rgba(22, 101, 52, 0.2);
-    color: #86efac;
+    background: rgba(180, 83, 9, 0.2) !important;
+    color: #fcd34d !important;
 }
 
 body.dark-mode .status-closed {
-    background: rgba(75, 85, 99, 0.2);
-    color: #d1d5db;
+    background: rgba(75, 85, 99, 0.2) !important;
+    color: #d1d5db !important;
+}
+
+body.dark-mode .status-pending {
+    background: rgba(217, 119, 6, 0.2) !important;
+    color: #fbbf24 !important;
 }
 
 @keyframes fadeInUp {
@@ -1809,7 +1789,8 @@ body.dark-mode .ticket-controls select:hover {
 #priority-select,
 #technician-select,
 #ticket-sort,
-#status-filter {
+#status-filter,
+#ticket-search {
     padding: 10px 12px;
     border: 2px solid #cfe4ff;
     border-radius: 8px;
@@ -1826,7 +1807,8 @@ body.dark-mode .ticket-controls select:hover {
 #priority-select:hover,
 #technician-select:hover,
 #ticket-sort:hover,
-#status-filter:hover {
+#status-filter:hover,
+#ticket-search:hover {
     border-color: #0078ff;
     background-color: #f8fbff;
     box-shadow: 0 3px 8px rgba(0, 84, 166, 0.15);
@@ -1835,7 +1817,8 @@ body.dark-mode .ticket-controls select:hover {
 #priority-select:focus,
 #technician-select:focus,
 #ticket-sort:focus,
-#status-filter:focus {
+#status-filter:focus,
+#ticket-search:focus {
     outline: none;
     border-color: #0078ff;
     background-color: #ffffff;
@@ -1846,7 +1829,8 @@ body.dark-mode .ticket-controls select:hover {
 body.dark-mode #priority-select,
 body.dark-mode #technician-select,
 body.dark-mode #ticket-sort,
-body.dark-mode #status-filter {
+body.dark-mode #status-filter,
+body.dark-mode #ticket-search {
     background: #2a2a2a;
     border-color: #444;
     color: #e0e0e0;
@@ -1856,7 +1840,8 @@ body.dark-mode #status-filter {
 body.dark-mode #priority-select:hover,
 body.dark-mode #technician-select:hover,
 body.dark-mode #ticket-sort:hover,
-body.dark-mode #status-filter:hover {
+body.dark-mode #status-filter:hover,
+body.dark-mode #ticket-search:hover {
     border-color: #666;
     background-color: #333;
 }
@@ -2303,6 +2288,26 @@ body.dark-mode .modal-section h3 {
     padding: 12px;
     border-radius: 8px;
     border-left: 4px solid #003366;
+    margin: 8px 0;
+    max-width: 85%;
+    clear: both;
+}
+
+/* Comments - left aligned */
+.comment-item:has(.comment-header) {
+    float: left;
+    margin-right: auto;
+    margin-left: 0;
+}
+
+/* Activity logs - right aligned */
+.comment-item[style*="background: #f9f9f9"] {
+    float: right;
+    margin-left: auto;
+    margin-right: 0;
+    max-width: 70%;
+    background: #f0f0f0 !important;
+    border-left: 3px solid #999;
 }
 
 .comment-header {
@@ -2339,6 +2344,25 @@ body.dark-mode .modal-section h3 {
     box-shadow: 0 0 0 3px rgba(0,51,102,0.1);
 }
 
+/* Comments and Activity List */
+#modal-comments-list {
+    display: flow-root;
+    max-height: 400px;
+    overflow-y: auto;
+    padding: 12px;
+    background: #fafafa;
+    border-radius: 6px;
+}
+
+#modal-activity-list {
+    display: flow-root;
+    max-height: 400px;
+    overflow-y: auto;
+    padding: 12px;
+    background: #fafafa;
+    border-radius: 6px;
+}
+
 body.dark-mode .comment-item {
     background: rgba(255,255,255,0.08);
     border-left-color: #60a5fa;
@@ -2371,29 +2395,87 @@ body.dark-mode .comment-form textarea {
 
 .activity-item {
     font-size: 0.85rem;
-    background: #fff8e6;
+    background: #f0f0f0;
     padding: 10px 12px;
     border-radius: 6px;
-    border-left: 4px solid #F58220;
-    color: #333;
+    border-left: 4px solid #999;
+    color: #555;
+    margin: 8px 0;
+    max-width: 70%;
+    float: right;
+    clear: both;
 }
 
 .activity-line {
     line-height: 1.5;
+    color: #666;
 }
 
 .activity-line strong {
-    color: #003366;
+    color: #333;
 }
 
 body.dark-mode .activity-item {
-    background: rgba(245,130,32,0.1);
-    border-left-color: #fbbf24;
-    color: #e5e7eb;
+    background: rgba(100,100,100,0.2);
+    border-left-color: #888;
+    color: #b0b0b0;
 }
 
 body.dark-mode .activity-line strong {
     color: #fbbf24;
+}
+
+/* Compact activity list styling */
+.activity-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0px;
+    padding: 12px;
+    background: #f5f5f5;
+    border-radius: 4px;
+    border: 1px solid #e5e5e5;
+    margin-top: 16px;
+}
+
+.activity-list > div {
+    transition: background 0.2s;
+}
+
+.activity-list > div:hover {
+    background: #f0f0f0 !important;
+}
+
+body.dark-mode .activity-list {
+    background: rgba(0,0,0,0.2);
+    border-color: #444;
+}
+
+body.dark-mode .activity-list > div:hover {
+    background: rgba(255,255,255,0.08) !important;
+}
+
+/* Comments list styling */
+.comments-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/* Modal section headers */
+.modal-section-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1.1rem;
+    color: #333;
+    margin: 16px 0 12px 0;
+    border-bottom: 2px solid #e0e0e0;
+    padding-bottom: 8px;
+}
+
+body.dark-mode .modal-section-header {
+    color: #e5e7eb;
+    border-bottom-color: #444;
 }
 
 /* ===============================
@@ -3306,7 +3388,6 @@ body.dark-mode .board-card-id {
 body.dark-mode .board-column[data-status="Open"] .board-column-header,
 body.dark-mode .board-column[data-status="In Progress"] .board-column-header,
 body.dark-mode .board-column[data-status="Pending"] .board-column-header,
-body.dark-mode .board-column[data-status="Resolved"] .board-column-header,
 body.dark-mode .board-column[data-status="Closed"] .board-column-header {
     border-left: 2px solid #666 !important;
 }
@@ -3314,7 +3395,6 @@ body.dark-mode .board-column[data-status="Closed"] .board-column-header {
 body.dark-mode .board-card[data-status="Open"],
 body.dark-mode .board-card[data-status="In Progress"],
 body.dark-mode .board-card[data-status="Pending"],
-body.dark-mode .board-card[data-status="Resolved"],
 body.dark-mode .board-card[data-status="Closed"] {
     border-left-color: #555 !important;
 }
@@ -3323,7 +3403,6 @@ body.dark-mode .board-card[data-status="Closed"] {
 body.dark-mode .status-open,
 body.dark-mode .status-in-progress,
 body.dark-mode .status-pending,
-body.dark-mode .status-resolved,
 body.dark-mode .status-closed {
     background: #3a3a3a !important;
     color: #e0e0e0 !important;
